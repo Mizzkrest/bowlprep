@@ -26,7 +26,7 @@
             </div>
             <div>
                 <span class="font-bold text-lg bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">BowlPrep</span>
-                <span class="text-[10px] uppercase tracking-widest font-bold text-indigo-400 block -mt-1 mono">v3.0 Strategic Match Engine</span>
+                <span class="text-[10px] uppercase tracking-widest font-bold text-indigo-400 block -mt-1 mono">v3.1 Stable Match Engine</span>
             </div>
         </div>
 
@@ -143,7 +143,7 @@
             </div>
         </section>
 
-        <!-- NEW PRE-GAME STAGING INTERFACE -->
+        <!-- PRE-GAME STAGING INTERFACE -->
         <section id="view-staging" class="view-panel max-w-2xl mx-auto w-full bg-[#0f1524] border border-slate-800 rounded-2xl p-6 space-y-6 hidden">
             <div class="text-center space-y-2 border-b border-slate-800 pb-4">
                 <span class="px-2.5 py-1 bg-indigo-500/10 text-indigo-400 text-xs tracking-widest uppercase font-mono rounded">Arena Match Manifest</span>
@@ -189,7 +189,6 @@
             <div class="lg:col-span-3 flex flex-col space-y-4">
                 <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-4 flex justify-between font-mono text-xs text-slate-400">
                     <div>ROOM CODE: <span class="text-indigo-400 font-bold tracking-wider" id="gameplayRoomToken">LOCAL</span></div>
-                    <!-- NEW POST-QUESTION TIMER INTERFACE VIEW -->
                     <div class="flex items-center space-x-4">
                         <div id="postQuestionTimerContainer" class="hidden px-2 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded font-bold animate-pulse">NEXT IN: <span id="postQuestionCountdownValue">10</span>s</div>
                         <div>QUESTION: <span id="gameplayItemFraction" class="text-slate-200 font-bold">0 / 5</span></div>
@@ -424,8 +423,6 @@
             clearInterval(APP_STATE.localWordInterval);
             APP_STATE.localWordInterval = setInterval(() => {
                 let s = APP_STATE.soloMatchData;
-                
-                // If counting down post-question, let the separate timer interface deal with it
                 if(s.post_question_countdown >= 0) return;
 
                 if(!s.is_buzzed_locked) {
@@ -438,7 +435,6 @@
                         executeLocalStateSync(s);
                         evaluateBotBuzzTriggers(s, words.length);
                     } else {
-                        // Question ended with no correct buzzes -> start 10s countdown
                         triggerPostQuestionCountdownPipeline();
                     }
                 }
@@ -447,7 +443,8 @@
 
         function evaluateBotBuzzTriggers(s, totalWords) {
             if(s.current_word_pointer > totalWords * 0.65 && Math.random() < 0.08) {
-                const choices = ["bot_sarah", "bot_marcus"].filter(b => !s.locked_out_players.includes(b));
+                const lockouts = s.locked_out_players || [];
+                const choices = ["bot_sarah", "bot_marcus"].filter(b => !lockouts.includes(b));
                 if(choices.length === 0) return;
                 
                 const targetBot = choices[Math.floor(Math.random() * choices.length)];
@@ -508,7 +505,8 @@
                 categories: APP_STATE.selectedCategories,
                 questions_cache: generatedCache,
                 scores: initialScores,
-                item_index: -1 // Staging Flag indicator
+                item_index: -1,
+                locked_out_players: []
             });
 
             connectToRoomChannel(token);
@@ -546,15 +544,15 @@
         }
 
         function handleRoomDataRouting(room) {
+            if(!room) return;
             if(room.item_index === -1) {
-                // We are inside the STAGING INTERFACE STAGE
                 switchView('staging');
                 document.getElementById('stagingRoomTokenDisplay').innerText = room.room_token;
                 document.getElementById('stagingDifficultyDisplay').innerText = room.difficulty;
                 
                 const roster = document.getElementById('stagingRosterContainer');
                 roster.innerHTML = "";
-                Object.keys(room.scores).forEach(uid => {
+                Object.keys(room.scores || {}).forEach(uid => {
                     roster.innerHTML += `<div class="p-2 bg-[#1b263f] border border-slate-700/60 rounded flex justify-between"><span>⚡ ${room.scores[uid].name}</span><span class="text-indigo-400 font-bold">READY</span></div>`;
                 });
 
@@ -567,7 +565,6 @@
                 }
                 APP_STATE.roomDataSnapshot = room;
             } else {
-                // Active Core Game Stream View
                 if(APP_STATE.view !== 'gameplay' && APP_STATE.view !== 'endgame') {
                     switchView('gameplay');
                     if(APP_STATE.isHost && APP_STATE.gameMode === 'multi') startMultiplayerHostClock();
@@ -578,7 +575,7 @@
 
         async function signalStartFromStaging() {
             if(!APP_STATE.isHost || !APP_STATE.roomDataSnapshot) return;
-            await supabaseInstance.from('match_rooms').update({ item_index: 0 }).eq('room_token', APP_STATE.roomDataSnapshot.room_token);
+            await supabaseInstance.from('match_rooms').update({ item_index: 0, locked_out_players: [] }).eq('room_token', APP_STATE.roomDataSnapshot.room_token);
         }
 
         function startMultiplayerHostClock() {
@@ -586,8 +583,6 @@
             APP_STATE.localWordInterval = setInterval(async () => {
                 let snap = APP_STATE.roomDataSnapshot;
                 if(!snap || snap.is_buzzed_locked || snap.item_index < 0) return;
-
-                // Stop incrementing word pointers if currently inside post-question idle timer phase
                 if(document.getElementById('postQuestionTimerContainer').classList.contains('hidden') === false) return;
 
                 const currentQuestion = snap.questions_cache[snap.item_index];
@@ -597,7 +592,6 @@
                 if(snap.current_word_pointer < maxWords) {
                     await supabaseInstance.from('match_rooms').update({ current_word_pointer: snap.current_word_pointer + 1 }).eq('room_token', snap.room_token);
                 } else {
-                    // Stream ran completely out of words -> kick off multiplayer clock countdown logic
                     triggerPostQuestionCountdownPipeline();
                 }
             }, APP_STATE.roomDataSnapshot.speed_ms);
@@ -618,12 +612,13 @@
         // STATE RENDER & SYNC ROUTINES
         // ==========================================
         function executeLocalStateSync(room) {
+            if(!room) return;
             APP_STATE.roomDataSnapshot = room;
             
             document.getElementById('gameplayRoomToken').innerText = APP_STATE.gameMode === 'solo' ? "LOCAL SOLO PRACTICE" : room.room_token;
-            document.getElementById('gameplayItemFraction').innerText = `${room.item_index + 1} / ${room.questions_cache.length}`;
+            document.getElementById('gameplayItemFraction').innerText = `${room.item_index + 1} / ${(room.questions_cache || []).length}`;
             
-            const currentQuestion = room.questions_cache[room.item_index];
+            const currentQuestion = (room.questions_cache || [])[room.item_index];
             if(!currentQuestion) {
                 clearInterval(APP_STATE.localWordInterval);
                 clearInterval(APP_STATE.postQuestionCountdownTimer);
@@ -631,9 +626,9 @@
                 return;
             }
 
-            document.getElementById('itemCategoryBadge').innerText = currentQuestion.category;
+            document.getElementById('itemCategoryBadge').innerText = currentQuestion.category || "General";
             
-            // Check lockout configuration arrays
+            // Fixed safety line below to prevent crashes if array is missing
             const lockoutList = room.locked_out_players || [];
             const isMeLockedOut = lockoutList.includes(APP_STATE.playerId);
             const buzzButton = document.getElementById('hardwareBuzzerButton');
@@ -648,18 +643,21 @@
                 buzzButton.className = "w-full bg-rose-600 hover:bg-rose-500 text-white rounded-xl py-6 font-black tracking-widest text-xl border-b-4 border-rose-800 focus:outline-none";
             }
 
-            const words = currentQuestion.tossupText.split(" ");
+            const words = (currentQuestion.tossupText || "").split(" ");
             let displayStr = "";
             for(let i = 0; i < room.current_word_pointer && i < words.length; i++) {
                 displayStr += words[i] + " ";
             }
-            document.getElementById('tossupDisplayStream').innerHTML = displayStr;
+            // If we are currently counting down at the end of a question, don't wipe out the countdown text display
+            if(document.getElementById('postQuestionTimerContainer').classList.contains('hidden')) {
+                document.getElementById('tossupDisplayStream').innerHTML = displayStr;
+            }
 
             if(room.is_buzzed_locked) {
                 clearInterval(APP_STATE.localWordInterval);
                 try { document.getElementById('buzzSound').play(); } catch(e){}
                 
-                document.getElementById('buzzerLockName').innerText = `${room.buzzed_name.toUpperCase()} BUZZED`;
+                document.getElementById('buzzerLockName').innerText = `${(room.buzzed_name || "SOMEONE").toUpperCase()} BUZZED`;
                 document.getElementById('buzzerLockBanner').classList.remove('hidden');
 
                 if(room.who_buzzed === APP_STATE.playerId) {
@@ -669,7 +667,7 @@
                 } else {
                     document.getElementById('userAnswerContainer').classList.add('hidden');
                     document.getElementById('botGradingStatus').classList.remove('hidden');
-                    document.getElementById('botGradingStatus').innerText = `${room.buzzed_name} is formulating text entry choices...`;
+                    document.getElementById('botGradingStatus').innerText = `${room.buzzed_name || 'Opponent'} is formulating text entry choices...`;
                 }
             } else {
                 document.getElementById('buzzerLockBanner').classList.add('hidden');
@@ -677,14 +675,13 @@
                 document.getElementById('userAnswerInput').value = "";
             }
 
-            renderRosterScoreboard(room.scores);
+            renderRosterScoreboard(room.scores || {});
         }
 
         async function triggerUserBuzz() {
             let snap = APP_STATE.roomDataSnapshot;
             if(!snap || snap.is_buzzed_locked) return;
 
-            // Block buzzes if locked out or if the 10-second complete reveal screen has taken over
             const lockoutList = snap.locked_out_players || [];
             if(lockoutList.includes(APP_STATE.playerId)) return;
             if(document.getElementById('postQuestionTimerContainer').classList.contains('hidden') === false) return;
@@ -734,17 +731,15 @@
             let currentLockouts = [...(snap.locked_out_players || [])];
 
             if(isCorrect) {
-                updatedScores[snap.who_buzzed].score += 10;
+                if(updatedScores[snap.who_buzzed]) updatedScores[snap.who_buzzed].score += 10;
                 nextIndex += 1;
                 nextWordPointer = 0;
-                currentLockouts = []; // Clear lockouts for the next question framework
+                currentLockouts = []; 
                 
-                // Jump to next question instantly on correct answers -> clean countdown state flags
                 clearInterval(APP_STATE.postQuestionCountdownTimer);
                 document.getElementById('postQuestionTimerContainer').classList.add('hidden');
             } else {
-                updatedScores[snap.who_buzzed].score -= 5;
-                // Log incorrect guessers into the tracking index array list matrix
+                if(updatedScores[snap.who_buzzed]) updatedScores[snap.who_buzzed].score -= 5;
                 if(!currentLockouts.includes(snap.who_buzzed)) {
                     currentLockouts.push(snap.who_buzzed);
                 }
@@ -760,13 +755,7 @@
                 APP_STATE.soloMatchData.buzzed_name = null;
                 
                 executeLocalStateSync(APP_STATE.soloMatchData);
-                
-                if(isCorrect) {
-                    startSoloLocalClock();
-                } else {
-                    // Question wasn't answered correctly, let the words continue streaming
-                    startSoloLocalClock();
-                }
+                startSoloLocalClock();
             } else {
                 await supabaseInstance.from('match_rooms').update({
                     scores: updatedScores, 
@@ -784,7 +773,6 @@
         // UNIFIED 10-SECOND COUNTDOWN PIPELINE ENGINE
         // ==========================================
         function triggerPostQuestionCountdownPipeline() {
-            // Prevent multiple parallel countdown loops from firing off
             if(APP_STATE.postQuestionCountdownTimer) clearInterval(APP_STATE.postQuestionCountdownTimer);
             if(!APP_STATE.isHost) return;
 
@@ -795,7 +783,6 @@
             container.classList.remove('hidden');
             counterLabel.innerText = timeLeft;
 
-            // Broadcast structural changes right out to components
             broadcastCountdownStateUpdate(timeLeft);
 
             APP_STATE.postQuestionCountdownTimer = setInterval(async () => {
@@ -807,7 +794,6 @@
                     clearInterval(APP_STATE.postQuestionCountdownTimer);
                     container.classList.add('hidden');
                     
-                    // Transition straight onto the next question block frame layout array
                     let snap = APP_STATE.roomDataSnapshot;
                     let targetIndex = snap.item_index + 1;
                     
@@ -829,7 +815,6 @@
         }
 
         function broadcastCountdownStateUpdate(sec) {
-            // Clients intercept UI changes via live state sync reflections
             const container = document.getElementById('postQuestionTimerContainer');
             const counterLabel = document.getElementById('postQuestionCountdownValue');
             
@@ -837,7 +822,6 @@
                 container.classList.remove('hidden');
                 counterLabel.innerText = sec;
                 
-                // Reveal the full question text on screen for review during the countdown
                 let snap = APP_STATE.roomDataSnapshot;
                 const currentQ = snap.questions_cache[snap.item_index];
                 if(currentQ) {
@@ -862,7 +846,7 @@
             switchView('endgame');
             let container = document.getElementById('endgamePlacementsContainer');
             container.innerHTML = `<h3 class="text-lg font-bold mb-4">Final Scoreboard Metrics</h3>`;
-            Object.keys(room.scores).forEach(uid => {
+            Object.keys(room.scores || {}).forEach(uid => {
                 let p = room.scores[uid];
                 container.innerHTML += `<p class="font-mono text-sm">${p.name}: <span class="text-indigo-400">${p.score} pts</span></p>`;
             });
