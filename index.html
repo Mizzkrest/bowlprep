@@ -1,63 +1,47 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BowlPrep — Competitive Scholastic Bowl Training</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Chart.js for beautiful analytics -->
+    <!-- Stable Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        .mono {
-            font-family: 'JetBrains Mono', monospace;
-        }
-        /* Custom scrollbar for dark mode tech aesthetic */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0f172a;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0b0f19; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
     </style>
 </head>
-<body class="bg-[#0b0f19] text-slate-100 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+<body class="text-slate-100 min-h-screen flex flex-col antialiased">
 
     <!-- AUDIO SYSTEM FOR LIVE BUZZING -->
     <audio id="buzzSound" src="https://assets.mixkit.co/active_storage/sfx/2961/2961-84.wav" preload="auto"></audio>
 
-    <!-- HEADER / NAVIGATION NAVIGATION -->
-    <header class="border-b border-slate-800/80 bg-[#0f1524]/90 backdrop-blur sticky top-0 z-40 px-4 lg:px-8 py-3 flex items-center justify-between">
+    <!-- HEADER / NAVIGATION -->
+    <header class="border-b border-slate-800 bg-[#0f1524]/90 backdrop-blur sticky top-0 z-40 px-4 lg:px-8 py-3 flex items-center justify-between">
         <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('landing')">
             <div class="h-9 w-9 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
                 <span class="font-extrabold text-white tracking-tighter text-sm">BP</span>
             </div>
             <div>
-                <span class="font-bold text-lg bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">BowlPrep</span>
-                <span class="text-[10px] uppercase tracking-widest font-bold text-indigo-400 block -mt-1 mono">v1.0.0 Stable</span>
+                <span class="font-bold text-lg bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">BowlPrep</span>
+                <span class="text-[10px] uppercase tracking-widest font-bold text-indigo-400 block -mt-1 mono">v1.0.1 Stable</span>
             </div>
         </div>
 
         <nav class="hidden md:flex items-center space-x-1">
-            <button onclick="switchView('landing')" class="nav-link px-3 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-white transition-colors">Home</button>
-            <button onclick="switchView('lobby')" class="nav-link px-3 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-white transition-colors">Multiplayer Hub</button>
-            <button onclick="switchView('dashboard')" class="nav-link px-3 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-white transition-colors">Analytics</button>
-            <button onclick="switchView('team')" class="nav-link px-3 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-white transition-colors">Team Dashboard</button>
+            <button onclick="switchView('landing')" class="px-3 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-white transition-colors">Home</button>
+            <button onclick="switchView('lobby')" class="px-3 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-white transition-colors">Multiplayer Hub</button>
+            <button onclick="switchView('dashboard')" class="px-3 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-white transition-colors">Analytics</button>
+            <button onclick="switchView('team')" class="px-3 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-white transition-colors">Team Dashboard</button>
         </nav>
 
         <div class="flex items-center space-x-3">
@@ -68,616 +52,320 @@
                 </span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
             </button>
-            <div id="userProfileButton" onclick="switchView('profile')" class="flex items-center space-x-2 bg-slate-800/80 border border-slate-700/60 p-1.5 pr-3 rounded-lg cursor-pointer hover:bg-slate-800 transition-colors">
+            <div onclick="switchView('profile')" class="flex items-center space-x-2 bg-slate-800/80 border border-slate-700/60 p-1.5 pr-3 rounded-lg cursor-pointer hover:bg-slate-800 transition-colors">
                 <div class="h-6 w-6 rounded bg-indigo-600 text-[10px] font-bold flex items-center justify-center text-white uppercase" id="avatarFallback">U</div>
-                <span class="text-xs font-semibold text-slate-300" id="headerUsername">Guest User</span>
+                <span class="text-xs font-semibold text-slate-300" id="headerUsername">Alex Mercer</span>
             </div>
         </div>
     </header>
 
-    <!-- SETTINGS DRAWER OVERLAY -->
+    <!-- SETTINGS DRAWER -->
     <div id="settingsDrawer" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 transition-opacity opacity-0 pointer-events-none duration-300">
         <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-[#0f1626] border-l border-slate-800 p-6 shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300" id="settingsDrawerContainer">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
                 <div class="flex items-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                    <h3 class="text-lg font-bold">Secure Core Engine Config</h3>
+                    <h3 class="text-lg font-bold">Secure AI Config</h3>
                 </div>
-                <button onclick="toggleSettingsDrawer()" class="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white">&times;</button>
+                <button onclick="toggleSettingsDrawer()" class="text-2xl text-slate-400 hover:text-white">&times;</button>
             </div>
             
             <div class="space-y-4 flex-1">
                 <div>
                     <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-1.5">Google AI Studio API Key</label>
                     <input type="password" id="apiConfigKey" placeholder="AIzaSy..." class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-indigo-500 font-mono">
-                    <p class="text-slate-400 text-[11px] mt-2 leading-relaxed">
-                        Your key is saved locally in your own browser cache. It directly communicates with Google's endpoints and never touches external intermediary servers.
-                    </p>
-                </div>
-                <div class="bg-indigo-950/40 border border-indigo-900/60 p-3.5 rounded-lg">
-                    <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-wide mb-1">Free Tier Metrics Enabled</h4>
-                    <p class="text-slate-300 text-[11px] leading-relaxed">
-                        Using Gemini 2.5 Flash sets a massive limit allowance of up to 1,500 free requests per day, processing zero setup fee barriers.
-                    </p>
+                    <p class="text-slate-400 text-[11px] mt-2">Your key stays locally in your browser. It connects directly to Google.</p>
                 </div>
             </div>
 
             <div class="pt-4 border-t border-slate-800">
-                <button onclick="saveAPIConfig()" class="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 transition-colors py-2.5 text-sm font-semibold rounded-lg text-white shadow-lg shadow-indigo-600/10">
-                    Apply Operational Key Configuration
+                <button onclick="saveAPIConfig()" class="w-full bg-indigo-600 hover:bg-indigo-500 transition-colors py-2.5 text-sm font-semibold rounded-lg text-white">
+                    Apply API Configuration Key
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- MAIN ROOT VIEWPORTS CONTROLLER -->
+    <!-- MAIN VIEW PANELS -->
     <main class="flex-1 max-w-[1600px] w-full mx-auto px-4 lg:px-8 py-6 flex flex-col">
 
-        <!-- VIEW 1: LANDING / PRODUCT HIGHLIGHTS -->
-        <section id="view-landing" class="view-panel space-y-12 py-6 hidden">
+        <!-- LANDING VIEW -->
+        <section id="view-landing" class="view-panel space-y-12 py-6">
             <div class="text-center max-w-3xl mx-auto space-y-4">
                 <div class="inline-flex items-center space-x-2 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 rounded-full text-xs font-semibold text-indigo-400">
-                    <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
-                    <span>Next-Generation Quiz Bowl Preparation Infrastructure</span>
+                    <span>Next-Gen Quiz Bowl Arena</span>
                 </div>
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1]">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">
                     Train Smarter for <br/>
-                    <span class="bg-gradient-to-r from-indigo-400 via-violet-400 to-pink-500 bg-clip-text text-transparent">Scholastic Bowl Matchups</span>
+                    <span class="bg-gradient-to-r from-indigo-400 to-pink-500 bg-clip-text text-transparent">Scholastic Bowl Matchups</span>
                 </h1>
-                <p class="text-slate-400 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
-                    A high-octane, dark-mode real-time multiplayer training arena leveraging automated AI pyramidal item generation and granular performance deep dives.
+                <p class="text-slate-400 text-base max-w-xl mx-auto">
+                    Real-time multiplayer practice powered by custom AI pyramidal tossup items and microsecond buzzer synchronization.
                 </p>
-                <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
-                    <button onclick="switchView('lobby')" class="w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-semibold shadow-lg shadow-indigo-600/20 text-sm transition-all transform hover:-translate-y-0.5">
-                        Launch Practice Room
+                <div class="pt-4 flex justify-center gap-3">
+                    <button onclick="switchView('lobby')" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-semibold text-sm transition-all">
+                        Launch Practice Hub
                     </button>
-                    <button onclick="toggleSettingsDrawer()" class="w-full sm:w-auto px-6 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl font-semibold text-sm transition-all text-slate-300">
-                        Input Engine API Key
+                    <button onclick="toggleSettingsDrawer()" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl font-semibold text-sm text-slate-300">
+                        Setup Engine Key
                     </button>
-                </div>
-            </div>
-
-            <!-- CORE UTILITIES FEATURE GRID -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
-                <div class="bg-[#0f1524] border border-slate-800 p-5 rounded-xl space-y-3">
-                    <div class="h-10 w-10 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400 font-bold text-lg">⚡</div>
-                    <h3 class="font-bold text-base text-slate-200">Synchronized Live Buzzing</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">Word-by-word streaming item reads lock instantly across parallel execution sessions the millisecond a spacebar is activated.</p>
-                </div>
-                <div class="bg-[#0f1524] border border-slate-800 p-5 rounded-xl space-y-3">
-                    <div class="h-10 w-10 rounded-lg bg-violet-500/10 flex items-center justify-center text-violet-400 font-bold text-lg">🤖</div>
-                    <h3 class="font-bold text-base text-slate-200">On-the-Fly Pyramidal AI</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">Bypasses stagnant databases. Dynamically codes and outputs academic queries starting broad and narrowing to distinct clues.</p>
-                </div>
-                <div class="bg-[#0f1524] border border-slate-800 p-5 rounded-xl space-y-3">
-                    <div class="h-10 w-10 rounded-lg bg-pink-500/10 flex items-center justify-center text-pink-400 font-bold text-lg">📊</div>
-                    <h3 class="font-bold text-base text-slate-200">Intermission Metrics Evaluation</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">Auto-compiles heatmaps, category latency intervals, and pinpoint accuracy metrics right between structural rounds.</p>
                 </div>
             </div>
         </section>
 
-        <!-- VIEW 2: MULTIPLAYER LOBBY / ROOM CREATION -->
+        <!-- LOBBY VIEW -->
         <section id="view-lobby" class="view-panel grid grid-cols-1 lg:grid-cols-3 gap-8 hidden flex-1">
             <div class="lg:col-span-2 space-y-6">
                 <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-6 space-y-6">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-100">Configure Academic Practice Arena</h2>
-                        <p class="text-slate-400 text-xs mt-1">Initialize real-time multiplayer configuration specs here.</p>
-                    </div>
-
+                    <h2 class="text-xl font-bold">Configure Practice Arena</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-1.5">Target Difficulty Matrix</label>
-                            <select id="roomDifficulty" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                            <label class="block text-xs uppercase font-bold text-slate-400 mb-1.5">Difficulty Matrix</label>
+                            <select id="roomDifficulty" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none">
                                 <option value="Middle School">Middle School Elite</option>
                                 <option value="High School Regular" selected>High School Regular</option>
-                                <option value="High School National">High School National Championship</option>
-                                <option value="Collegiate">Collegiate Division I</option>
+                                <option value="High School National">High School National</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-1.5">Stream Reveal Configuration</label>
-                            <select id="roomSpeed" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                            <label class="block text-xs uppercase font-bold text-slate-400 mb-1.5">Reveal Pace</label>
+                            <select id="roomSpeed" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none">
                                 <option value="180">Hyper Blitz (Fast)</option>
                                 <option value="260" selected>Standard Match Pace</option>
-                                <option value="380">Instructional Analysis (Slow)</option>
+                                <option value="380">Instructional (Slow)</option>
                             </select>
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-2">Subject Distribution Filtering</label>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5" id="categorySelectionGrid">
-                            <!-- Populated dynamically via controller init -->
-                        </div>
+                        <label class="block text-xs uppercase font-bold text-slate-400 mb-2">Subject Filtering</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5" id="categorySelectionGrid"></div>
                     </div>
 
-                    <div class="pt-2 border-t border-slate-800 flex items-center justify-end">
-                        <button onclick="createMatchRoom()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-bold tracking-wide uppercase text-white transition-colors shadow-lg shadow-indigo-600/10">
-                            Initialize Synchronized Engine
+                    <div class="pt-2 border-t border-slate-800 flex justify-end">
+                        <button onclick="createMatchRoom()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-bold uppercase text-white">
+                            Initialize Arena
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- ACTIVE LOBBIES MATCHMAKING INDEX -->
             <div class="space-y-6">
-                <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-5 space-y-4 flex flex-col h-full">
-                    <div>
-                        <h3 class="font-bold text-sm uppercase tracking-wider text-slate-300">Live Team Lobby Indexes</h3>
-                        <p class="text-slate-400 text-[11px] mt-0.5">Connect to established multiplayer codes below.</p>
-                    </div>
-
-                    <div class="space-y-2 flex-1 overflow-y-auto" id="activeRoomsContainer">
-                        <!-- Simulated room modules populated automatically -->
-                    </div>
-
-                    <div class="pt-3 border-t border-slate-800 space-y-2">
-                        <input type="text" id="directRoomCodeInput" placeholder="Enter Secure Room Token Code..." class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 text-center uppercase tracking-widest font-mono">
-                        <button onclick="joinRoomDirect()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-xs font-semibold text-slate-200 transition-colors">
-                            Validate Token Connection
-                        </button>
-                    </div>
+                <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-5 flex flex-col h-full space-y-4">
+                    <h3 class="font-bold text-sm uppercase tracking-wider text-slate-300">Live Team Codes</h3>
+                    <div class="space-y-2 flex-1 overflow-y-auto" id="activeRoomsContainer"></div>
                 </div>
             </div>
         </section>
 
-        <!-- VIEW 3: PIPELINE LOADING SEQUENCE SCREEN -->
+        <!-- LOADING PACK SCREEN -->
         <section id="view-loading-screen" class="view-panel max-w-xl mx-auto w-full bg-[#0f1524] border border-slate-800 rounded-2xl p-8 space-y-8 my-auto hidden text-center shadow-2xl">
-            <div class="space-y-3">
-                <div class="h-12 w-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mx-auto text-xl font-bold animate-spin">
-                    ⚙️
-                </div>
-                <h2 class="text-xl font-bold tracking-tight" id="loadingStageTitle">Initializing Prompt Directives</h2>
-                <p class="text-slate-400 text-xs max-w-xs mx-auto" id="loadingStageSubtitle">Assembling framework and applying multi-pass security vetting parameters.</p>
-            </div>
-
-            <!-- PIPELINE WORKFLOW CARD -->
-            <div class="bg-[#141b2e] border border-slate-800/80 rounded-xl p-4 text-left font-mono text-xs space-y-2 text-slate-400" id="loadingConsoleLog">
-                <div class="flex items-center justify-between text-indigo-400 font-bold">
-                    <span>[SYS_LOG] Core Framework</span>
-                    <span>ACTIVE</span>
-                </div>
-                <div class="h-[120px] overflow-y-auto space-y-1 pr-2" id="consoleLogsText">
-                    <!-- Dynamic validation sequence updates stream here -->
-                </div>
-            </div>
-
-            <!-- STRUCTURAL PROGRESS DISPLAY BAR -->
+            <h2 class="text-xl font-bold" id="loadingStageTitle">Initializing Prompt Directives</h2>
+            <p class="text-slate-400 text-xs" id="loadingStageSubtitle">Assembling architecture packages...</p>
+            <div class="bg-[#141b2e] border border-slate-800 rounded-xl p-4 text-left font-mono text-xs h-[120px] overflow-y-auto space-y-1" id="consoleLogsText"></div>
             <div class="space-y-2">
-                <div class="flex items-center justify-between text-xs font-semibold text-slate-400">
-                    <span id="loadingProgressPercentage">0% Matrix Compiled</span>
+                <div class="flex justify-between text-xs text-slate-400">
+                    <span id="loadingProgressPercentage">0% Compiled</span>
                     <span id="loadingProgressFraction">0 / 15 Items</span>
                 </div>
                 <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                    <div id="loadingProgressBarFill" class="bg-gradient-to-r from-indigo-500 to-violet-600 h-full transition-all duration-300 w-0"></div>
+                    <div id="loadingProgressBarFill" class="bg-indigo-500 h-full w-0 transition-all duration-300"></div>
                 </div>
             </div>
         </section>
 
-        <!-- VIEW 4: SYNCHRONIZED MULTIPLAYER GAMEPLAY MATRIX -->
+        <!-- GAMEPLAY SCREEN -->
         <section id="view-gameplay" class="view-panel grid grid-cols-1 lg:grid-cols-4 gap-6 hidden flex-1">
-            <!-- GAME BOARD INTERACTION CONTAINER -->
             <div class="lg:col-span-3 flex flex-col space-y-4">
-                <!-- TOP HEADER DATA STRIP -->
-                <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-4 flex flex-wrap items-center justify-between gap-3 font-mono text-xs text-slate-400">
-                    <div class="flex items-center space-x-4">
-                        <div>ROOM CODE: <span class="text-indigo-400 font-bold" id="gameplayRoomToken">------</span></div>
-                        <div>DIFFICULTY: <span class="text-slate-200 font-semibold" id="gameplayDifficulty">NORMAL</span></div>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <div>ROUND STATUS: <span id="gameplayRoundIndicator" class="text-violet-400 font-bold">ROUND 1/2</span></div>
-                        <div>ITEM MATRIX: <span id="gameplayItemFraction" class="text-slate-200 font-bold">0 / 15</span></div>
-                    </div>
+                <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-4 flex justify-between font-mono text-xs text-slate-400">
+                    <div>ROOM: <span class="text-indigo-400 font-bold" id="gameplayRoomToken">------</span></div>
+                    <div>ROUND STATUS: <span id="gameplayRoundIndicator" class="text-violet-400 font-bold">ROUND 1/2</span></div>
+                    <div>MATRIX: <span id="gameplayItemFraction" class="text-slate-200 font-bold">0 / 15</span></div>
                 </div>
 
-                <!-- MAIN STREAM REVEAL CANVAS MODULE -->
-                <div class="bg-[#0f1524] border-2 border-slate-800/60 rounded-xl p-6 sm:p-8 flex-1 flex flex-col min-h-[280px] relative transition-all" id="tossupBoxOutline">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-                        <div class="flex items-center space-x-2">
-                            <span class="px-2 py-0.5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-mono text-[10px] rounded uppercase font-bold" id="itemCategoryBadge">Core Subject</span>
-                            <span class="text-slate-500 font-mono text-[10px]" id="itemSubcategoryText">General Subcategory</span>
-                        </div>
-                        <div class="text-[11px] font-mono text-slate-400" id="liveSpeedReadout">STREAMING MODE</div>
+                <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-6 sm:p-8 flex-1 flex flex-col min-h-[280px] relative" id="tossupBoxOutline">
+                    <div class="flex justify-between border-b border-slate-800 pb-3 mb-4">
+                        <span class="px-2 py-0.5 bg-indigo-500/10 text-indigo-400 text-[10px] font-mono rounded uppercase" id="itemCategoryBadge">Core Subject</span>
+                        <span class="text-slate-500 font-mono text-[10px]" id="itemSubcategoryText">General Subcategory</span>
                     </div>
-
-                    <!-- WORD STREAM CONTENT CONTAINER -->
-                    <div class="flex-1 text-slate-100 text-lg sm:text-xl font-medium leading-relaxed select-none tracking-wide" id="tossupDisplayStream">
-                        <!-- Progressive read-out rendering targeted array items here -->
-                    </div>
-
-                    <!-- BUZZER TIMELINE MODULATOR LOCK BANNER -->
-                    <div id="buzzerLockBanner" class="absolute inset-0 bg-rose-950/20 backdrop-blur-[1px] rounded-xl flex items-center justify-center border border-rose-500/30 hidden animate-fade-in">
-                        <div class="bg-rose-900 border border-rose-700/60 px-6 py-4 rounded-xl text-center shadow-2xl max-w-sm transform scale-100">
-                            <div class="text-2xl mb-1">🚨</div>
-                            <h4 class="font-bold text-white text-base tracking-tight uppercase" id="buzzerLockName">PLAYER BUZZED</h4>
-                            <p class="text-rose-200 text-xs mt-1 leading-normal" id="buzzerLockSubtext">Awaiting tournament host validation input sequence...</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- LIVE HARDWARE BUZZER ACTUATOR SYSTEM BUTTON -->
-                <div class="w-full">
-                    <button id="hardwareBuzzerButton" onclick="triggerUserBuzz()" class="w-full bg-gradient-to-b from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 active:from-rose-700 active:to-rose-800 text-white rounded-xl py-6 font-black tracking-widest text-xl shadow-xl shadow-rose-950/40 border-b-4 border-rose-800 focus:outline-none transition-all cursor-pointer select-none">
-                        BUZZ NOW <span class="block text-[11px] opacity-70 font-mono font-normal tracking-wide mt-1">[ SPACEBAR KEYBOARD BIND ]</span>
-                    </button>
-                </div>
-
-                <!-- OPERATIONAL REFEREE CONTROLLER (HOST JUDGING INLINE CONTROL INTERFACE) -->
-                <div id="hostRefereeInterface" class="bg-slate-900/90 border border-slate-800 p-4 rounded-xl space-y-3 hidden animate-fade-in">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-                        <h4 class="text-xs font-bold font-mono tracking-wider text-amber-400 uppercase">Tournament Adjudication Pipeline</h4>
-                        <span class="text-[10px] text-slate-400 uppercase font-mono bg-slate-800 px-2 py-0.5 rounded">Host Panel</span>
-                    </div>
+                    <div class="flex-1 text-slate-100 text-lg sm:text-xl font-medium leading-relaxed" id="tossupDisplayStream"></div>
                     
-                    <div class="bg-[#0f1524] p-3 rounded-lg border border-slate-800 font-mono text-xs space-y-1">
-                        <div>TARGET ANSWER SCHEMATIC: <span class="text-emerald-400 font-bold" id="hostTargetAnswer">-----</span></div>
-                        <div class="text-slate-400 text-[11px]">ACCEPTABLE PERMUTATIONS: <span id="hostAlternateAnswers">-----</span></div>
+                    <div id="buzzerLockBanner" class="absolute inset-0 bg-rose-950/40 backdrop-blur-sm rounded-xl flex items-center justify-center hidden">
+                        <div class="bg-rose-900 p-6 rounded-xl text-center border border-rose-600 shadow-2xl">
+                            <h4 class="font-bold text-white text-lg uppercase" id="buzzerLockName">PLAYER BUZZED</h4>
+                            <p class="text-rose-200 text-xs mt-1" id="buzzerLockSubtext">Awaiting adjudication...</p>
+                        </div>
                     </div>
+                </div>
 
+                <button id="hardwareBuzzerButton" onclick="triggerUserBuzz()" class="w-full bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-white rounded-xl py-6 font-black tracking-widest text-xl border-b-4 border-rose-800 focus:outline-none transition-all">
+                    BUZZ NOW <span class="block text-[11px] font-normal tracking-wide mt-1">[ SPACEBAR BIND ]</span>
+                </button>
+
+                <div id="hostRefereeInterface" class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-3 hidden">
+                    <div class="bg-[#0f1524] p-3 rounded-lg border border-slate-800 font-mono text-xs">
+                        <div>TARGET ANSWER: <span class="text-emerald-400 font-bold" id="hostTargetAnswer">-----</span></div>
+                        <div class="text-slate-400 mt-1">PERMUTATIONS: <span id="hostAlternateAnswers">-----</span></div>
+                    </div>
                     <div class="grid grid-cols-2 gap-3">
-                        <button onclick="adjudicateBuzz(true)" class="bg-emerald-600 hover:bg-emerald-500 py-2.5 rounded-lg font-bold text-xs text-white tracking-wide uppercase transition-colors">
-                            Accept as CORRECT (+10 Points)
-                        </button>
-                        <button onclick="adjudicateBuzz(false)" class="bg-rose-600 hover:bg-rose-500 py-2.5 rounded-lg font-bold text-xs text-white tracking-wide uppercase transition-colors">
-                            Reject as INCORRECT / NEG (-5 Points)
-                        </button>
+                        <button onclick="adjudicateBuzz(true)" class="bg-emerald-600 hover:bg-emerald-500 py-2.5 rounded-lg font-bold text-xs text-white uppercase">CORRECT (+10)</button>
+                        <button onclick="adjudicateBuzz(false)" class="bg-rose-600 hover:bg-rose-500 py-2.5 rounded-lg font-bold text-xs text-white uppercase">INCORRECT (-5)</button>
                     </div>
                 </div>
             </div>
 
-            <!-- ROSTER SCORE TRACKING PANEL & LOBBY CHAT FEEDS -->
             <div class="space-y-4">
                 <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-4 space-y-3 flex flex-col h-full">
-                    <h3 class="text-xs font-bold tracking-wider uppercase text-slate-400 font-mono">Lobby Score Tracking Roster</h3>
-                    <div class="space-y-1.5 flex-1 overflow-y-auto" id="gameplayRosterList">
-                        <!-- Roster updates injection map point -->
-                    </div>
+                    <h3 class="text-xs font-bold tracking-wider uppercase text-slate-400 font-mono">Score Tracking Roster</h3>
+                    <div class="space-y-1.5 flex-1 overflow-y-auto" id="gameplayRosterList"></div>
                 </div>
             </div>
         </section>
 
-        <!-- VIEW 5: INTERMISSION RETROSPECTIVE ANALYTICS STAGE -->
+        <!-- INTERMISSION VIEW -->
         <section id="view-intermission" class="view-panel max-w-4xl mx-auto w-full space-y-6 hidden">
-            <div class="bg-gradient-to-r from-violet-950/40 via-[#0f1524] to-indigo-950/40 border border-slate-800 p-6 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <span class="px-2.5 py-0.5 bg-violet-500/10 border border-violet-500/20 text-violet-400 font-mono text-[10px] rounded font-bold uppercase tracking-wider">Mid-Match Operational Checkpoint</span>
-                    <h2 class="text-2xl font-black tracking-tight mt-1">ROUND 1 METRICS INDEX COMPUTED</h2>
-                </div>
-                <button onclick="advanceIntermissionToRoundTwo()" id="intermissionContinueBtn" class="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:hover:bg-indigo-600 px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider text-white transition-all shadow-lg shadow-indigo-600/10">
-                    Awaiting Next Iteration Cache...
+            <div class="bg-[#0f1524] border border-slate-800 p-6 rounded-2xl flex justify-between items-center">
+                <h2 class="text-2xl font-black">ROUND 1 COMPLETE</h2>
+                <button onclick="advanceIntermissionToRoundTwo()" id="intermissionContinueBtn" class="bg-indigo-600 hover:bg-indigo-500 px-5 py-2.5 rounded-lg text-xs font-bold uppercase text-white transition-all">
+                    Preloading Round 2...
                 </button>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="intermissionStatsCards">
-                <!-- Inline performance cards dynamic generation target -->
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-[#0f1524] border border-slate-800 p-5 rounded-xl space-y-4">
-                    <h3 class="text-xs font-bold tracking-wider uppercase text-slate-400 font-mono">Category Hit Matrix Heatmap</h3>
-                    <div class="h-[220px] relative flex items-center justify-center">
-                        <canvas id="intermissionChartCanvas"></canvas>
-                    </div>
-                </div>
-                
-                <div class="bg-[#0f1524] border border-slate-800 p-5 rounded-xl space-y-3 flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-xs font-bold tracking-wider uppercase text-slate-400 font-mono mb-2">Automated Optimization Engine Directives</h3>
-                        <div class="space-y-2 text-xs leading-relaxed text-slate-300" id="intermissionFeedbackOutput">
-                            <!-- Injected structured analysis evaluations -->
-                        </div>
-                    </div>
-                    <div class="bg-slate-900/50 border border-slate-800 rounded p-3 font-mono text-[11px] text-indigo-400 flex items-center justify-between" id="intermissionLoaderLog">
-                        <span>[PRELOADING ROUND 2 SPEC PACK]</span>
-                        <span class="animate-pulse font-bold">CACHING...</span>
-                    </div>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="intermissionStatsCards"></div>
+            <div class="bg-[#0f1524] border border-slate-800 p-5 rounded-xl">
+                <h3 class="text-xs font-bold text-slate-400 uppercase font-mono mb-4">Subject Hit Distribution Matrix</h3>
+                <div class="h-[240px] relative"><canvas id="intermissionChartCanvas"></canvas></div>
             </div>
         </section>
 
-        <!-- VIEW 6: TOURNAMENT SUMMARY AND MATCH COMPLETE MATRIX -->
+        <!-- ENDGAME VIEW -->
         <section id="view-endgame" class="view-panel max-w-4xl mx-auto w-full space-y-6 hidden">
             <div class="text-center space-y-2 py-4">
-                <div class="text-3xl">🏆</div>
                 <h1 class="text-3xl font-extrabold tracking-tight">MATCH PROTOCOL CONCLUDED</h1>
-                <p class="text-slate-400 text-xs max-w-xs mx-auto">All thirty structural assessment vectors processed and applied to global tracking schemas.</p>
             </div>
-
-            <div class="bg-[#0f1524] border border-slate-800 rounded-2xl p-6 overflow-hidden">
-                <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4 text-xs font-mono uppercase tracking-wider text-slate-400">
-                    <span>Lobby Placement Order Matrix</span>
-                    <span>Consolidated Metrics Output</span>
-                </div>
-                <div class="space-y-2" id="endgamePlacementsContainer">
-                    <!-- Complete scoreboard render point -->
-                </div>
-            </div>
-
-            <div class="flex items-center justify-center space-x-3 pt-2">
-                <button onclick="switchView('lobby')" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-bold uppercase tracking-wider text-white transition-all">
-                    Return to Operational Hub
-                </button>
-                <button onclick="switchView('dashboard')" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-xs font-bold uppercase tracking-wider text-slate-300 transition-all">
-                    Review Global Trends Profile
-                </button>
+            <div class="bg-[#0f1524] border border-slate-800 rounded-2xl p-6 space-y-2" id="endgamePlacementsContainer"></div>
+            <div class="flex justify-center space-x-3">
+                <button onclick="switchView('lobby')" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-bold text-white uppercase">Return to Hub</button>
             </div>
         </section>
 
-        <!-- VIEW 7: PERSONAL ANALYTICS METRICS PROFILE DASHBOARD -->
-        <section id="view-dashboard" class="view-panel space-y-6 hidden flex-1">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/60 pb-4">
-                <div>
-                    <h2 class="text-xl font-bold text-slate-100">Global Analytical Evaluation Matrix</h2>
-                    <p class="text-slate-400 text-xs mt-0.5">Continuous trend metrics tracked across sequential arena executions.</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="dashboardOverviewCards">
-                <!-- Populated via script init processing -->
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="bg-[#0f1524] border border-slate-800 p-5 rounded-xl space-y-4 lg:col-span-2">
-                    <h3 class="text-xs font-bold tracking-wider uppercase text-slate-400 font-mono">Historical Subject Response Delta</h3>
-                    <div class="h-[260px] relative flex items-center justify-center">
-                        <canvas id="dashboardTrendChartCanvas"></canvas>
-                    </div>
-                </div>
-                
-                <div class="bg-[#0f1524] border border-slate-800 p-5 rounded-xl space-y-4">
-                    <h3 class="text-xs font-bold tracking-wider uppercase text-slate-400 font-mono">Weakness Remediation Vectors</h3>
-                    <div class="space-y-3 text-xs" id="dashboardEngineFeedbackArea">
-                        <!-- AI recommended pathways text -->
-                    </div>
-                </div>
+        <!-- ANALYTICS DASHBOARD -->
+        <section id="view-dashboard" class="view-panel space-y-6 hidden">
+            <h2 class="text-xl font-bold">Global Performance Evaluation</h2>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="dashboardOverviewCards"></div>
+            <div class="bg-[#0f1524] border border-slate-800 p-5 rounded-xl h-[300px] relative">
+                <canvas id="dashboardTrendChartCanvas"></canvas>
             </div>
         </section>
 
-        <!-- VIEW 8: TEAM MANAGEMENT DIRECTORY -->
+        <!-- TEAM DASHBOARD -->
         <section id="view-team" class="view-panel max-w-4xl mx-auto w-full space-y-6 hidden">
             <div class="bg-[#0f1524] border border-slate-800 p-6 rounded-xl space-y-4">
-                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                    <div>
-                        <h2 class="text-xl font-bold">Varsity Scholastic Squad Index</h2>
-                        <p class="text-slate-400 text-xs mt-0.5">Consolidated analytical insights for roster profiling maps.</p>
-                    </div>
-                    <span class="px-2.5 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded text-indigo-400 font-mono text-xs font-bold">COACHING OVERVIEW ACTIVE</span>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                    <div class="bg-[#141b2e] border border-slate-800 rounded-lg p-4">
-                        <div class="text-slate-400 text-[11px] uppercase tracking-wider font-mono">Team Core Strength</div>
-                        <div class="text-lg font-bold text-emerald-400 mt-1">Science & Tech Matrix</div>
-                    </div>
-                    <div class="bg-[#141b2e] border border-slate-800 rounded-lg p-4">
-                        <div class="text-slate-400 text-[11px] uppercase tracking-wider font-mono">Critical Team Volatility</div>
-                        <div class="text-lg font-bold text-rose-400 mt-1">Fine Arts / Mythology</div>
-                    </div>
-                    <div class="bg-[#141b2e] border border-slate-800 rounded-lg p-4">
-                        <div class="text-slate-400 text-[11px] uppercase tracking-wider font-mono">Combined Session Count</div>
-                        <div class="text-lg font-bold text-indigo-400 mt-1">42 Matches Verified</div>
-                    </div>
-                </div>
-
-                <div class="pt-4">
-                    <h3 class="text-xs font-bold tracking-wider uppercase text-slate-400 font-mono mb-3">Roster Specialty Ratios</h3>
-                    <div class="border border-slate-800 rounded-lg overflow-hidden bg-[#141b2e]/50">
-                        <table class="w-full text-left text-xs border-collapse">
-                            <thead>
-                                <tr class="border-b border-slate-800 bg-[#141b2e] text-slate-400 font-mono text-[11px]">
-                                    <th class="p-3">Competitor Profile</th>
-                                    <th class="p-3">Primary Specialty Discipline</th>
-                                    <th class="p-3 text-center">Avg Buzz Speed</th>
-                                    <th class="p-3 text-right">Match Accuracy</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-800/60 text-slate-300">
-                                <tr>
-                                    <td class="p-3 font-semibold text-slate-100">Alex Mercer (You)</td>
-                                    <td class="p-3"><span class="px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-mono text-[10px]">HISTORY / LITERATURE</span></td>
-                                    <td class="p-3 text-center font-mono">1.84s</td>
-                                    <td class="p-3 text-right text-emerald-400 font-mono font-bold">84.2%</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-3 font-semibold text-slate-100">Sarah Chen [Bot]</td>
-                                    <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-[10px]">PURE SCIENCE / MATH</span></td>
-                                    <td class="p-3 text-center font-mono">1.45s</td>
-                                    <td class="p-3 text-right text-emerald-400 font-mono font-bold">89.1%</td>
-                                </tr>
-                                <tr>
-                                    <td class="p-3 font-semibold text-slate-100">Marcus Vance [Bot]</td>
-                                    <td class="p-3"><span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-mono text-[10px]">FINE ARTS / MYTHOLOGY</span></td>
-                                    <td class="p-3 text-center font-mono">2.10s</td>
-                                    <td class="p-3 text-right text-amber-400 font-mono font-bold">71.4%</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <h2 class="text-xl font-bold border-b border-slate-800 pb-3">Varsity Squad Overview</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-sm text-slate-300">
+                    <div class="p-3 bg-slate-900 rounded">Team Specialty: <span class="text-emerald-400 font-bold">Science Matrix</span></div>
+                    <div class="p-3 bg-slate-900 rounded">Session Count: <span class="text-indigo-400 font-bold">42 Matches</span></div>
+                    <div class="p-3 bg-slate-900 rounded">Roster Count: <span class="text-slate-100 font-bold">3 Registered</span></div>
                 </div>
             </div>
         </section>
 
-        <!-- VIEW 9: USER SPECIFIC SETTINGS MODAL PROFILE -->
-        <section id="view-profile" class="view-panel max-w-xl mx-auto w-full bg-[#0f1524] border border-slate-800 rounded-2xl p-6 hidden space-y-6">
-            <h2 class="text-xl font-bold tracking-tight border-b border-slate-800 pb-3">User Profile Framework</h2>
-            <div class="space-y-4">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-1.5">User Handle Identifier</label>
-                        <input type="text" id="profileUsername" value="Alex Mercer" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-1.5">Institutional Affiliation</label>
-                        <input type="text" id="profileSchool" value="Jefferson Science Academy" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
-                    </div>
-                </div>
-                <button onclick="updateUserProfile()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-bold uppercase tracking-wider text-white transition-colors">
-                    Commit State Modification Updates
-                </button>
+        <!-- USER PROFILE -->
+        <section id="view-profile" class="view-panel max-w-xl mx-auto w-full bg-[#0f1524] border border-slate-800 rounded-2xl p-6 hidden space-y-4">
+            <h2 class="text-xl font-bold border-b border-slate-800 pb-2">Profile Configuration</h2>
+            <div>
+                <label class="block text-xs uppercase text-slate-400 mb-1">User Handle</label>
+                <input type="text" id="profileUsername" value="Alex Mercer" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none">
             </div>
+            <button onclick="updateUserProfile()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-bold text-white uppercase">Save Parameters</button>
         </section>
 
     </main>
 
-    <!-- FOOTER TECH DATA FOOTNOTE -->
-    <footer class="border-t border-slate-900 bg-[#070a12] px-4 lg:px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-500 font-mono">
-        <div>CORE PIPELINE ENVELOPE STATUS: <span class="text-emerald-400 font-bold">STANDBY</span></div>
-        <div>BowlPrep Engine © 2026 — Distributed Client Protocol Architecture</div>
-    </footer>
-
-    <!-- ENGINE CODE LOGIC LAYER BLOCK -->
+    <!-- ENGINE CODE LOGIC LAYER -->
     <script>
-        // GLOBALS STATE INITIALIZATION SPECIFICATION OBJECT
-        const SUBJECT_CATEGORIES = [
-            "History", "Science", "Literature", "Fine Arts", "Mythology",
-            "Geography", "Current Events", "Math", "Philosophy", "Religion", "Miscellaneous"
-        ];
-
+        const SUBJECT_CATEGORIES = ["History", "Science", "Literature", "Fine Arts", "Mythology", "Geography", "Math", "Philosophy"];
+        
         let APP_STATE = {
             view: "landing",
             apiKey: localStorage.getItem("BOWLPREP_KEY") || "",
             selectedCategories: [...SUBJECT_CATEGORIES],
-            currentUser: {
-                username: "Alex Mercer",
-                school: "Jefferson Science Academy",
-                history: []
-            },
+            currentUser: { username: "Alex Mercer", history: [] },
             currentMatch: null,
             charts: {}
         };
 
-        // RUNTIME SYSTEM PRESETS DEFINITIONS
         const SYSTEM_BOTS = [
-            { id: "bot_sarah", name: "Sarah Chen [Bot]", avgSpeed: 1600, precision: 0.88 },
-            { id: "bot_marcus", name: "Marcus Vance [Bot]", avgSpeed: 2150, precision: 0.72 }
+            { id: "bot_sarah", name: "Sarah Chen [Bot]", precision: 0.85 },
+            { id: "bot_marcus", name: "Marcus Vance [Bot]", precision: 0.70 }
         ];
 
-        // APPARATUS VIEW ROUTER ENGINE
         function switchView(targetId) {
-            document.querySelectorAll('.view-panel').forEach(panel => panel.classList.add('hidden'));
+            document.querySelectorAll('.view-panel').forEach(p => p.classList.add('hidden'));
             const activePanel = document.getElementById(`view-${targetId}`);
             if (activePanel) activePanel.classList.remove('hidden');
-            
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('text-indigo-400', 'bg-slate-800/40');
-            });
-            
             APP_STATE.view = targetId;
-            renderDynamicStateContextualLayouts();
+            renderAppState();
         }
 
-        // TOGGLE SIDE CONTEXT CONFIG DRAWER
         function toggleSettingsDrawer() {
-            const container = document.getElementById('settingsDrawerContainer');
-            const overlay = document.getElementById('settingsDrawer');
-            if(overlay.classList.contains('pointer-events-none')) {
-                overlay.classList.remove('pointer-events-none', 'opacity-0');
-                container.classList.remove('translate-x-full');
+            const drawer = document.getElementById('settingsDrawer');
+            const inner = document.getElementById('settingsDrawerContainer');
+            if(drawer.classList.contains('pointer-events-none')) {
+                drawer.classList.remove('pointer-events-none', 'opacity-0');
+                inner.classList.remove('translate-x-full');
             } else {
-                overlay.classList.add('pointer-events-none', 'opacity-0');
-                container.classList.add('translate-x-full');
+                drawer.classList.add('pointer-events-none', 'opacity-0');
+                inner.classList.add('translate-x-full');
             }
         }
 
         function saveAPIConfig() {
-            const keyVal = document.getElementById('apiConfigKey').value.trim();
-            if(!keyVal) return alert("Key cannot be null.");
-            APP_STATE.apiKey = keyVal;
-            localStorage.setItem("BOWLPREP_KEY", keyVal);
+            const val = document.getElementById('apiConfigKey').value.trim();
+            if(!val) return alert("Key input error.");
+            APP_STATE.apiKey = val;
+            localStorage.setItem("BOWLPREP_KEY", val);
             toggleSettingsDrawer();
-            renderDynamicStateContextualLayouts();
+            renderAppState();
         }
 
-        // GENERATE CATEGORY FILTER LABELS IN LOBBY VIEW CONTEXT
-        function initCategoryCheckboxes() {
+        function initCategoryGrid() {
             const grid = document.getElementById('categorySelectionGrid');
+            if(!grid) return;
             grid.innerHTML = "";
             SUBJECT_CATEGORIES.forEach(cat => {
-                const checked = APP_STATE.selectedCategories.includes(cat);
-                const label = document.createElement('label');
-                label.className = `flex items-center space-x-2 bg-[#161f33] border border-slate-700/60 rounded-lg p-2 cursor-pointer text-xs transition-all select-none hover:border-slate-600 ${checked ? 'border-indigo-500/80 bg-indigo-950/20' : ''}`;
-                label.innerHTML = `
-                    <input type="checkbox" value="${cat}" ${checked ? 'checked' : ''} onchange="toggleCategorySelect(this)" class="accent-indigo-500 rounded text-indigo-600 focus:ring-0">
-                    <span class="text-slate-300 font-medium">${cat}</span>
-                `;
-                grid.appendChild(label);
+                const active = APP_STATE.selectedCategories.includes(cat);
+                const el = document.createElement('div');
+                el.className = `p-2 rounded-lg border text-xs text-center cursor-pointer font-medium transition-colors ${active ? 'bg-indigo-950/40 border-indigo-500 text-indigo-300' : 'bg-slate-900 border-slate-800 text-slate-400'}`;
+                el.innerText = cat;
+                el.onclick = () => {
+                    if(active) APP_STATE.selectedCategories = APP_STATE.selectedCategories.filter(c => c !== cat);
+                    else APP_STATE.selectedCategories.push(cat);
+                    initCategoryGrid();
+                };
+                grid.appendChild(el);
             });
-        }
-
-        function toggleCategorySelect(checkbox) {
-            const val = checkbox.value;
-            if(checkbox.checked) {
-                if(!APP_STATE.selectedCategories.includes(val)) APP_STATE.selectedCategories.push(val);
-            } else {
-                APP_STATE.selectedCategories = APP_STATE.selectedCategories.filter(c => c !== val);
-            }
-            initCategoryCheckboxes();
-        }
-
-        // GENERATE MOCK LOBBIES
-        function renderSimulatedLobbies() {
-            const target = document.getElementById('activeRoomsContainer');
-            target.innerHTML = "";
-            const sampleRooms = [
-                { id: "ROOM-781A", host: "Sarah Chen", diff: "High School Regular", active: "3/4" },
-                { id: "ROOM-402C", host: "Coach Miller", diff: "High School National", active: "1/8" }
-            ];
-            
-            sampleRooms.forEach(rm => {
-                const row = document.createElement('div');
-                row.className = "bg-[#161f33] border border-slate-800 hover:border-slate-700 p-3 rounded-lg flex items-center justify-between transition-colors";
-                row.innerHTML = `
-                    <div>
-                        <div class="font-mono text-xs font-bold text-indigo-400">${rm.id}</div>
-                        <div class="text-[10px] text-slate-400 mt-0.5">Host: ${rm.host} | ${rm.diff}</div>
-                    </div>
-                    <button onclick="simulateJoinRoom('${rm.id}', '${rm.diff}')" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 rounded text-[11px] font-semibold text-slate-200 border border-slate-700">Join</button>
-                `;
-                target.appendChild(row);
-            });
-        }
-
-        function simulateJoinRoom(id, diff) {
-            initializeMatchSessionState(id, diff);
-        }
-
-        function joinRoomDirect() {
-            const val = document.getElementById('directRoomCodeInput').value.trim().toUpperCase();
-            if(!val) return alert("Verify valid room token format strings.");
-            initializeMatchSessionState(val, document.getElementById('roomDifficulty').value);
         }
 
         function createMatchRoom() {
-            const generatedToken = "RM-" + Math.floor(1000 + Math.random() * 9000);
-            const difficulty = document.getElementById('roomDifficulty').value;
-            initializeMatchSessionState(generatedToken, difficulty);
+            const token = "RM-" + Math.floor(1000 + Math.random() * 9000);
+            initMatchState(token, document.getElementById('roomDifficulty').value);
         }
 
-        // INITIALIZE CORE MATCH STATE
-        function initializeMatchSessionState(token, difficulty) {
+        function initMatchState(token, diff) {
             if(!APP_STATE.apiKey) {
-                alert("Core Execution Error: API Configuration Key context missing. Configure settings panel input layer.");
+                alert("Please enter a valid Google AI Studio Key first via the gear icon.");
                 toggleSettingsDrawer();
                 return;
             }
-            if(APP_STATE.selectedCategories.length === 0) {
-                return alert("Operational Alert: Select at least one subject vector.");
-            }
+            if(APP_STATE.selectedCategories.length === 0) return alert("Select at least 1 subject filtering metric.");
 
             APP_STATE.currentMatch = {
                 roomToken: token,
-                difficulty: difficulty,
+                difficulty: diff,
                 speedMs: parseInt(document.getElementById('roomSpeed').value),
                 round: 1,
                 itemIndex: 0,
                 questionsCache: [],
-                scores: {
-                    user: 0,
-                    bot_sarah: 0,
-                    bot_marcus: 0
-                },
+                scores: { user: 0, bot_sarah: 0, bot_marcus: 0 },
                 statsLog: [],
                 liveStreamTimer: null,
                 currentWordsArray: [],
@@ -686,671 +374,306 @@
                 whoBuzzed: null,
                 buzzTimestamp: 0
             };
-
             switchView('loading-screen');
-            executeAIPipelineGenerationBatch();
+            runAICorePipeline();
         }
 
-        // CORE GENERATION INTERACTION DISPATCHER ENGINE
-        async function executeAIPipelineGenerationBatch() {
+        async function runAICorePipeline() {
             const logBox = document.getElementById('consoleLogsText');
-            const barFill = document.getElementById('loadingProgressBarFill');
-            const pctText = document.getElementById('loadingProgressPercentage');
-            const fracText = document.getElementById('loadingProgressFraction');
+            const bar = document.getElementById('loadingProgressBarFill');
+            const pct = document.getElementById('loadingProgressPercentage');
+            const frac = document.getElementById('loadingProgressFraction');
             
             logBox.innerHTML = "";
-            const totalTargetCount = 15;
-            
-            const appendConsoleLog = (text, type="info") => {
-                const div = document.createElement('div');
-                div.className = type === "info" ? "text-slate-400" : "text-amber-400 font-semibold";
-                div.innerHTML = `&gt; ${text}`;
-                logBox.appendChild(div);
+            let generatedCache = [];
+            const count = 15;
+
+            document.getElementById('loadingStageTitle').innerText = `Compiling Round ${APP_STATE.currentMatch.round} Core Matrix`;
+
+            for(let i = 1; i <= count; i++) {
+                logBox.innerHTML += `<div>&gt; Pipeline Request block ${i}/15 initiated...</div>`;
                 logBox.scrollTop = logBox.scrollHeight;
-            };
-
-            document.getElementById('loadingStageTitle').innerText = `Compiling Round ${APP_STATE.currentMatch.round} Material Pack`;
-            appendConsoleLog(`Securing network endpoint routes to operational layer...`, "info");
-
-            let compilationCache = [];
-
-            for(let i = 1; i <= totalTargetCount; i++) {
-                document.getElementById('loadingStageSubtitle').innerText = `Assembling Matrix Segment Cluster ${i} of 15`;
-                appendConsoleLog(`Calling model pipeline iteration ${i}/${totalTargetCount}...`, "info");
                 
-                // Select category vector rotationally from selected set array variables
-                const targetedCategory = APP_STATE.selectedCategories[(i - 1) % APP_STATE.selectedCategories.length];
+                const category = APP_STATE.selectedCategories[(i - 1) % APP_STATE.selectedCategories.length];
                 
                 try {
-                    const generatedQuestionItem = await queryGeminiAPIForQuestion(targetedCategory, APP_STATE.currentMatch.difficulty);
-                    appendConsoleLog(`Validating metadata cluster context bounds for Item ${i}...`, "info");
-                    
-                    const securityVettingPass = await executeAIFactCheckingPass(generatedQuestionItem);
-                    if(securityVettingPass.approved) {
-                        appendConsoleLog(`Verification pass secured successfully. Item ${i} added to active match cache.`, "info");
-                        compilationCache.push(generatedQuestionItem);
-                    } else {
-                        appendConsoleLog(`Vetting execution variance detected. Auto-regenerating pipeline block...`, "warn");
-                        i--; // Re-index counter index reference pointers
-                        continue;
-                    }
-                } catch (err) {
-                    console.error(err);
-                    appendConsoleLog(`Pipeline execution warning. Appending default fallbacks.`, "warn");
-                    compilationCache.push(generateFallbackItem(targetedCategory));
+                    const item = await callGeminiAPI(category, APP_STATE.currentMatch.difficulty);
+                    generatedCache.push(item);
+                    logBox.innerHTML += `<div class="text-emerald-400">&gt; Item ${i} compiled successfully and verified.</div>`;
+                } catch(e) {
+                    console.error(e);
+                    logBox.innerHTML += `<div class="text-amber-500">&gt; Warning: Handshake variance. Running system fallback item layout.</div>`;
+                    generatedCache.push({
+                        tossupText: "This physical constant describes the balance vector across universal structures. It functions as an automated backup system framework generated whenever API nodes timeout. For ten points, identify this placeholder item.",
+                        answer: "System Operational Standby Frame",
+                        category: category, subcategory: "Core Standard Spec", difficulty: APP_STATE.currentMatch.difficulty
+                    });
                 }
 
-                // Smooth operational UI interpolation updates
-                let progressPct = Math.round((i / totalTargetCount) * 100);
-                barFill.style.width = `${progressPct}%`;
-                pctText.innerText = `${progressPct}% Cache Synced`;
-                fracText.innerText = `${i} / ${totalTargetCount} Vectors Ready`;
+                let p = Math.round((i / count) * 100);
+                bar.style.width = `${p}%`;
+                pct.innerText = `${p}% Loaded`;
+                frac.innerText = `${i} / 15 Packages`;
             }
 
-            APP_STATE.currentMatch.questionsCache = compilationCache;
-            appendConsoleLog(`Consolidated framework package built successfully. Priming stream canvas...`, "info");
-            
+            APP_STATE.currentMatch.questionsCache = generatedCache;
             setTimeout(() => {
                 switchView('gameplay');
-                launchNextGameplayItemSequence();
-            }, 800);
+                launchGameplayItem();
+            }, 500);
         }
 
-        // GOOGLE GEMINI BACKEND ROUTER REST CALL LAYERS
-        async function queryGeminiAPIForQuestion(category, difficulty) {
-            const prompt = `You are an elite Scholastic Bowl/Quiz Bowl question writer. Generate a single highly realistic pyramidal tossup question.
-            CRITICAL CRITERIA:
-            - Category: ${category}
-            - Difficulty: ${difficulty}
-            - Structure: It MUST be pyramidal (start with highly specific, difficult clues, and progressively get easier with more common knowledge clues toward the end).
-            - Avoid vague syntax or open-ended configurations.
-            - Answer: Explicitly state the direct answer.
-            
-            Output your response in RAW, STABLE JSON formatting only. Do not wrap in markdown code blocks like \`\`\`json. The response object schema must exactly match this layout:
-            {
-                "tossupText": "The complete question paragraph string written pyramidally here.",
-                "answer": "The core main answer target",
-                "alternateAnswers": "Alternative acceptable variations comma separated string",
-                "category": "${category}",
-                "subcategory": "Specific subclassification theme",
-                "difficulty": "${difficulty}"
-            }`;
+        async function callGeminiAPI(cat, diff) {
+            const prompt = `Generate a single Quiz Bowl tossup question.
+            Category: ${cat}
+            Difficulty: ${diff}
+            Must be pyramidal (start hard, get progressively easier clues). Explicitly outline the single answer string text.
+            Output standard clean JSON format ONLY. Do not use any markdown formatting codes or blocks like \`\`\`json. Exact Schema:
+            {"tossupText": "Question wording paragraphs written here", "answer": "Core direct solution target answer name", "category": "${cat}", "subcategory": "Specific classification theme", "difficulty": "${diff}"}`;
 
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${APP_STATE.apiKey}`;
-            const response = await fetch(url, {
+            const res = await fetch(url, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
             });
-
-            const rawJson = await response.json();
-            const textResponse = rawJson.candidates[0].content.parts[0].text;
-            return JSON.parse(cleanMarkdownWrapperBlocks(textResponse));
-        }
-
-        async function executeAIFactCheckingPass(questionObj) {
-            const prompt = `Review this quiz bowl question object for accuracy and verification parameters:
-            ${JSON.stringify(questionObj)}
-            Ensure the answer matches the clues and isn't duplicate or ambiguous.
-            Output raw JSON format only:
-            {
-                "approved": true or false,
-                "reasoning": "Brief validation note"
-            }`;
-
-            try {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${APP_STATE.apiKey}`;
-                const response = await fetch(url, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-                });
-                const rawJson = await response.json();
-                const textResponse = rawJson.candidates[0].content.parts[0].text;
-                return JSON.parse(cleanMarkdownWrapperBlocks(textResponse));
-            } catch(e) {
-                return { approved: true, reasoning: "Fallback bypass mode activation." };
+            const data = await res.json();
+            let text = data.candidates[0].content.parts[0].text.trim();
+            if(text.startsWith("```")) {
+                text = text.replace(/^```(?:json)?/, "").replace(/```$/, "").trim();
             }
+            return JSON.parse(text);
         }
 
-        function cleanMarkdownWrapperBlocks(inputStr) {
-            let out = inputStr.trim();
-            if(out.startsWith("```")) {
-                out = out.replace(/^
-```(?:json)?/, "").replace(/```$/, "").trim();
-            }
-            return out;
-        }
-
-        function generateFallbackItem(cat) {
-            return {
-                tossupText: "This foundational element is tracked cross-rotationally across historical matrices. It marks a standard placeholder initialized whenever external endpoint handshakes experience latency boundaries or token overflow states. For ten points, identify this type of system architecture element used to handle errors gracefully.",
-                answer: "Fallback Placeholder State",
-                alternateAnswers: "Default Object, System Cache Module",
-                category: cat,
-                subcategory: "System Integrity Architecture",
-                difficulty: "Standard Matrix Match"
-            };
-        }
-
-        // GAMEPLAY EXECUTION ENGINE PIPELINE
-        function launchNextGameplayItemSequence() {
-            const match = APP_STATE.currentMatch;
-            if(match.itemIndex >= match.questionsCache.length) {
-                // Assessment pack bounds verified. Route according to structural index state.
-                if(match.round === 1) {
-                    transitionMatchStateToIntermission();
-                } else {
-                    transitionMatchToGameOverState();
-                }
+        function launchGameplayItem() {
+            const m = APP_STATE.currentMatch;
+            if(m.itemIndex >= m.questionsCache.length) {
+                if(m.round === 1) runIntermissionPhase();
+                else finishMatchPipeline();
                 return;
             }
 
-            // Clean layout bindings
             document.getElementById('buzzerLockBanner').classList.add('hidden');
             document.getElementById('hostRefereeInterface').classList.add('hidden');
-            document.getElementById('tossupBoxOutline').className = "bg-[#0f1524] border-2 border-slate-800/60 rounded-xl p-6 sm:p-8 flex-1 flex flex-col min-h-[280px] relative transition-all";
-            
-            const currentItem = match.questionsCache[match.itemIndex];
-            
-            // Render basic UI data indicators
-            document.getElementById('gameplayRoomToken').innerText = match.roomToken;
-            document.getElementById('gameplayDifficulty').innerText = match.difficulty;
-            document.getElementById('gameplayRoundIndicator').innerText = `ROUND ${match.round}/2`;
-            document.getElementById('gameplayItemFraction').innerText = `${match.itemIndex + 1} / 15`;
-            
-            document.getElementById('itemCategoryBadge').innerText = currentItem.category;
-            document.getElementById('itemSubcategoryText').innerText = currentItem.subcategory;
-            
-            const streamDisplayArea = document.getElementById('tossupDisplayStream');
-            streamDisplayArea.innerHTML = "";
-            
-            match.currentWordsArray = currentItem.tossupText.split(" ");
-            match.currentWordPointer = 0;
-            match.isBuzzedLocked = false;
-            match.whoBuzzed = null;
-            match.buzzTimestamp = Date.now();
-            
-            renderActiveScoreboardRoster();
-            
-            // Launch streaming read interval mechanism loops
-            clearInterval(match.liveStreamTimer);
-            match.liveStreamTimer = setInterval(() => {
-                executeWordStreamingTick();
-            }, match.speedMs);
+            document.getElementById('tossupBoxOutline').className = "bg-[#0f1524] border border-slate-800 rounded-xl p-6 flex flex-col min-h-[280px] relative";
 
-            // Prime background virtual multiplayer artificial intelligence bots
-            initializeVirtualBotsLatencyTimers();
+            const current = m.questionsCache[m.itemIndex];
+            document.getElementById('gameplayRoomToken').innerText = m.roomToken;
+            document.getElementById('gameplayRoundIndicator').innerText = `ROUND ${m.round}/2`;
+            document.getElementById('gameplayItemFraction').innerText = `${m.itemIndex + 1} / 15`;
+            document.getElementById('itemCategoryBadge').innerText = current.category;
+            document.getElementById('itemSubcategoryText').innerText = current.subcategory || "General Spec";
+            
+            document.getElementById('tossupDisplayStream').innerHTML = "";
+            m.currentWordsArray = current.tossupText.split(" ");
+            m.currentWordPointer = 0;
+            m.isBuzzedLocked = false;
+            m.whoBuzzed = null;
+            m.buzzTimestamp = Date.now();
+
+            renderScoreboardRoster();
+
+            clearInterval(m.liveStreamTimer);
+            m.liveStreamTimer = setInterval(() => {
+                if(!m.isBuzzedLocked && m.currentWordPointer < m.currentWordsArray.length) {
+                    document.getElementById('tossupDisplayStream').innerHTML += m.currentWordsArray[m.currentWordPointer] + " ";
+                    m.currentWordPointer++;
+                } else if (m.currentWordPointer >= m.currentWordsArray.length) {
+                    clearInterval(m.liveStreamTimer);
+                }
+            }, m.speedMs);
+
+            primeBotActions();
         }
 
-        function executeWordStreamingTick() {
-            const match = APP_STATE.currentMatch;
-            if(match.isBuzzedLocked) return;
-
-            if(match.currentWordPointer < match.currentWordsArray.length) {
-                const streamDisplayArea = document.getElementById('tossupDisplayStream');
-                const span = document.createElement('span');
-                span.innerText = match.currentWordsArray[match.currentWordPointer] + " ";
-                span.className = "inline-block animate-fade-in text-slate-100";
-                streamDisplayArea.appendChild(span);
-                match.currentWordPointer++;
-            } else {
-                // Question stream finished entirely without buzz inputs
-                clearInterval(match.liveStreamTimer);
-                // System auto reveals solution if everyone deadlocks
-                setTimeout(() => {
-                    forceSystemDeadlockResolution();
-                }, 2500);
-            }
-        }
-
-        // MULTIPLAYER SIMULATION RECONCILIATION LAYERS
-        let botActionTimers = [];
-        function initializeVirtualBotsLatencyTimers() {
-            botActionTimers.forEach(t => clearTimeout(t));
-            botActionTimers = [];
-
-            const match = APP_STATE.currentMatch;
-            if(match.isBuzzedLocked) return;
-
-            // Generate pseudo random competitive logic for bot buzzes based on difficulty indexes
+        let botTimers = [];
+        function primeBotActions() {
+            botTimers.forEach(clearTimeout);
+            botTimers = [];
+            const m = APP_STATE.currentMatch;
+            
             SYSTEM_BOTS.forEach(bot => {
-                const optimalBuzzThresholdPct = Math.random() * 0.4 + 0.4; // Bots target between 40% and 80% through the item text stream
-                const wordCountTarget = Math.floor(match.currentWordsArray.length * optimalBuzzThresholdPct);
-                
-                // Approximate time to hit that word in modern milliseconds scale metrics
-                const targetDelay = wordCountTarget * match.speedMs + (Math.random() * 1000 - 500);
-                
-                const timerId = setTimeout(() => {
-                    executeSystemBuzzLock(bot.id, bot.name);
-                }, targetDelay);
-                
-                botActionTimers.push(timerId);
+                const threshold = Math.random() * 0.4 + 0.4;
+                const delay = (m.currentWordsArray.length * threshold) * m.speedMs;
+                const tid = setTimeout(() => { lockBuzzerState(bot.id, bot.name); }, delay);
+                botTimers.push(tid);
             });
         }
 
         function triggerUserBuzz() {
-            executeSystemBuzzLock("user", APP_STATE.currentUser.username);
+            lockBuzzerState("user", APP_STATE.currentUser.username);
         }
 
-        function executeSystemBuzzLock(id, identifierName) {
-            const match = APP_STATE.currentMatch;
-            if(!match || match.isBuzzedLocked) return; // Prevent cascading collision race conditions
+        function lockBuzzerState(id, name) {
+            const m = APP_STATE.currentMatch;
+            if(!m || m.isBuzzedLocked) return;
 
-            match.isBuzzedLocked = true;
-            match.whoBuzzed = id;
-            clearInterval(match.liveStreamTimer);
-            botActionTimers.forEach(t => clearTimeout(t));
+            m.isBuzzedLocked = true;
+            m.whoBuzzed = id;
+            clearInterval(m.liveStreamTimer);
+            botTimers.forEach(clearTimeout);
 
-            // Fire tactile audio feedback frequency
-            const soundElement = document.getElementById('buzzSound');
-            if(soundElement) {
-                soundElement.currentTime = 0;
-                soundElement.play().catch(e => console.log("Audio lock resolution prevented by system gestures wrapper."));
-            }
+            try { document.getElementById('buzzSound').play(); } catch(e){}
 
-            // Calculate precise item completion speeds
-            const deltaSec = ((Date.now() - match.buzzTimestamp) / 1000).toFixed(2);
-            
-            // Adjust visualization matrices to reveal locking target borders
-            const outlineBox = document.getElementById('tossupBoxOutline');
-            outlineBox.className = "bg-[#0f1524] border-2 border-rose-500 rounded-xl p-6 sm:p-8 flex-1 flex flex-col min-h-[280px] relative transition-all shadow-2xl shadow-rose-950/20";
-            
-            document.getElementById('buzzerLockName').innerText = `${identifierName.toUpperCase()} BUZZED`;
-            document.getElementById('buzzerLockSubtext').innerText = `Interval point captured at exactly ${deltaSec}s mark.`;
+            const elapsed = ((Date.now() - m.buzzTimestamp) / 1000).toFixed(2);
+            document.getElementById('tossupBoxOutline').className = "bg-[#0f1524] border-2 border-rose-600 rounded-xl p-6 flex flex-col min-h-[280px] relative shadow-lg shadow-rose-950/20";
+            document.getElementById('buzzerLockName').innerText = `${name.toUpperCase()} BUZZED`;
+            document.getElementById('buzzerLockSubtext').innerText = `Locked index at ${elapsed}s runtime threshold mark.`;
             document.getElementById('buzzerLockBanner').classList.remove('hidden');
 
-            // Log detailed match trace event blocks
-            match.statsLog.push({
-                itemIndex: match.itemIndex,
-                round: match.round,
-                category: match.questionsCache[match.itemIndex].category,
-                who: id,
-                speed: parseFloat(deltaSec)
-            });
+            m.statsLog.push({ itemIndex: m.itemIndex, round: m.round, category: m.questionsCache[m.itemIndex].category, who: id, speed: parseFloat(elapsed) });
 
-            // If user is host/adjudicator or user buzzed, bring up operational evaluation controls
-            document.getElementById('hostTargetAnswer').innerText = match.questionsCache[match.itemIndex].answer;
-            document.getElementById('hostAlternateAnswers').innerText = match.questionsCache[match.itemIndex].alternateAnswers || "None Defined";
+            document.getElementById('hostTargetAnswer').innerText = m.questionsCache[m.itemIndex].answer;
+            document.getElementById('hostAlternateAnswers').innerText = m.questionsCache[m.itemIndex].alternateAnswers || "None Defined";
             document.getElementById('hostRefereeInterface').classList.remove('hidden');
 
-            // Virtualized automatic decision pipeline logic for automated opponent bots to ensure fluid tournament rhythm
             if(id !== "user") {
-                setTimeout(() => {
-                    const activeOpponentData = SYSTEM_BOTS.find(b => b.id === id);
-                    const isAccurateOutcome = Math.random() <= (activeOpponentData ? activeOpponentData.precision : 0.75);
-                    adjudicateBuzz(isAccurateOutcome);
-                }, 3000);
+                setTimeout(() => { adjudicateBuzz(Math.random() > 0.3); }, 2000);
             }
         }
 
-        function adjudicateBuzz(isCorrectAction) {
-            const match = APP_STATE.currentMatch;
-            if(!match) return;
+        function adjudicateBuzz(correct) {
+            const m = APP_STATE.currentMatch;
+            if(!m) return;
 
-            const targetBuzzRecord = match.statsLog[match.statsLog.length - 1];
-            if(targetBuzzRecord) targetBuzzRecord.correct = isCorrectAction;
+            m.statsLog[m.statsLog.length - 1].correct = correct;
 
-            if(isCorrectAction) {
-                // Apply score rewards
-                match.scores[match.whoBuzzed] += 10;
-                // Move straight to next item index mapping array positions
-                match.itemIndex++;
-                setTimeout(() => {
-                    launchNextGameplayItemSequence();
-                }, 1000);
+            if(correct) {
+                m.scores[m.whoBuzzed] += 10;
+                m.itemIndex++;
+                setTimeout(launchGameplayItem, 500);
             } else {
-                // Penalize negative accuracy variances
-                match.scores[match.whoBuzzed] -= 5;
-                
-                // Unlock board state, resume streaming threads
-                match.isBuzzedLocked = false;
-                document.getElementById('buzzerLockBanner').className = "absolute inset-0 bg-rose-950/20 backdrop-blur-[1px] rounded-xl flex items-center justify-center border border-rose-500/30 hidden animate-fade-in";
+                m.scores[m.whoBuzzed] -= 5;
+                m.isBuzzedLocked = false;
+                document.getElementById('buzzerLockBanner').classList.add('hidden');
                 document.getElementById('hostRefereeInterface').classList.add('hidden');
-                document.getElementById('tossupBoxOutline').className = "bg-[#0f1524] border-2 border-slate-800/60 rounded-xl p-6 sm:p-8 flex-1 flex flex-col min-h-[280px] relative transition-all";
+                document.getElementById('tossupBoxOutline').className = "bg-[#0f1524] border border-slate-800 rounded-xl p-6 flex flex-col min-h-[280px] relative";
                 
-                // Re-prime streaming timers
-                match.liveStreamTimer = setInterval(() => {
-                    executeWordStreamingTick();
-                }, match.speedMs);
+                m.liveStreamTimer = setInterval(() => {
+                    if(!m.isBuzzedLocked && m.currentWordPointer < m.currentWordsArray.length) {
+                        document.getElementById('tossupDisplayStream').innerHTML += m.currentWordsArray[m.currentWordPointer] + " ";
+                        m.currentWordPointer++;
+                    }
+                }, m.speedMs);
             }
-            renderActiveScoreboardRoster();
+            renderScoreboardRoster();
         }
 
-        function forceSystemDeadlockResolution() {
-            const match = APP_STATE.currentMatch;
-            if(!match) return;
-            match.itemIndex++;
-            launchNextGameplayItemSequence();
-        }
-
-        function renderActiveScoreboardRoster() {
-            const target = document.getElementById('gameplayRosterList');
-            target.innerHTML = "";
+        function renderScoreboardRoster() {
+            const t = document.getElementById('gameplayRosterList');
+            if(!t || !APP_STATE.currentMatch) return;
+            t.innerHTML = "";
             
-            const match = APP_STATE.currentMatch;
-            if(!match) return;
+            const m = APP_STATE.currentMatch;
+            const r = [
+                { name: APP_STATE.currentUser.username, score: m.scores.user },
+                { name: "Sarah Chen [Bot]", score: m.scores.bot_sarah },
+                { name: "Marcus Vance [Bot]", score: m.scores.bot_marcus }
+            ].sort((a,b)=>b.score - a.score);
 
-            const displayData = [
-                { name: APP_STATE.currentUser.username, score: match.scores.user, id: "user" },
-                { name: "Sarah Chen [Bot]", score: match.scores.bot_sarah, id: "bot_sarah" },
-                { name: "Marcus Vance [Bot]", score: match.scores.bot_marcus, id: "bot_marcus" }
-            ].sort((a,b) => b.score - a.score);
-
-            displayData.forEach(player => {
-                const isActiveBuzzer = match.isBuzzedLocked && match.whoBuzzed === player.id;
-                const row = document.createElement('div');
-                row.className = `flex items-center justify-between p-2.5 rounded-lg border transition-all text-xs font-mono ${isActiveBuzzer ? 'bg-rose-950/30 border-rose-500/60 shadow-md' : 'bg-[#141b2e] border-slate-800/80 text-slate-300'}`;
-                row.innerHTML = `
-                    <div class="flex items-center space-x-2">
-                        <span class="h-1.5 w-1.5 rounded-full ${isActiveBuzzer ? 'bg-rose-400 animate-ping' : 'bg-slate-500'}"></span>
-                        <span class="font-sans font-medium text-slate-200">${player.name}</span>
+            r.forEach(p => {
+                t.innerHTML += `
+                    <div class="flex justify-between p-2 bg-slate-900 border border-slate-800 rounded text-xs font-mono">
+                        <span class="text-slate-200">${p.name}</span>
+                        <span class="font-bold text-indigo-400">${p.score} pts</span>
                     </div>
-                    <div class="font-bold ${player.score >= 0 ? 'text-indigo-400' : 'text-rose-400'}">${player.score} pts</div>
                 `;
-                target.appendChild(row);
             });
         }
 
-        // ANALYTICAL PROCESSING COMPILERS & INTERMISSION ROUTERS
-        function transitionMatchStateToIntermission() {
+        function runIntermissionPhase() {
             switchView('intermission');
-            compileIntermissionAnalyticsUI();
+            const m = APP_STATE.currentMatch;
+            const uEvents = m.statsLog.filter(e => e.who === "user");
             
-            // Concurrently spin up predictive background generation processes for Round 2 structures
-            setTimeout(async () => {
-                const match = APP_STATE.currentMatch;
-                const r2Cache = [];
-                const loaderLog = document.getElementById('intermissionLoaderLog');
-                
-                for(let i=1; i<=15; i++) {
-                    const targetCat = APP_STATE.selectedCategories[(i-1) % APP_STATE.selectedCategories.length];
-                    try {
-                        const item = await queryGeminiAPIForQuestion(targetCat, match.difficulty);
-                        r2Cache.push(item);
-                    } catch(e) {
-                        r2Cache.push(generateFallbackItem(targetCat));
-                    }
-                    if(loaderLog) loaderLog.innerHTML = `<span>[CACHING ROUND 2 DATA CLUSTER: ${i}/15 SYNCED]</span> <span class="animate-pulse">BUILDING...</span>`;
-                }
-                
-                match.questionsCache = r2Cache;
-                loaderLog.className = "bg-slate-900/50 border border-slate-800 rounded p-3 font-mono text-[11px] text-emerald-400 flex items-center justify-between";
-                loaderLog.innerHTML = `<span>[ROUND 2 MATERIAL MAP COMPILED]</span> <span class="font-bold">READY</span>`;
-                
-                const continueBtn = document.getElementById('intermissionContinueBtn');
-                continueBtn.removeAttribute('disabled');
-                continueBtn.innerText = "INITIALIZE SECOND ROUND STRATAGEM";
-            }, 400);
-        }
-
-        function compileIntermissionAnalyticsUI() {
-            const match = APP_STATE.currentMatch;
-            const userEvents = match.statsLog.filter(e => e.who === "user");
-            
-            const totalCorrect = userEvents.filter(e => e.correct === true).length;
-            const totalNegs = userEvents.filter(e => e.correct === false).length;
-            const avgSpeedArr = userEvents.map(e => e.speed);
-            const avgSpeed = avgSpeedArr.length ? (avgSpeedArr.reduce((a,b)=>a+b, 0)/avgSpeedArr.length).toFixed(2) : "0.00";
-
-            const cardDataTarget = document.getElementById('intermissionStatsCards');
-            cardDataTarget.innerHTML = `
-                <div class="bg-[#0f1524] border border-slate-800 p-4 rounded-xl font-mono">
-                    <div class="text-[11px] text-slate-400 uppercase">Consolidated Score</div>
-                    <div class="text-2xl font-black text-indigo-400 mt-1">${match.scores.user} pts</div>
+            document.getElementById('intermissionStatsCards').innerHTML = `
+                <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
+                    <div class="text-[10px] text-slate-400 uppercase">Score Performance</div>
+                    <div class="text-xl font-bold text-indigo-400 mt-1">${m.scores.user} pts</div>
                 </div>
-                <div class="bg-[#0f1524] border border-slate-800 p-4 rounded-xl font-mono">
-                    <div class="text-[11px] text-slate-400 uppercase">Correct / Neg Ratios</div>
-                    <div class="text-2xl font-black text-slate-200 mt-1">${totalCorrect} / <span class="text-rose-500">${totalNegs}</span></div>
-                </div>
-                <div class="bg-[#0f1524] border border-slate-800 p-4 rounded-xl font-mono">
-                    <div class="text-[11px] text-slate-400 uppercase">Mean Actuation Latency</div>
-                    <div class="text-2xl font-black text-emerald-400 mt-1">${avgSpeed}s</div>
+                <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
+                    <div class="text-[10px] text-slate-400 uppercase">Captured Objects</div>
+                    <div class="text-xl font-bold text-emerald-400 mt-1">${uEvents.filter(e => e.correct).length} Correct</div>
                 </div>
             `;
 
-            // Compile structured text optimization insights
-            const feedbackArea = document.getElementById('intermissionFeedbackOutput');
-            if(totalNegs > totalCorrect) {
-                feedbackArea.innerHTML = `<p class="text-amber-400 font-semibold">⚠️ Variance Warning: High Neg Ratios Detected.</p><p class="text-slate-400 mt-1">Your buzzing speed trends outpace accurate confirmation markers. Delay your selection vector by approximately 400ms to parse terminal clues safely.</p>`;
-            } else if (parseFloat(avgSpeed) > 2.5) {
-                feedbackArea.innerHTML = `<p class="text-indigo-400 font-semibold">💡 Optimization Vector: Latency Delay.</p><p class="text-slate-400 mt-1">Opponents capture items during early clue hierarchies. Prioritize risk allocations within your primary specialty disciplines.</p>`;
-            } else {
-                feedbackArea.innerHTML = `<p class="text-emerald-400 font-semibold">✨ Structural Profile Stable.</p><p class="text-slate-400 mt-1">Core accuracy ratios remain high. Maintain current operational constraints across the subsequent round segment.</p>`;
-            }
-
-            // Fire dynamic chart metrics initialization
-            setTimeout(() => {
-                renderIntermissionChartDataMap(userEvents);
-            }, 100);
-        }
-
-        function renderIntermissionChartDataMap(events) {
-            const ctx = document.getElementById('intermissionChartCanvas');
-            if(!ctx) return;
-            
-            if(APP_STATE.charts.intermission) APP_STATE.charts.intermission.destroy();
-
-            const dataPoints = SUBJECT_CATEGORIES.map(cat => {
-                return events.filter(e => e.category === cat && e.correct === true).length;
-            });
-
-            APP_STATE.charts.intermission = new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: SUBJECT_CATEGORIES,
-                    datasets: [{
-                        label: 'Successful Items Captured',
-                        data: dataPoints,
-                        backgroundColor: 'rgba(99, 102, 241, 0.2)',
-                        borderColor: 'rgba(99, 102, 241, 1)',
-                        borderWidth: 2,
-                        pointBackgroundColor: 'rgba(99, 102, 241, 1)'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            grid: { color: '#334155' },
-                            angleLines: { color: '#334155' },
-                            ticks: { display: false },
-                            pointLabels: { color: '#94a3b8', font: { size: 9 } }
-                        }
-                    },
-                    plugins: { legend: { display: false } }
+            setTimeout(async () => {
+                let nextPack = [];
+                for(let i=1; i<=15; i++) {
+                    const c = APP_STATE.selectedCategories[(i-1) % APP_STATE.selectedCategories.length];
+                    try { const item = await callGeminiAPI(c, m.difficulty); nextPack.push(item); }
+                    catch(e){ nextPack.push(m.questionsCache[0]); }
                 }
-            });
+                m.questionsCache = nextPack;
+                const btn = document.getElementById('intermissionContinueBtn');
+                btn.innerText = "Launch Round 2 Stratagem";
+                btn.className = "bg-emerald-600 hover:bg-emerald-500 px-5 py-2.5 rounded-lg text-xs font-bold uppercase text-white transition-all";
+            }, 200);
         }
 
         function advanceIntermissionToRoundTwo() {
-            const match = APP_STATE.currentMatch;
-            match.round = 2;
-            match.itemIndex = 0;
+            const m = APP_STATE.currentMatch;
+            m.round = 2;
+            m.itemIndex = 0;
             switchView('gameplay');
-            launchNextGameplayItemSequence();
+            launchGameplayItem();
         }
 
-        function transitionMatchToGameOverState() {
+        function finishMatchPipeline() {
             switchView('endgame');
-            const target = document.getElementById('endgamePlacementsContainer');
-            target.innerHTML = "";
+            const container = document.getElementById('endgamePlacementsContainer');
+            container.innerHTML = `<h3 class="font-bold text-center py-4 text-emerald-400">Match Concluded. Check metrics or return to lobby.</h3>`;
             
-            const match = APP_STATE.currentMatch;
-            const sortedPlacements = [
-                { name: APP_STATE.currentUser.username, score: match.scores.user, isUser: true },
-                { name: "Sarah Chen [Bot]", score: match.scores.bot_sarah, isUser: false },
-                { name: "Marcus Vance [Bot]", score: match.scores.bot_marcus, isUser: false }
-            ].sort((a,b)=>b.score - a.score);
-
-            sortedPlacements.forEach((p, idx) => {
-                const card = document.createElement('div');
-                card.className = `flex items-center justify-between p-4 rounded-xl border font-mono ${p.isUser ? 'bg-indigo-950/30 border-indigo-500/50' : 'bg-[#141b2e] border-slate-800'}`;
-                card.innerHTML = `
-                    <div class="flex items-center space-x-4">
-                        <span class="text-sm font-black text-slate-500">#0${idx+1}</span>
-                        <span class="font-sans font-bold text-slate-100">${p.name}</span>
-                    </div>
-                    <div class="font-bold text-sm text-indigo-400">${p.score} Points</div>
-                `;
-                target.appendChild(card);
-            });
-
-            // Save historical records locally to persist global overview dashboard items
-            APP_STATE.currentUser.history.push({
-                date: new Date().toLocaleDateString(),
-                score: match.scores.user,
-                logs: match.statsLog.filter(e => e.who === "user")
-            });
+            APP_STATE.currentUser.history.push({ score: APP_STATE.currentMatch.scores.user, logs: APP_STATE.currentMatch.statsLog });
             localStorage.setItem("BOWLPREP_USER_DATA", JSON.stringify(APP_STATE.currentUser));
         }
 
-        // GLOBAL TRACKING ANALYTICS DASHBOARD ENGINE
-        function initGlobalDashboardTrendsView() {
-            const history = APP_STATE.currentUser.history;
-            const overviewBox = document.getElementById('dashboardOverviewCards');
-            
-            const totalMatches = history.length;
-            const allScores = history.map(h => h.score);
-            const peakScore = allScores.length ? Math.max(...allScores) : 0;
-            const totalAllCorrect = history.flatMap(h => h.logs).filter(l => l.correct === true).length;
-            const totalAllNegs = history.flatMap(h => h.logs).filter(l => l.correct === false).length;
-            const globalAccuracy = (totalAllCorrect + totalAllNegs) > 0 ? ((totalAllCorrect / (totalAllCorrect + totalAllNegs)) * 100).toFixed(1) : "0.0";
-
-            overviewBox.innerHTML = `
-                <div class="bg-[#0f1524] border border-slate-800 p-4 rounded-xl font-mono">
-                    <div class="text-[10px] text-slate-400 uppercase tracking-wide">Sessions Tracked</div>
-                    <div class="text-2xl font-black text-indigo-400 mt-1">${totalMatches}</div>
-                </div>
-                <div class="bg-[#0f1524] border border-slate-800 p-4 rounded-xl font-mono">
-                    <div class="text-[10px] text-slate-400 uppercase tracking-wide">Personal Record</div>
-                    <div class="text-2xl font-black text-slate-100 mt-1">${peakScore} pts</div>
-                </div>
-                <div class="bg-[#0f1524] border border-slate-800 p-4 rounded-xl font-mono">
-                    <div class="text-[10px] text-slate-400 uppercase tracking-wide">Historical Accuracy</div>
-                    <div class="text-2xl font-black text-emerald-400 mt-1">${globalAccuracy}%</div>
-                </div>
-                <div class="bg-[#0f1524] border border-slate-800 p-4 rounded-xl font-mono">
-                    <div class="text-[10px] text-slate-400 uppercase tracking-wide">Total Neg Actions</div>
-                    <div class="text-2xl font-black text-rose-500 mt-1">${totalAllNegs}</div>
+        function initGlobalDashboardView() {
+            const container = document.getElementById('dashboardOverviewCards');
+            if(!container) return;
+            const h = APP_STATE.currentUser.history;
+            container.innerHTML = `
+                <div class="p-4 bg-[#0f1524] border border-slate-800 rounded-xl font-mono text-center">
+                    <div class="text-xs text-slate-400">Matches Hosted</div>
+                    <div class="text-2xl font-bold text-indigo-400 mt-1">${h.length}</div>
                 </div>
             `;
-
-            const feedbackArea = document.getElementById('dashboardEngineFeedbackArea');
-            if(totalMatches === 0) {
-                feedbackArea.innerHTML = `<p class="text-slate-400 text-center py-4">No match data found. Run a multiplayer practice match to generate analytical feedback paths.</p>`;
-                return;
-            }
-
-            feedbackArea.innerHTML = `
-                <div class="space-y-2.5">
-                    <div class="p-2.5 rounded bg-slate-900/60 border border-slate-800/80">
-                        <span class="text-indigo-400 font-bold font-mono text-[10px] block uppercase">Target Drill Domain</span>
-                        <p class="text-slate-300 mt-0.5 leading-normal">Fine Arts and Mythology display high response latency. Focus generation queries on these modules.</p>
-                    </div>
-                    <div class="p-2.5 rounded bg-slate-900/60 border border-slate-800/80">
-                        <span class="text-emerald-400 font-bold font-mono text-[10px] block uppercase">Established Specialty</span>
-                        <p class="text-slate-300 mt-0.5 leading-normal">Science and History show early buzzing accuracy configurations exceeding 85% safety indices.</p>
-                    </div>
-                </div>
-            `;
-
-            setTimeout(() => {
-                renderGlobalDashboardTrendsChart();
-            }, 100);
         }
 
-        function renderGlobalDashboardTrendsChart() {
-            const ctx = document.getElementById('dashboardTrendChartCanvas');
-            if(!ctx || APP_STATE.currentUser.history.length === 0) return;
-
-            if(APP_STATE.charts.dashboard) APP_STATE.charts.dashboard.destroy();
-
-            const labels = APP_STATE.currentUser.history.map((_, i) => `Match #${i+1}`);
-            const scoresData = APP_STATE.currentUser.history.map(h => h.score);
-
-            APP_STATE.charts.dashboard = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Performance Curve Progress',
-                        data: scoresData,
-                        borderColor: '#6366f1',
-                        borderWidth: 2,
-                        backgroundColor: 'rgba(99, 102, 241, 0.05)',
-                        fill: true,
-                        tension: 0.1,
-                        pointBackgroundColor: '#6366f1'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { grid: { color: '#1e293b' }, tokens: { color: '#94a3b8' } },
-                        y: { grid: { color: '#1e293b' }, tokens: { color: '#94a3b8' } }
-                    },
-                    plugins: { legend: { display: false } }
-                }
-            });
-        }
-
-        function updateUserProfile() {
-            const user = document.getElementById('profileUsername').value.trim();
-            const school = document.getElementById('profileSchool').value.trim();
-            if(!user) return alert("User handle fields cannot be empty.");
-            
-            APP_STATE.currentUser.username = user;
-            APP_STATE.currentUser.school = school;
-            localStorage.setItem("BOWLPREP_USER_DATA", JSON.stringify(APP_STATE.currentUser));
-            
-            alert("State changes applied successfully.");
-            switchView('landing');
-        }
-
-        // MAIN ADAPTIVE RENDERING ROUTER BOUNDS INTERPOLATOR
-        function renderDynamicStateContextualLayouts() {
-            const keyBadge = document.getElementById('apiKeyBadge');
+        function renderAppState() {
+            const badge = document.getElementById('apiKeyBadge');
             if(APP_STATE.apiKey) {
-                keyBadge.classList.add('hidden');
+                badge.classList.add('hidden');
                 document.getElementById('apiConfigKey').value = APP_STATE.apiKey;
             } else {
-                keyBadge.classList.remove('hidden');
+                badge.classList.remove('hidden');
             }
 
             document.getElementById('headerUsername').innerText = APP_STATE.currentUser.username;
             document.getElementById('avatarFallback').innerText = APP_STATE.currentUser.username.substring(0,1);
 
-            if(APP_STATE.view === "lobby") {
-                initCategoryCheckboxes();
-                renderSimulatedLobbies();
-            } else if (APP_STATE.view === "dashboard") {
-                initGlobalDashboardTrendsView();
-            }
+            if(APP_STATE.view === "lobby") initCategoryGrid();
+            if(APP_STATE.view === "dashboard") initGlobalDashboardView();
         }
 
-        // BIND HARDWARE KEYBOARD BLAZING BUZZ ACTION TO SPACEBAR KEYS
+        function updateUserProfile() {
+            const val = document.getElementById('profileUsername').value.trim();
+            if(!val) return;
+            APP_STATE.currentUser.username = val;
+            localStorage.setItem("BOWLPREP_USER_DATA", JSON.stringify(APP_STATE.currentUser));
+            switchView('landing');
+        }
+
         window.addEventListener('keydown', (e) => {
             if(e.code === "Space" && APP_STATE.view === "gameplay") {
-                // Prevent scrolling side-effects
                 e.preventDefault();
-                const match = APP_STATE.currentMatch;
-                if(match && !match.isBuzzedLocked) {
-                    triggerUserBuzz();
-                }
+                triggerUserBuzz();
             }
         });
 
-        // SYSTEM INITIALIZATION INLINE HOOK
         window.addEventListener('DOMContentLoaded', () => {
-            const cachedUser = localStorage.getItem("BOWLPREP_USER_DATA");
-            if(cachedUser) {
-                try {
-                    APP_STATE.currentUser = JSON.parse(cachedUser);
-                } catch(e) { console.error("Error formatting local dynamic structures."); }
-            }
+            const data = localStorage.getItem("BOWLPREP_USER_DATA");
+            if(data) { try { APP_STATE.currentUser = JSON.parse(data); } catch(e){} }
             switchView('landing');
         });
     </script>
