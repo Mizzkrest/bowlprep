@@ -26,7 +26,7 @@
             </div>
             <div>
                 <span class="font-bold text-lg bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">BowlPrep</span>
-                <span class="text-[10px] uppercase tracking-widest font-bold text-indigo-400 block -mt-1 mono">v3.2 Crash Isolated</span>
+                <span class="text-[10px] uppercase tracking-widest font-bold text-indigo-400 block -mt-1 mono">v3.3 Restored Structure</span>
             </div>
         </div>
 
@@ -45,54 +45,54 @@
     <div id="settingsDrawer" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 transition-opacity opacity-0 pointer-events-none duration-300">
         <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-[#0f1626] border-l border-slate-800 p-6 shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300" id="settingsDrawerContainer">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
-                <h3 class="text-lg font-bold">Network & Keys Config</h3>
+                <h3 class="text-lg font-bold">Configuration Infrastructure</h3>
                 <button onclick="toggleSettingsDrawer()" class="text-2xl text-slate-400 hover:text-white">&times;</button>
             </div>
             <div class="space-y-4 flex-1">
                 <div>
-                    <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-1.5">Your Screen Name</label>
-                    <input type="text" id="configPlayerName" placeholder="PlayerName" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
+                    <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-1.5">Screen Display Name</label>
+                    <input type="text" id="configPlayerName" placeholder="Player" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
                 </div>
                 <div>
                     <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-1.5">Google AI Studio API Key</label>
                     <input type="password" id="apiConfigKey" placeholder="AIzaSy..." class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono text-slate-100 focus:outline-none focus:border-indigo-500">
                 </div>
                 <div class="pt-2 border-t border-slate-800/60">
-                    <span class="text-[11px] font-bold text-amber-500 uppercase tracking-wider block mb-2">Supabase Settings</span>
+                    <span class="text-[11px] font-bold text-amber-500 uppercase tracking-wider block mb-2">Supabase Network Backing</span>
                 </div>
                 <div>
-                    <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-1.5">Supabase URL</label>
-                    <input type="text" id="supabaseUrlInput" placeholder="https://your-id.supabase.co" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono text-slate-110 focus:outline-none focus:border-indigo-500">
+                    <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-1.5">Supabase project URL</label>
+                    <input type="text" id="supabaseUrlInput" placeholder="https://your-project.supabase.co" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono text-slate-100 focus:outline-none focus:border-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-1.5">Supabase Anon Key</label>
+                    <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-1.5">Supabase Service API Key</label>
                     <input type="password" id="supabaseKeyInput" placeholder="eyJhbG..." class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono text-slate-100 focus:outline-none focus:border-indigo-500">
                 </div>
             </div>
             <div class="pt-4 border-t border-slate-800">
-                <button onclick="saveAllConfigs()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-2.5 text-sm font-semibold rounded-lg text-white">Save Infrastructure Settings</button>
+                <button onclick="saveAllConfigs()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-2.5 text-sm font-semibold rounded-lg text-white">Commit Configuration</button>
             </div>
         </div>
     </div>
 
-    <!-- MAIN VIEWS -->
+    <!-- PANELS -->
     <main class="flex-1 max-w-[1600px] w-full mx-auto px-4 lg:px-8 py-6 flex flex-col">
-        <!-- LANDING VIEW -->
+        
+        <!-- VIEW: LANDING -->
         <section id="view-landing" class="view-panel space-y-12 py-6">
             <div class="text-center max-w-3xl mx-auto space-y-4 pt-12">
                 <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight">Train for <br/><span class="bg-gradient-to-r from-indigo-400 to-pink-500 bg-clip-text text-transparent">Scholastic Bowl Matchups</span></h1>
                 <p class="text-slate-400 text-base max-w-xl mx-auto">Pyramidal question practice engine supporting automated lockouts and countdown rules.</p>
                 <div class="pt-4 flex justify-center gap-3">
-                    <button onclick="switchView('lobby')" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-semibold text-sm transition-all">Launch Arena Hub</button>
+                    <button onclick="switchView('lobby')" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-semibold text-sm transition-all shadow-lg shadow-indigo-600/20">Launch Arena Hub</button>
                     <button onclick="toggleSettingsDrawer()" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl font-semibold text-sm text-slate-300">Set Keys & Name</button>
                 </div>
             </div>
         </section>
 
-        <!-- LOBBY VIEW -->
+        <!-- VIEW: LOBBY -->
         <section id="view-lobby" class="view-panel grid grid-cols-1 lg:grid-cols-3 gap-8 hidden flex-1">
             <div class="lg:col-span-2 space-y-6">
-                <!-- Host Panel -->
                 <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-6 space-y-4">
                     <div class="flex justify-between items-center">
                         <h2 class="text-xl font-bold">Configure Practice Session</h2>
@@ -127,7 +127,6 @@
                     </div>
                 </div>
 
-                <!-- Join Panel -->
                 <div id="lobbyJoinContainer" class="bg-[#0f1524] border border-slate-800 rounded-xl p-6 space-y-4 hidden">
                     <h2 class="text-xl font-bold">Join an Active Arena Code</h2>
                     <div class="flex gap-3">
@@ -143,7 +142,7 @@
             </div>
         </section>
 
-        <!-- PRE-GAME STAGING INTERFACE -->
+        <!-- VIEW: STAGING -->
         <section id="view-staging" class="view-panel max-w-2xl mx-auto w-full bg-[#0f1524] border border-slate-800 rounded-2xl p-6 space-y-6 hidden">
             <div class="text-center space-y-2 border-b border-slate-800 pb-4">
                 <span class="px-2.5 py-1 bg-indigo-500/10 text-indigo-400 text-xs tracking-widest uppercase font-mono rounded">Arena Match Manifest</span>
@@ -170,7 +169,7 @@
             </div>
         </section>
 
-        <!-- LOADING SCREEN -->
+        <!-- VIEW: LOADING -->
         <section id="view-loading-screen" class="view-panel max-w-xl mx-auto w-full bg-[#0f1524] border border-slate-800 rounded-2xl p-8 space-y-8 my-auto hidden text-center">
             <h2 class="text-xl font-bold" id="loadingStageTitle">Generating Packet Stream Via AI</h2>
             <div class="bg-[#141b2e] border border-slate-800 rounded-xl p-4 text-left font-mono text-xs h-[120px] overflow-y-auto" id="consoleLogsText"></div>
@@ -184,7 +183,7 @@
             </div>
         </section>
 
-        <!-- GAMEPLAY SCREEN -->
+        <!-- VIEW: GAMEPLAY -->
         <section id="view-gameplay" class="view-panel grid grid-cols-1 lg:grid-cols-4 gap-6 hidden flex-1">
             <div class="lg:col-span-3 flex flex-col space-y-4">
                 <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-4 flex justify-between font-mono text-xs text-slate-400">
@@ -197,18 +196,18 @@
                 <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-6 sm:p-8 flex-1 flex flex-col min-h-[280px] relative" id="tossupBoxOutline">
                     <div class="flex justify-between border-b border-slate-800 pb-3 mb-4">
                         <span class="px-2 py-0.5 bg-indigo-500/10 text-indigo-400 text-[10px] font-mono rounded uppercase" id="itemCategoryBadge">Subject</span>
-                        <span id="lockoutWarningBadge" class="hidden px-2 py-0.5 bg-rose-500/10 text-rose-400 text-[10px] font-mono rounded uppercase font-bold tracking-wide">LOCKED OUT OF THIS QUESTION</span>
+                        <span id="lockoutWarningBadge" class="hidden px-2 py-0.5 bg-rose-500/10 text-rose-400 text-[10px] font-mono rounded uppercase font-bold tracking-wide">LOCKED OUT</span>
                     </div>
                     <div class="flex-1 text-slate-100 text-lg sm:text-xl font-medium leading-relaxed select-none" id="tossupDisplayStream"></div>
                     
-                    <!-- DYNAMIC BUZZER MODAL -->
+                    <!-- BUZZ PANEL -->
                     <div id="buzzerLockBanner" class="absolute inset-0 bg-slate-950/95 backdrop-blur-md rounded-xl flex items-center justify-center hidden">
                         <div class="w-full max-w-md p-6 text-center space-y-4">
-                            <h4 class="font-black text-rose-500 text-2xl tracking-wider uppercase" id="buzzerLockName">ANYONE BUZZED</h4>
+                            <h4 class="font-black text-rose-500 text-2xl tracking-wider uppercase" id="buzzerLockName">SOMEONE BUZZED</h4>
                             
                             <div id="userAnswerContainer" class="hidden space-y-3">
-                                <input type="text" id="userAnswerInput" placeholder="Your Answer..." class="w-full bg-[#161f33] border-2 border-indigo-500 rounded-xl px-4 py-3 text-base text-white font-medium focus:outline-none text-center" autocomplete="off">
-                                <button onclick="submitUserAnswer()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-lg text-sm uppercase tracking-wide transition-all">Transmit Response</button>
+                                <input type="text" id="userAnswerInput" placeholder="Your Answer..." class="w-full bg-[#161f33] border-2 border-indigo-500 rounded-xl px-4 py-3 text-base text-white text-center focus:outline-none" autocomplete="off">
+                                <button onclick="submitUserAnswer()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-lg text-sm uppercase">Transmit Response</button>
                             </div>
 
                             <div id="botGradingStatus" class="hidden text-sm text-slate-400 font-mono animate-pulse">
@@ -227,7 +226,7 @@
             </div>
         </section>
 
-        <!-- ENDGAME VIEW -->
+        <!-- VIEW: ENDGAME -->
         <section id="view-endgame" class="view-panel max-w-4xl mx-auto w-full space-y-6 hidden text-center pt-12">
             <h1 class="text-3xl font-extrabold tracking-tight">MATCH CONCLUDED</h1>
             <div class="bg-[#0f1524] border border-slate-800 rounded-2xl p-6" id="endgamePlacementsContainer"></div>
@@ -235,443 +234,468 @@
         </section>
     </main>
 
-    <!-- AUTOMATED COMBINED BRAIN ENGINE -->
+    <!-- TRADITIONAL FLAT JAVASCRIPT ARCHITECTURE -->
     <script>
-        let SB_URL = localStorage.getItem("BOWLPREP_SB_URL") || "";
-        let SB_KEY = localStorage.getItem("BOWLPREP_SB_KEY") || "";
-
-        let supabaseInstance = null;
+        // Global Single-Value States (Restored from older builds structure)
+        var currentView = "landing";
+        var currentGameMode = "solo";
         
-        // SAFE CONDITIONAL INITIALIZATION BLOCK (Stops v3.1 Boot Crash)
+        var userApiKey = localStorage.getItem("BOWLPREP_KEY") || "";
+        var userPlayerName = localStorage.getItem("BOWLPREP_NAME") || "Player";
+        var userPlayerId = localStorage.getItem("BOWLPREP_UID") || "uid_" + Math.random().toString(36).substring(2, 11);
+        
+        var supabaseUrl = localStorage.getItem("BOWLPREP_SB_URL") || "";
+        var supabaseKey = localStorage.getItem("BOWLPREP_SB_KEY") || "";
+        var supabaseClient = null;
+        
+        var baseCategories = ["History", "Science", "Literature", "Fine Arts", "Mythology", "Geography", "Math", "Philosophy"];
+        var userSelectedCategories = ["History", "Science", "Literature", "Fine Arts", "Mythology", "Geography", "Math", "Philosophy"];
+        
+        var networkRoomCode = "LOCAL";
+        var userIsHost = true;
+        var clockIntervalTracker = null;
+        var countdownIntervalTracker = null;
+        
+        // Active Question Matrix State Fields
+        var matchItemIndex = 0;
+        var matchQuestionsCache = [];
+        var matchScoresMap = {};
+        var matchIsBuzzedLocked = false;
+        var matchWhoBuzzed = null;
+        var matchBuzzedName = null;
+        var matchWordPointer = 0;
+        var matchSpeedMs = 260;
+        var matchLockedOutArray = [];
+        
+        var activeRoomSnapshot = null;
+
+        localStorage.setItem("BOWLPREP_UID", userPlayerId);
+
+        // Safe Supabase Initializer Engine
         try {
-            if (SB_URL && SB_KEY && SB_URL.trim() !== "" && !SB_URL.includes("PASTE-YOUR")) {
-                supabaseInstance = window.supabase.createClient(SB_URL, SB_KEY);
+            if (supabaseUrl && supabaseKey && supabaseUrl.trim() !== "" && !supabaseUrl.includes("your-project")) {
+                supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
             }
-        } catch (err) {
-            console.error("Supabase failed initialization safely trapped:", err);
+        } catch (e) {
+            console.log("Supabase safely deferred.");
         }
 
-        const SUBJECT_CATEGORIES = ["History", "Science", "Literature", "Fine Arts", "Mythology", "Geography", "Math", "Philosophy"];
-
-        let APP_STATE = {
-            view: "landing",
-            gameMode: "solo", 
-            apiKey: localStorage.getItem("BOWLPREP_KEY") || "",
-            playerName: localStorage.getItem("BOWLPREP_NAME") || "Player",
-            playerId: localStorage.getItem("BOWLPREP_UID") || "uid_" + Math.random().toString(36).substring(2, 11),
-            selectedCategories: [...SUBJECT_CATEGORIES],
-            
-            activeRoomToken: "LOCAL",
-            isHost: true,
-            localWordInterval: null,
-            postQuestionCountdownTimer: null,
-            
-            soloMatchData: {
-                item_index: 0,
-                questions_cache: [],
-                scores: {},
-                is_buzzed_locked: false,
-                who_buzzed: null,
-                buzzed_name: null,
-                current_word_pointer: 0,
-                speed_ms: 260,
-                locked_out_players: [],
-                post_question_countdown: -1
+        function switchView(target) {
+            var panels = document.querySelectorAll('.view-panel');
+            for(var i=0; i<panels.length; i++) {
+                panels[i].classList.add('hidden');
             }
-        };
-
-        localStorage.setItem("BOWLPREP_UID", APP_STATE.playerId);
-
-        function switchView(targetId) {
-            document.querySelectorAll('.view-panel').forEach(p => p.classList.add('hidden'));
-            const activePanel = document.getElementById(`view-${targetId}`);
-            if (activePanel) activePanel.classList.remove('hidden');
-            APP_STATE.view = targetId;
-            renderAppState();
-        }
-
-        function setGameMode(mode) {
-            APP_STATE.gameMode = mode;
-            const btnSolo = document.getElementById('modeBtnSolo');
-            const btnMulti = document.getElementById('modeBtnMulti');
-            const joinBox = document.getElementById('lobbyJoinContainer');
-            const launchBtn = document.getElementById('mainLaunchBtn');
-            const desc = document.getElementById('lobbyStatusDescription');
-
-            if(mode === 'solo') {
-                if (btnSolo) btnSolo.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all bg-indigo-600 text-white";
-                if (btnMulti) btnMulti.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all text-slate-400 hover:text-white";
-                if (joinBox) joinBox.classList.add('hidden');
-                if (launchBtn) launchBtn.innerText = "Start Solo Training";
-                if (desc) desc.innerText = "Solo Mode runs completely locally inside your browser, loading simulated automated smart bot competitors.";
-            } else {
-                if (btnSolo) btnSolo.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all text-slate-400 hover:text-white";
-                if (btnMulti) btnMulti.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all bg-indigo-600 text-white";
-                if (joinBox) joinBox.classList.remove('hidden');
-                if (launchBtn) launchBtn.innerText = "Setup Staging Room";
-                if (desc) desc.innerText = "Launches the Pre-Match Manifest so users can view sync tags and lobby rosters before launching.";
-            }
+            var active = document.getElementById("view-" + target);
+            if(active) active.classList.remove('hidden');
+            currentView = target;
+            syncHeaderBadge();
+            if(target === "lobby") buildCategoryGridElements();
         }
 
         function toggleSettingsDrawer() {
-            const drawer = document.getElementById('settingsDrawer');
-            const inner = document.getElementById('settingsDrawerContainer');
+            var drawer = document.getElementById('settingsDrawer');
+            var container = document.getElementById('settingsDrawerContainer');
+            if(!drawer || !container) return;
+            
             if(drawer.classList.contains('pointer-events-none')) {
                 drawer.classList.remove('pointer-events-none', 'opacity-0');
-                inner.classList.remove('translate-x-full');
+                container.classList.remove('translate-x-full');
+                
+                document.getElementById('configPlayerName').value = userPlayerName;
+                document.getElementById('apiConfigKey').value = userApiKey;
+                document.getElementById('supabaseUrlInput').value = supabaseUrl;
+                document.getElementById('supabaseKeyInput').value = supabaseKey;
             } else {
                 drawer.classList.add('pointer-events-none', 'opacity-0');
-                inner.classList.add('translate-x-full');
+                container.classList.add('translate-x-full');
             }
         }
 
         function saveAllConfigs() {
-            APP_STATE.playerName = document.getElementById('configPlayerName').value.trim() || APP_STATE.playerName;
-            APP_STATE.apiKey = document.getElementById('apiConfigKey').value.trim();
-            SB_URL = document.getElementById('supabaseUrlInput').value.trim();
-            SB_KEY = document.getElementById('supabaseKeyInput').value.trim();
+            userPlayerName = document.getElementById('configPlayerName').value.trim() || "Player";
+            userApiKey = document.getElementById('apiConfigKey').value.trim();
+            supabaseUrl = document.getElementById('supabaseUrlInput').value.trim();
+            supabaseKey = document.getElementById('supabaseKeyInput').value.trim();
 
-            localStorage.setItem("BOWLPREP_NAME", APP_STATE.playerName);
-            localStorage.setItem("BOWLPREP_KEY", APP_STATE.apiKey);
-            localStorage.setItem("BOWLPREP_SB_URL", SB_URL);
-            localStorage.setItem("BOWLPREP_SB_KEY", SB_KEY);
+            localStorage.setItem("BOWLPREP_NAME", userPlayerName);
+            localStorage.setItem("BOWLPREP_KEY", userApiKey);
+            localStorage.setItem("BOWLPREP_SB_URL", supabaseUrl);
+            localStorage.setItem("BOWLPREP_SB_KEY", supabaseKey);
 
             try {
-                if (SB_URL && SB_KEY && SB_URL.trim() !== "") {
-                    supabaseInstance = window.supabase.createClient(SB_URL, SB_KEY);
+                if(supabaseUrl && supabaseKey && supabaseUrl.trim() !== "") {
+                    supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
                 }
             } catch(e) {
                 console.error(e);
             }
             toggleSettingsDrawer();
-            renderAppState();
+            syncHeaderBadge();
         }
 
-        function initCategoryGrid() {
-            const grid = document.getElementById('categorySelectionGrid');
+        function setGameMode(mode) {
+            currentGameMode = mode;
+            var btnSolo = document.getElementById('modeBtnSolo');
+            var btnMulti = document.getElementById('modeBtnMulti');
+            var joinBox = document.getElementById('lobbyJoinContainer');
+            var launchBtn = document.getElementById('mainLaunchBtn');
+            var desc = document.getElementById('lobbyStatusDescription');
+
+            if(mode === 'solo') {
+                if(btnSolo) btnSolo.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all bg-indigo-600 text-white";
+                if(btnMulti) btnMulti.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all text-slate-400 hover:text-white";
+                if(joinBox) joinBox.classList.add('hidden');
+                if(launchBtn) launchBtn.innerText = "Start Solo Training";
+                if(desc) desc.innerText = "Solo Mode runs completely locally inside your browser, loading simulated automated smart bot competitors.";
+            } else {
+                if(btnSolo) btnSolo.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all text-slate-400 hover:text-white";
+                if(btnMulti) btnMulti.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all bg-indigo-600 text-white";
+                if(joinBox) joinBox.classList.remove('hidden');
+                if(launchBtn) launchBtn.innerText = "Setup Staging Room";
+                if(desc) desc.innerText = "Launches the Pre-Match Manifest so users can view sync tags and lobby rosters before launching.";
+            }
+        }
+
+        function buildCategoryGridElements() {
+            var grid = document.getElementById('categorySelectionGrid');
             if(!grid) return;
             grid.innerHTML = "";
-            SUBJECT_CATEGORIES.forEach(cat => {
-                const active = APP_STATE.selectedCategories.includes(cat);
-                const el = document.createElement('div');
-                el.className = `p-2 rounded-lg border text-xs text-center cursor-pointer font-medium transition-colors ${active ? 'bg-indigo-950/40 border-indigo-500 text-indigo-300' : 'bg-slate-900 border-slate-800 text-slate-400'}`;
+            baseCategories.forEach(function(cat) {
+                var isSelected = userSelectedCategories.includes(cat);
+                var el = document.createElement('div');
+                el.className = "p-2 rounded-lg border text-xs text-center cursor-pointer font-medium transition-colors " + 
+                             (isSelected ? "bg-indigo-950/40 border-indigo-500 text-indigo-300" : "bg-slate-900 border-slate-800 text-slate-400");
                 el.innerText = cat;
-                el.onclick = () => {
-                    if(active) APP_STATE.selectedCategories = APP_STATE.selectedCategories.filter(c => c !== cat);
-                    else APP_STATE.selectedCategories.push(cat);
-                    initCategoryGrid();
+                el.onclick = function() {
+                    if(isSelected) {
+                        userSelectedCategories = userSelectedCategories.filter(function(c) { return c !== cat; });
+                    } else {
+                        userSelectedCategories.push(cat);
+                    }
+                    buildCategoryGridElements();
                 };
                 grid.appendChild(el);
             });
         }
 
         function initializePracticeMatch() {
-            if(!APP_STATE.apiKey) return alert("An AI Studio API key is required to compile question streams.");
-            if(APP_STATE.gameMode === "multi") {
-                createMatchRoom();
+            if(!userApiKey) return alert("An AI Studio API key is required to compile question streams.");
+            if(currentGameMode === "multi") {
+                createNetworkMultiplayerRoom();
             } else {
-                createSoloLocalRoom();
+                launchLocalSoloMatch();
             }
         }
 
-        async function createSoloLocalRoom() {
-            APP_STATE.isHost = true;
-            APP_STATE.activeRoomToken = "LOCAL-SOLO";
+        async function launchLocalSoloMatch() {
+            userIsHost = true;
+            networkRoomCode = "LOCAL-SOLO";
             switchView('loading-screen');
 
-            const logBox = document.getElementById('consoleLogsText');
-            const bar = document.getElementById('loadingProgressBarFill');
-            const pct = document.getElementById('loadingProgressPercentage');
-            logBox.innerHTML = "";
+            var logBox = document.getElementById('consoleLogsText');
+            var bar = document.getElementById('loadingProgressBarFill');
+            var pct = document.getElementById('loadingProgressPercentage');
+            if(logBox) logBox.innerHTML = "";
             
-            let generatedCache = [];
-            const count = 5;
+            var generated = [];
+            var totalCount = 5;
 
-            for(let i = 1; i <= count; i++) {
-                logBox.innerHTML += `<div>&gt; Compiling solo AI question ${i}/${count}...</div>`;
-                const cat = APP_STATE.selectedCategories[(i - 1) % APP_STATE.selectedCategories.length];
-                const diff = document.getElementById('roomDifficulty').value;
+            for(var i = 1; i <= totalCount; i++) {
+                if(logBox) logBox.innerHTML += "<div>&gt; Compiling solo AI question " + i + "/" + totalCount + "...</div>";
+                var activeCat = userSelectedCategories[(i - 1) % userSelectedCategories.length];
+                var difficultySetting = document.getElementById('roomDifficulty').value;
                 try {
-                    const item = await callGeminiAPI(cat, diff);
-                    generatedCache.push(item);
-                    logBox.innerHTML += `<div class="text-emerald-400">&gt; Packet ${i} integrated.</div>`;
+                    var item = await callGeminiPacket(activeCat, difficultySetting);
+                    generated.push(item);
+                    if(logBox) logBox.innerHTML += "<div class='text-emerald-400'>&gt; Packet " + i + " integrated.</div>";
                 } catch(e) {
-                    generatedCache.push({ tossupText: "Fallback backup frame.", answer: "Offline", category: "Science" });
+                    generated.push({ tossupText: "Fallback structural data parsing module logic template.", answer: "Fallback", category: "Science" });
                 }
-                let p = Math.round((i / count) * 100);
-                if (bar) bar.style.width = `${p}%`;
-                if (pct) pct.innerText = `${p}% Compiled`;
+                var percentValue = Math.round((i / totalCount) * 100);
+                if(bar) bar.style.width = percentValue + "%";
+                if(pct) pct.innerText = percentValue + "% Compiled";
             }
 
-            let scores = {};
-            scores[APP_STATE.playerId] = { name: APP_STATE.playerName + " (You)", score: 0 };
-            scores["bot_sarah"] = { name: "Sarah Chen [Bot]", score: 0 };
-            scores["bot_marcus"] = { name: "Marcus Vance [Bot]", score: 0 };
+            var initialScores = {};
+            initialScores[userPlayerId] = { name: userPlayerName + " (You)", score: 0 };
+            initialScores["bot_sarah"] = { name: "Sarah Chen [Bot]", score: 0 };
+            initialScores["bot_marcus"] = { name: "Marcus Vance [Bot]", score: 0 };
 
-            APP_STATE.soloMatchData = {
-                item_index: 0,
-                questions_cache: generatedCache,
-                scores: scores,
-                is_buzzed_locked: false,
-                who_buzzed: null,
-                buzzed_name: null,
-                current_word_pointer: 0,
-                speed_ms: parseInt(document.getElementById('roomSpeed').value),
-                locked_out_players: [],
-                post_question_countdown: -1
-            };
+            matchItemIndex = 0;
+            matchQuestionsCache = generated;
+            matchScoresMap = initialScores;
+            matchIsBuzzedLocked = false;
+            matchWhoBuzzed = null;
+            matchBuzzedName = null;
+            matchWordPointer = 0;
+            matchSpeedMs = parseInt(document.getElementById('roomSpeed').value) || 260;
+            matchLockedOutArray = [];
 
             switchView('gameplay');
-            executeLocalStateSync(APP_STATE.soloMatchData);
-            startSoloLocalClock();
+            syncUIVisualsLocal();
+            runSoloClockLoop();
         }
 
-        function startSoloLocalClock() {
-            clearInterval(APP_STATE.localWordInterval);
-            APP_STATE.localWordInterval = setInterval(() => {
-                let s = APP_STATE.soloMatchData;
-                if(s.post_question_countdown >= 0) return;
+        function runSoloClockLoop() {
+            clearInterval(clockIntervalTracker);
+            clockIntervalTracker = setInterval(function() {
+                var timerBox = document.getElementById('postQuestionTimerContainer');
+                if(timerBox && !timerBox.classList.contains('hidden')) return;
 
-                if(!s.is_buzzed_locked) {
-                    const currentQ = s.questions_cache[s.item_index];
-                    if(!currentQ) return clearInterval(APP_STATE.localWordInterval);
-
-                    const words = currentQ.tossupText.split(" ");
-                    if(s.current_word_pointer < words.length) {
-                        s.current_word_pointer++;
-                        executeLocalStateSync(s);
-                        evaluateBotBuzzTriggers(s, words.length);
+                if(!matchIsBuzzedLocked) {
+                    var q = matchQuestionsCache[matchItemIndex];
+                    if(!q) {
+                        clearInterval(clockIntervalTracker);
+                        return;
+                    }
+                    var splitArray = q.tossupText.split(" ");
+                    if(matchWordPointer < splitArray.length) {
+                        matchWordPointer++;
+                        syncUIVisualsLocal();
+                        evaluateAutomatedBotBuzzes(splitArray.length);
                     } else {
-                        triggerPostQuestionCountdownPipeline();
+                        triggerPostQuestionCountdown();
                     }
                 }
-            }, APP_STATE.soloMatchData.speed_ms);
+            }, matchSpeedMs);
         }
 
-        function evaluateBotBuzzTriggers(s, totalWords) {
-            if(s.current_word_pointer > totalWords * 0.65 && Math.random() < 0.08) {
-                const lockouts = s.locked_out_players || [];
-                const choices = ["bot_sarah", "bot_marcus"].filter(b => !lockouts.includes(b));
-                if(choices.length === 0) return;
+        function evaluateAutomatedBotBuzzes(totalWords) {
+            if(matchWordPointer > totalWords * 0.65 && Math.random() < 0.08) {
+                var currentLockouts = matchLockedOutArray || [];
+                var viableBots = ["bot_sarah", "bot_marcus"].filter(function(b) { return !currentLockouts.includes(b); });
+                if(viableBots.length === 0) return;
                 
-                const targetBot = choices[Math.floor(Math.random() * choices.length)];
+                var choice = viableBots[Math.floor(Math.random() * viableBots.length)];
                 
-                s.is_buzzed_locked = true;
-                s.who_buzzed = targetBot;
-                s.buzzed_name = s.scores[targetBot].name;
+                matchIsBuzzedLocked = true;
+                matchWhoBuzzed = choice;
+                matchBuzzedName = matchScoresMap[choice].name;
                 
-                clearInterval(APP_STATE.localWordInterval);
-                executeLocalStateSync(s);
+                clearInterval(clockIntervalTracker);
+                syncUIVisualsLocal();
 
-                setTimeout(() => {
-                    let isBotCorrect = Math.random() > 0.40; 
-                    processAdjudicatedChanges(isBotCorrect);
+                setTimeout(function() {
+                    var calculatedChance = Math.random() > 0.40; 
+                    adjudicateResponseOutcome(calculatedChance);
                 }, 2000);
             }
         }
 
-        async function createMatchRoom() {
-            if(!supabaseInstance) return alert("Configure valid Supabase keys via the config gear first.");
-            APP_STATE.isHost = true;
-            const token = "RM-" + Math.floor(1000 + Math.random() * 9000);
+        async function createNetworkMultiplayerRoom() {
+            if(!supabaseClient) return alert("Configure valid Supabase keys via the config gear first.");
+            userIsHost = true;
+            var token = "RM-" + Math.floor(1000 + Math.random() * 9000);
             switchView('loading-screen');
 
-            const logBox = document.getElementById('consoleLogsText');
-            const bar = document.getElementById('loadingProgressBarFill');
-            const pct = document.getElementById('loadingProgressPercentage');
-            logBox.innerHTML = "";
+            var logBox = document.getElementById('consoleLogsText');
+            var bar = document.getElementById('loadingProgressBarFill');
+            var pct = document.getElementById('loadingProgressPercentage');
+            if(logBox) logBox.innerHTML = "";
             
-            let generatedCache = [];
-            const count = 5;
+            var generated = [];
+            var count = 5;
 
-            for(let i = 1; i <= count; i++) {
-                logBox.innerHTML += `<div>&gt; Generating item package ${i}/${count}...</div>`;
-                const cat = APP_STATE.selectedCategories[(i - 1) % APP_STATE.selectedCategories.length];
-                const diff = document.getElementById('roomDifficulty').value;
+            for(var i = 1; i <= count; i++) {
+                if(logBox) logBox.innerHTML += "<div>&gt; Generating item package " + i + "/" + count + "...</div>";
+                var cat = userSelectedCategories[(i - 1) % userSelectedCategories.length];
+                var diff = document.getElementById('roomDifficulty').value;
                 try {
-                    const item = await callGeminiAPI(cat, diff);
-                    generatedCache.push(item);
+                    var item = await callGeminiPacket(cat, diff);
+                    generated.push(item);
                 } catch(e) {
-                    generatedCache.push({ tossupText: "Fallback question module logic.", answer: "Fallback", category: "History" });
+                    generated.push({ tossupText: "Fallback configuration fallback line schema.", answer: "Fallback", category: "History" });
                 }
-                let p = Math.round((i / count) * 100);
-                if (bar) bar.style.width = `${p}%`;
-                if (pct) pct.innerText = `${p}% Synced`;
+                var p = Math.round((i / count) * 100);
+                if (bar) bar.style.width = p + "%";
+                if (pct) pct.innerText = p + "% Synced";
             }
 
-            const initialScores = {};
-            initialScores[APP_STATE.playerId] = { name: APP_STATE.playerName, score: 0 };
+            var baseScores = {};
+            baseScores[userPlayerId] = { name: userPlayerName, score: 0 };
 
-            await supabaseInstance.from('match_rooms').insert({
+            await supabaseClient.from('match_rooms').insert({
                 room_token: token,
                 difficulty: document.getElementById('roomDifficulty').value,
-                speed_ms: parseInt(document.getElementById('roomSpeed').value),
-                categories: APP_STATE.selectedCategories,
-                questions_cache: generatedCache,
-                scores: initialScores,
+                speed_ms: parseInt(document.getElementById('roomSpeed').value) || 260,
+                categories: userSelectedCategories,
+                questions_cache: generated,
+                scores: baseScores,
                 item_index: -1,
                 locked_out_players: []
             });
 
-            connectToRoomChannel(token);
+            establishChannelSubscription(token);
         }
 
         async function joinMatchRoom() {
-            if(!supabaseInstance) return alert("Configure valid Supabase keys via the config gear first.");
-            const token = document.getElementById('joinTokenInput').value.trim().toUpperCase();
+            if(!supabaseClient) return alert("Configure valid Supabase keys via the config gear first.");
+            var token = document.getElementById('joinTokenInput').value.trim().toUpperCase();
             if(!token) return;
 
-            APP_STATE.isHost = false;
-            const { data } = await supabaseInstance.from('match_rooms').select('*').eq('room_token', token).maybeSingle();
-            if(!data) return alert("Active room layout code not located.");
+            userIsHost = false;
+            var response = await supabaseClient.from('match_rooms').select('*').eq('room_token', token).maybeSingle();
+            if(!response || !response.data) return alert("Active room configuration token layout code not located.");
 
-            let updatedScores = { ...data.scores };
-            if(!updatedScores[APP_STATE.playerId]) {
-                updatedScores[APP_STATE.playerId] = { name: APP_STATE.playerName, score: 0 };
-                await supabaseInstance.from('match_rooms').update({ scores: updatedScores }).eq('room_token', token);
+            var currentScores = response.data.scores || {};
+            if(!currentScores[userPlayerId]) {
+                currentScores[userPlayerId] = { name: userPlayerName, score: 0 };
+                await supabaseClient.from('match_rooms').update({ scores: currentScores }).eq('room_token', token);
             }
-            connectToRoomChannel(token);
+            establishChannelSubscription(token);
         }
 
-        function connectToRoomChannel(token) {
-            if (!supabaseInstance) return;
-            APP_STATE.activeRoomToken = token;
-            supabaseInstance.channel(`room_${token}`)
-            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'match_rooms', filter: `room_token=eq.${token}` }, payload => {
-                handleRoomDataRouting(payload.new);
+        function establishChannelSubscription(token) {
+            if(!supabaseClient) return;
+            networkRoomCode = token;
+            supabaseClient.channel("room_" + token)
+            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'match_rooms', filter: "room_token=eq." + token }, function(payload) {
+                routeIncomingNetworkState(payload.new);
             })
-            .subscribe(async (status) => {
+            .subscribe(async function(status) {
                 if(status === "SUBSCRIBED") {
-                    const { data } = await supabaseInstance.from('match_rooms').select('*').eq('room_token', token).single();
-                    handleRoomDataRouting(data);
+                    var response = await supabaseClient.from('match_rooms').select('*').eq('room_token', token).single();
+                    routeIncomingNetworkState(response.data);
                 }
             });
         }
 
-        function handleRoomDataRouting(room) {
+        function routeIncomingNetworkState(room) {
             if(!room) return;
+            activeRoomSnapshot = room;
+            
+            // Map flat network values down to local tracking vars
+            matchItemIndex = room.item_index;
+            matchQuestionsCache = room.questions_cache || [];
+            matchScoresMap = room.scores || {};
+            matchIsBuzzedLocked = room.is_buzzed_locked;
+            matchWhoBuzzed = room.who_buzzed;
+            matchBuzzedName = room.buzzed_name;
+            matchWordPointer = room.current_word_pointer;
+            matchSpeedMs = room.speed_ms;
+            matchLockedOutArray = room.locked_out_players || [];
+
             if(room.item_index === -1) {
                 switchView('staging');
                 document.getElementById('stagingRoomTokenDisplay').innerText = room.room_token;
                 document.getElementById('stagingDifficultyDisplay').innerText = room.difficulty;
                 
-                const roster = document.getElementById('stagingRosterContainer');
-                if (roster) {
+                var roster = document.getElementById('stagingRosterContainer');
+                if(roster) {
                     roster.innerHTML = "";
-                    Object.keys(room.scores || {}).forEach(uid => {
-                        roster.innerHTML += `<div class="p-2 bg-[#1b263f] border border-slate-700/60 rounded flex justify-between"><span>⚡ ${room.scores[uid].name}</span><span class="text-indigo-400 font-bold">READY</span></div>`;
+                    Object.keys(matchScoresMap).forEach(function(uid) {
+                        roster.innerHTML += "<div class='p-2 bg-[#1b263f] border border-slate-700/60 rounded flex justify-between'><span>⚡ " + matchScoresMap[uid].name + "</span><span class='text-indigo-400 font-bold'>READY</span></div>";
                     });
                 }
 
-                if(APP_STATE.isHost) {
+                if(userIsHost) {
                     document.getElementById('stagingHostStartBtn').classList.remove('hidden');
                     document.getElementById('stagingClientWaitMessage').classList.add('hidden');
                 } else {
                     document.getElementById('stagingHostStartBtn').classList.add('hidden');
                     document.getElementById('stagingClientWaitMessage').classList.remove('hidden');
                 }
-                APP_STATE.roomDataSnapshot = room;
             } else {
-                if(APP_STATE.view !== 'gameplay' && APP_STATE.view !== 'endgame') {
+                if(currentView !== 'gameplay' && currentView !== 'endgame') {
                     switchView('gameplay');
-                    if(APP_STATE.isHost && APP_STATE.gameMode === 'multi') startMultiplayerHostClock();
+                    if(userIsHost && currentGameMode === 'multi') runMultiplayerHostClock();
                 }
-                executeLocalStateSync(room);
+                syncUIVisualsLocal();
             }
         }
 
         async function signalStartFromStaging() {
-            if(!APP_STATE.isHost || !APP_STATE.roomDataSnapshot || !supabaseInstance) return;
-            await supabaseInstance.from('match_rooms').update({ item_index: 0, locked_out_players: [] }).eq('room_token', APP_STATE.roomDataSnapshot.room_token);
+            if(!userIsHost || !activeRoomSnapshot || !supabaseClient) return;
+            await supabaseClient.from('match_rooms').update({ item_index: 0, locked_out_players: [] }).eq('room_token', activeRoomSnapshot.room_token);
         }
 
-        function startMultiplayerHostClock() {
-            clearInterval(APP_STATE.localWordInterval);
-            APP_STATE.localWordInterval = setInterval(async () => {
-                let snap = APP_STATE.roomDataSnapshot;
-                if(!snap || snap.is_buzzed_locked || snap.item_index < 0 || !supabaseInstance) return;
-                if(document.getElementById('postQuestionTimerContainer').classList.contains('hidden') === false) return;
-
-                const currentQuestion = snap.questions_cache[snap.item_index];
-                if(!currentQuestion) return clearInterval(APP_STATE.localWordInterval);
+        function runMultiplayerHostClock() {
+            clearInterval(clockIntervalTracker);
+            clockIntervalTracker = setInterval(async function() {
+                var snap = activeRoomSnapshot;
+                if(!snap || snap.is_buzzed_locked || snap.item_index < 0 || !supabaseClient) return;
                 
-                const maxWords = currentQuestion.tossupText.split(" ").length;
-                if(snap.current_word_pointer < maxWords) {
-                    await supabaseInstance.from('match_rooms').update({ current_word_pointer: snap.current_word_pointer + 1 }).eq('room_token', snap.room_token);
+                var timerBox = document.getElementById('postQuestionTimerContainer');
+                if(timerBox && !timerBox.classList.contains('hidden')) return;
+
+                var q = snap.questions_cache[snap.item_index];
+                if(!q) return clearInterval(clockIntervalTracker);
+                
+                var totalLen = q.tossupText.split(" ").length;
+                if(snap.current_word_pointer < totalLen) {
+                    await supabaseClient.from('match_rooms').update({ current_word_pointer: snap.current_word_pointer + 1 }).eq('room_token', snap.room_token);
                 } else {
-                    triggerPostQuestionCountdownPipeline();
+                    triggerPostQuestionCountdown();
                 }
-            }, APP_STATE.roomDataSnapshot.speed_ms);
+            }, matchSpeedMs);
         }
 
-        async function callGeminiAPI(cat, diff) {
-            const prompt = `Generate a single Quiz Bowl tossup question. Category: ${cat}. Difficulty: ${diff}. Must be pyramidal. Output standard clean raw JSON format ONLY. Schema: {"tossupText": "Wording here", "answer": "Answer here", "category": "${cat}"}`;
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${APP_STATE.apiKey}`;
-            const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
-            const data = await res.json();
-            let text = data.candidates[0].content.parts[0].text.trim();
-            if(text.startsWith("```")) text = text.replace(/^
+        async function callGeminiPacket(cat, diff) {
+            var prompt = 'Generate a single Quiz Bowl tossup question. Category: ' + cat + '. Difficulty: ' + diff + '. Must be pyramidal. Output standard clean raw JSON format ONLY. Schema: {"tossupText": "Wording here", "answer": "Answer here", "category": "' + cat + '"}';
+            var url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + userApiKey;
+            var response = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+            var parsed = await response.json();
+            var txt = parsed.candidates[0].content.parts[0].text.trim();
+            if(txt.startsWith("```")) txt = txt.replace(/^
 ```(?:json)?/, "").replace(/```$/, "").trim();
-            return JSON.parse(text);
+            return JSON.parse(txt);
         }
 
-        function executeLocalStateSync(room) {
-            if(!room) return;
-            APP_STATE.roomDataSnapshot = room;
+        function syncUIVisualsLocal() {
+            document.getElementById('gameplayRoomToken').innerText = (currentGameMode === 'solo') ? "LOCAL SOLO PRACTICE" : networkRoomCode;
+            document.getElementById('gameplayItemFraction').innerText = (matchItemIndex + 1) + " / " + matchQuestionsCache.length;
             
-            document.getElementById('gameplayRoomToken').innerText = APP_STATE.gameMode === 'solo' ? "LOCAL SOLO PRACTICE" : room.room_token;
-            document.getElementById('gameplayItemFraction').innerText = `${room.item_index + 1} / ${(room.questions_cache || []).length}`;
-            
-            const currentQuestion = (room.questions_cache || [])[room.item_index];
-            if(!currentQuestion) {
-                clearInterval(APP_STATE.localWordInterval);
-                clearInterval(APP_STATE.postQuestionCountdownTimer);
-                renderFinalEndgame(room);
+            var currentQ = matchQuestionsCache[matchItemIndex];
+            if(!currentQ) {
+                clearInterval(clockIntervalTracker);
+                clearInterval(countdownIntervalTracker);
+                renderFinalScoresPanel();
                 return;
             }
 
-            document.getElementById('itemCategoryBadge').innerText = currentQuestion.category || "General";
+            document.getElementById('itemCategoryBadge').innerText = currentQ.category || "General";
             
-            const lockoutList = room.locked_out_players || [];
-            const isMeLockedOut = lockoutList.includes(APP_STATE.playerId);
-            const buzzButton = document.getElementById('hardwareBuzzerButton');
+            var isMeLockedOut = matchLockedOutArray.includes(userPlayerId);
+            var buzzBtn = document.getElementById('hardwareBuzzerButton');
             
-            if (buzzButton) {
+            if(buzzBtn) {
                 if(isMeLockedOut) {
                     document.getElementById('lockoutWarningBadge').classList.remove('hidden');
-                    buzzButton.disabled = true;
-                    buzzButton.className = "w-full bg-slate-800 text-slate-500 rounded-xl py-6 font-black tracking-widest text-xl cursor-not-allowed border-b-4 border-slate-900";
+                    buzzBtn.disabled = true;
+                    buzzBtn.className = "w-full bg-slate-800 text-slate-500 rounded-xl py-6 font-black tracking-widest text-xl cursor-not-allowed border-b-4 border-slate-900";
                 } else {
                     document.getElementById('lockoutWarningBadge').classList.add('hidden');
-                    buzzButton.disabled = false;
-                    buzzButton.className = "w-full bg-rose-600 hover:bg-rose-500 text-white rounded-xl py-6 font-black tracking-widest text-xl border-b-4 border-rose-800 focus:outline-none";
+                    buzzBtn.disabled = false;
+                    buzzBtn.className = "w-full bg-rose-600 hover:bg-rose-500 text-white rounded-xl py-6 font-black tracking-widest text-xl border-b-4 border-rose-800 focus:outline-none";
                 }
             }
 
-            const words = (currentQuestion.tossupText || "").split(" ");
-            let displayStr = "";
-            for(let i = 0; i < room.current_word_pointer && i < words.length; i++) {
-                displayStr += words[i] + " ";
+            var words = (currentQ.tossupText || "").split(" ");
+            var runningString = "";
+            for(var i = 0; i < matchWordPointer && i < words.length; i++) {
+                runningString += words[i] + " ";
             }
-            if(document.getElementById('postQuestionTimerContainer').classList.contains('hidden')) {
-                document.getElementById('tossupDisplayStream').innerHTML = displayStr;
+            
+            var timerContainer = document.getElementById('postQuestionTimerContainer');
+            if(!timerContainer || timerContainer.classList.contains('hidden')) {
+                document.getElementById('tossupDisplayStream').innerHTML = runningString;
             }
 
-            if(room.is_buzzed_locked) {
-                clearInterval(APP_STATE.localWordInterval);
+            if(matchIsBuzzedLocked) {
+                clearInterval(clockIntervalTracker);
                 try { document.getElementById('buzzSound').play(); } catch(e){}
                 
-                document.getElementById('buzzerLockName').innerText = `${(room.buzzed_name || "SOMEONE").toUpperCase()} BUZZED`;
+                document.getElementById('buzzerLockName').innerText = (matchBuzzedName || "SOMEONE").toUpperCase() + " BUZZED";
                 document.getElementById('buzzerLockBanner').classList.remove('hidden');
 
-                if(room.who_buzzed === APP_STATE.playerId) {
+                if(matchWhoBuzzed === userPlayerId) {
                     document.getElementById('userAnswerContainer').classList.remove('hidden');
                     document.getElementById('botGradingStatus').classList.add('hidden');
-                    setTimeout(() => { document.getElementById('userAnswerInput').focus(); }, 50);
+                    setTimeout(function() { document.getElementById('userAnswerInput').focus(); }, 50);
                 } else {
                     document.getElementById('userAnswerContainer').classList.add('hidden');
                     document.getElementById('botGradingStatus').classList.remove('hidden');
-                    document.getElementById('botGradingStatus').innerText = `${room.buzzed_name || 'Opponent'} is formulating text entry choices...`;
+                    document.getElementById('botGradingStatus').innerText = (matchBuzzedName || 'Opponent') + " is formulating text entry choices...";
                 }
             } else {
                 document.getElementById('buzzerLockBanner').classList.add('hidden');
@@ -679,220 +703,207 @@
                 document.getElementById('userAnswerInput').value = "";
             }
 
-            renderRosterScoreboard(room.scores || {});
+            renderScoreboardTrackList();
         }
 
         async function triggerUserBuzz() {
-            let snap = APP_STATE.roomDataSnapshot;
-            if(!snap || snap.is_buzzed_locked) return;
+            if(matchIsBuzzedLocked) return;
+            if(matchLockedOutArray.includes(userPlayerId)) return;
+            
+            var timerBox = document.getElementById('postQuestionTimerContainer');
+            if(timerBox && !timerBox.classList.contains('hidden')) return;
 
-            const lockoutList = snap.locked_out_players || [];
-            if(lockoutList.includes(APP_STATE.playerId)) return;
-            if(document.getElementById('postQuestionTimerContainer').classList.contains('hidden') === false) return;
-
-            if(APP_STATE.gameMode === 'solo') {
-                clearInterval(APP_STATE.localWordInterval);
-                snap.is_buzzed_locked = true;
-                snap.who_buzzed = APP_STATE.playerId;
-                snap.buzzed_name = APP_STATE.playerName;
-                executeLocalStateSync(snap);
+            if(currentGameMode === 'solo') {
+                clearInterval(clockIntervalTracker);
+                matchIsBuzzedLocked = true;
+                matchWhoBuzzed = userPlayerId;
+                matchBuzzedName = userPlayerName;
+                syncUIVisualsLocal();
             } else {
-                if (!supabaseInstance) return;
-                await supabaseInstance.from('match_rooms').update({ is_buzzed_locked: true, who_buzzed: APP_STATE.playerId, buzzed_name: APP_STATE.playerName }).eq('room_token', snap.room_token).eq('is_buzzed_locked', false);
+                if(!supabaseClient || !activeRoomSnapshot) return;
+                await supabaseClient.from('match_rooms').update({ 
+                    is_buzzed_locked: true, 
+                    who_buzzed: userPlayerId, 
+                    buzzed_name: userPlayerName 
+                }).eq('room_token', activeRoomSnapshot.room_token).eq('is_buzzed_locked', false);
             }
         }
 
         async function submitUserAnswer() {
-            let snap = APP_STATE.roomDataSnapshot;
-            if(!snap || snap.who_buzzed !== APP_STATE.playerId) return;
-
-            const val = document.getElementById('userAnswerInput').value.trim();
+            if(matchWhoBuzzed !== userPlayerId) return;
+            var val = document.getElementById('userAnswerInput').value.trim();
             if(!val) return;
 
             document.getElementById('userAnswerContainer').classList.add('hidden');
             document.getElementById('botGradingStatus').innerText = "AI Referee checking your answer...";
             document.getElementById('botGradingStatus').classList.remove('hidden');
 
-            const targetAnswer = snap.questions_cache[snap.item_index].answer;
-            const prompt = `You are a strict Quiz Bowl referee. Core target answer: "${targetAnswer}". User typed answer: "${val}". Respond ONLY with the word TRUE if valid, or FALSE if wrong.`;
-            let isCorrect = false;
+            var targetAnswer = matchQuestionsCache[matchItemIndex].answer;
+            var prompt = 'You are a strict Quiz Bowl referee. Core target answer: "' + targetAnswer + '". User typed answer: "' + val + '". Respond ONLY with the word TRUE if valid, or FALSE if wrong.';
+            
+            var isCorrect = false;
             try {
-                const url = `[https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$](https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$){APP_STATE.apiKey}`;
-                const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
-                const d = await res.json();
+                var url = "[https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=](https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=)" + userApiKey;
+                var res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+                var d = await res.json();
                 isCorrect = d.candidates[0].content.parts[0].text.trim().toUpperCase().includes("TRUE");
             } catch(e) {
                 isCorrect = (val.toLowerCase() === targetAnswer.toLowerCase());
             }
 
-            processAdjudicatedChanges(isCorrect);
+            adjudicateResponseOutcome(isCorrect);
         }
 
-        async function processAdjudicatedChanges(isCorrect) {
-            let snap = APP_STATE.roomDataSnapshot;
-            let updatedScores = { ...snap.scores };
-            let nextIndex = snap.item_index;
-            let nextWordPointer = snap.current_word_pointer;
-            let currentLockouts = [...(snap.locked_out_players || [])];
+        async function adjudicateResponseOutcome(isCorrect) {
+            var updatedScores = Object.assign({}, matchScoresMap);
+            var targetNextIndex = matchItemIndex;
+            var targetNextWordPointer = matchWordPointer;
+            var targetLockouts = [].concat(matchLockedOutArray || []);
 
             if(isCorrect) {
-                if(updatedScores[snap.who_buzzed]) updatedScores[snap.who_buzzed].score += 10;
-                nextIndex += 1;
-                nextWordPointer = 0;
-                currentLockouts = []; 
+                if(updatedScores[matchWhoBuzzed]) updatedScores[matchWhoBuzzed].score += 10;
+                targetNextIndex += 1;
+                targetNextWordPointer = 0;
+                targetLockouts = []; 
                 
-                clearInterval(APP_STATE.postQuestionCountdownTimer);
-                document.getElementById('postQuestionTimerContainer').classList.add('hidden');
+                clearInterval(countdownIntervalTracker);
+                var timerBox = document.getElementById('postQuestionTimerContainer');
+                if(timerBox) timerBox.classList.add('hidden');
             } else {
-                if(updatedScores[snap.who_buzzed]) updatedScores[snap.who_buzzed].score -= 5;
-                if(!currentLockouts.includes(snap.who_buzzed)) {
-                    currentLockouts.push(snap.who_buzzed);
+                if(updatedScores[matchWhoBuzzed]) updatedScores[matchWhoBuzzed].score -= 5;
+                if(!targetLockouts.includes(matchWhoBuzzed)) {
+                    targetLockouts.push(matchWhoBuzzed);
                 }
             }
 
-            if(APP_STATE.gameMode === "solo") {
-                APP_STATE.soloMatchData.scores = updatedScores;
-                APP_STATE.soloMatchData.item_index = nextIndex;
-                APP_STATE.soloMatchData.current_word_pointer = nextWordPointer;
-                APP_STATE.soloMatchData.locked_out_players = currentLockouts;
-                APP_STATE.soloMatchData.is_buzzed_locked = false;
-                APP_STATE.soloMatchData.who_buzzed = null;
-                APP_STATE.soloMatchData.buzzed_name = null;
+            if(currentGameMode === "solo") {
+                matchScoresMap = updatedScores;
+                matchItemIndex = targetNextIndex;
+                matchWordPointer = targetNextWordPointer;
+                matchLockedOutArray = targetLockouts;
+                matchIsBuzzedLocked = false;
+                matchWhoBuzzed = null;
+                matchBuzzedName = null;
                 
-                executeLocalStateSync(APP_STATE.soloMatchData);
-                startSoloLocalClock();
+                syncUIVisualsLocal();
+                runSoloClockLoop();
             } else {
-                if (!supabaseInstance) return;
-                await supabaseInstance.from('match_rooms').update({
+                if(!supabaseClient || !activeRoomSnapshot) return;
+                await supabaseClient.from('match_rooms').update({
                     scores: updatedScores, 
-                    item_index: nextIndex, 
-                    current_word_pointer: nextWordPointer,
-                    locked_out_players: currentLockouts,
+                    item_index: targetNextIndex, 
+                    current_word_pointer: targetNextWordPointer,
+                    locked_out_players: targetLockouts,
                     is_buzzed_locked: false, 
                     who_buzzed: null, 
                     buzzed_name: null
-                }).eq('room_token', snap.room_token);
+                }).eq('room_token', activeRoomSnapshot.room_token);
             }
         }
 
-        function triggerPostQuestionCountdownPipeline() {
-            if(APP_STATE.postQuestionCountdownTimer) clearInterval(APP_STATE.postQuestionCountdownTimer);
-            if(!APP_STATE.isHost) return;
+        function triggerPostQuestionCountdown() {
+            clearInterval(countdownIntervalTracker);
+            if(!userIsHost) return;
 
-            let timeLeft = 10;
-            const container = document.getElementById('postQuestionTimerContainer');
-            const counterLabel = document.getElementById('postQuestionCountdownValue');
+            var timeLeft = 10;
+            var container = document.getElementById('postQuestionTimerContainer');
+            var counterLabel = document.getElementById('postQuestionCountdownValue');
             
-            if (container) container.classList.remove('hidden');
-            if (counterLabel) counterLabel.innerText = timeLeft;
+            if(container) container.classList.remove('hidden');
+            if(counterLabel) counterLabel.innerText = timeLeft;
 
-            broadcastCountdownStateUpdate(timeLeft);
+            updateCountdownUIVisuals(timeLeft);
 
-            APP_STATE.postQuestionCountdownTimer = setInterval(async () => {
+            countdownIntervalTracker = setInterval(async function() {
                 timeLeft--;
                 if(timeLeft >= 0) {
-                    if (counterLabel) counterLabel.innerText = timeLeft;
-                    broadcastCountdownStateUpdate(timeLeft);
+                    if(counterLabel) counterLabel.innerText = timeLeft;
+                    updateCountdownUIVisuals(timeLeft);
                 } else {
-                    clearInterval(APP_STATE.postQuestionCountdownTimer);
-                    if (container) container.classList.add('hidden');
+                    clearInterval(countdownIntervalTracker);
+                    if(container) container.classList.add('hidden');
                     
-                    let snap = APP_STATE.roomDataSnapshot;
-                    let targetIndex = snap.item_index + 1;
+                    var targetIndex = matchItemIndex + 1;
                     
-                    if(APP_STATE.gameMode === "solo") {
-                        APP_STATE.soloMatchData.item_index = targetIndex;
-                        APP_STATE.soloMatchData.current_word_pointer = 0;
-                        APP_STATE.soloMatchData.locked_out_players = [];
-                        executeLocalStateSync(APP_STATE.soloMatchData);
-                        startSoloLocalClock();
+                    if(currentGameMode === "solo") {
+                        matchItemIndex = targetIndex;
+                        matchWordPointer = 0;
+                        matchLockedOutArray = [];
+                        syncUIVisualsLocal();
+                        runSoloClockLoop();
                     } else {
-                        if (!supabaseInstance) return;
-                        await supabaseInstance.from('match_rooms').update({
+                        if(!supabaseClient || !activeRoomSnapshot) return;
+                        await supabaseClient.from('match_rooms').update({
                             item_index: targetIndex,
                             current_word_pointer: 0,
                             locked_out_players: []
-                        }).eq('room_token', snap.room_token);
+                        }).eq('room_token', activeRoomSnapshot.room_token);
                     }
                 }
             }, 1000);
         }
 
-        function broadcastCountdownStateUpdate(sec) {
-            const container = document.getElementById('postQuestionTimerContainer');
-            const counterLabel = document.getElementById('postQuestionCountdownValue');
+        function updateCountdownUIVisuals(sec) {
+            var container = document.getElementById('postQuestionTimerContainer');
+            var counterLabel = document.getElementById('postQuestionCountdownValue');
             
             if(sec >= 0) {
-                if (container) container.classList.remove('hidden');
-                if (counterLabel) counterLabel.innerText = sec;
+                if(container) container.classList.remove('hidden');
+                if(counterLabel) counterLabel.innerText = sec;
                 
-                let snap = APP_STATE.roomDataSnapshot;
-                const currentQ = snap.questions_cache[snap.item_index];
+                var currentQ = matchQuestionsCache[matchItemIndex];
                 if(currentQ) {
-                    document.getElementById('tossupDisplayStream').innerHTML = currentQ.tossupText + ` <br><br><span class="text-amber-400 font-bold font-mono text-sm">[ ANSWER: ${currentQ.answer} ]</span>`;
+                    document.getElementById('tossupDisplayStream').innerHTML = currentQ.tossupText + 
+                        "<br><br><span class='text-amber-400 font-bold font-mono text-sm'>[ ANSWER: " + currentQ.answer + " ]</span>";
                 }
             } else {
-                if (container) container.classList.add('hidden');
+                if(container) container.classList.add('hidden');
             }
         }
 
-        function renderRosterScoreboard(scores) {
-            const t = document.getElementById('gameplayRosterList');
-            if(!t) return;
-            t.innerHTML = "";
-            Object.keys(scores).forEach(uid => {
-                const entry = scores[uid];
-                t.innerHTML += `<div class="flex justify-between p-2 bg-slate-900 border border-slate-800 text-xs font-mono"><span>${entry.name}</span><span class="text-indigo-400 font-bold">${entry.score} pts</span></div>`;
+        function renderScoreboardTrackList() {
+            var el = document.getElementById('gameplayRosterList');
+            if(!el) return;
+            el.innerHTML = "";
+            Object.keys(matchScoresMap).forEach(function(uid) {
+                var item = matchScoresMap[uid];
+                el.innerHTML += "<div class='flex justify-between p-2 bg-slate-900 border border-slate-800 text-xs font-mono'><span>" + item.name + "</span><span class='text-indigo-400 font-bold'>" + item.score + " pts</span></div>";
             });
         }
 
-        function renderFinalEndgame(room) {
+        function renderFinalScoresPanel() {
             switchView('endgame');
-            let container = document.getElementById('endgamePlacementsContainer');
-            if (container) {
-                container.innerHTML = `<h3 class="text-lg font-bold mb-4">Final Scoreboard Metrics</h3>`;
-                Object.keys(room.scores || {}).forEach(uid => {
-                    let p = room.scores[uid];
-                    container.innerHTML += `<p class="font-mono text-sm">${p.name}: <span class="text-indigo-400">${p.score} pts</span></p>`;
+            var container = document.getElementById('endgamePlacementsContainer');
+            if(container) {
+                container.innerHTML = "<h3 class='text-lg font-bold mb-4'>Final Scoreboard Metrics</h3>";
+                Object.keys(matchScoresMap).forEach(function(uid) {
+                    var p = matchScoresMap[uid];
+                    container.innerHTML += "<p class='font-mono text-sm'>" + p.name + ": <span class='text-indigo-400'>" + p.score + " pts</span></p>";
                 });
             }
         }
 
-        function renderAppState() {
-            const badge = document.getElementById('apiKeyBadge');
+        function syncHeaderBadge() {
+            var badge = document.getElementById('apiKeyBadge');
             if(badge) {
-                if(APP_STATE.apiKey) {
-                    badge.classList.add('hidden');
-                } else {
-                    badge.classList.remove('hidden');
-                }
+                if(userApiKey) badge.classList.add('hidden');
+                else badge.classList.remove('hidden');
             }
-            
-            const nameField = document.getElementById('configPlayerName');
-            const keyField = document.getElementById('apiConfigKey');
-            const urlField = document.getElementById('supabaseUrlInput');
-            const sbKeyField = document.getElementById('supabaseKeyInput');
-
-            if (nameField) nameField.value = APP_STATE.playerName;
-            if (keyField) keyField.value = APP_STATE.apiKey;
-            if (urlField) urlField.value = SB_URL;
-            if (sbKeyField) sbKeyField.value = SB_KEY;
-            
-            if(APP_STATE.view === "lobby") initCategoryGrid();
         }
 
-        window.addEventListener('keydown', (e) => {
-            if(document.activeElement.id === "userAnswerInput") {
+        // Global Action Event Listeners
+        window.addEventListener('keydown', function(e) {
+            if(document.activeElement && document.activeElement.id === "userAnswerInput") {
                 if(e.code === "Enter") submitUserAnswer();
                 return;
             }
-            if(e.code === "Space" && APP_STATE.view === "gameplay") {
+            if(e.code === "Space" && currentView === "gameplay") {
                 e.preventDefault();
                 triggerUserBuzz();
             }
         });
 
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', function() {
             switchView('landing');
         });
     </script>
