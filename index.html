@@ -26,7 +26,7 @@
             </div>
             <div>
                 <span class="font-bold text-lg bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">BowlPrep</span>
-                <span class="text-[10px] uppercase tracking-widest font-bold text-indigo-400 block -mt-1 mono">v3.1 Stable Match Engine</span>
+                <span class="text-[10px] uppercase tracking-widest font-bold text-indigo-400 block -mt-1 mono">v3.2 Crash Isolated</span>
             </div>
         </div>
 
@@ -62,7 +62,7 @@
                 </div>
                 <div>
                     <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-1.5">Supabase URL</label>
-                    <input type="text" id="supabaseUrlInput" placeholder="https://your-id.supabase.co" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono text-slate-100 focus:outline-none focus:border-indigo-500">
+                    <input type="text" id="supabaseUrlInput" placeholder="https://your-id.supabase.co" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono text-slate-110 focus:outline-none focus:border-indigo-500">
                 </div>
                 <div>
                     <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-1.5">Supabase Anon Key</label>
@@ -237,12 +237,18 @@
 
     <!-- AUTOMATED COMBINED BRAIN ENGINE -->
     <script>
-        let SB_URL = localStorage.getItem("BOWLPREP_SB_URL") || "https://PASTE-YOUR-OWN-PROJECT-ID.supabase.co";
-        let SB_KEY = localStorage.getItem("BOWLPREP_SB_KEY") || "PASTE-YOUR-OWN-ANON-PUBLIC-KEY";
+        let SB_URL = localStorage.getItem("BOWLPREP_SB_URL") || "";
+        let SB_KEY = localStorage.getItem("BOWLPREP_SB_KEY") || "";
 
         let supabaseInstance = null;
-        if (SB_URL && SB_KEY && !SB_URL.includes("PASTE-YOUR")) {
-            supabaseInstance = window.supabase.createClient(SB_URL, SB_KEY);
+        
+        // SAFE CONDITIONAL INITIALIZATION BLOCK (Stops v3.1 Boot Crash)
+        try {
+            if (SB_URL && SB_KEY && SB_URL.trim() !== "" && !SB_URL.includes("PASTE-YOUR")) {
+                supabaseInstance = window.supabase.createClient(SB_URL, SB_KEY);
+            }
+        } catch (err) {
+            console.error("Supabase failed initialization safely trapped:", err);
         }
 
         const SUBJECT_CATEGORIES = ["History", "Science", "Literature", "Fine Arts", "Mythology", "Geography", "Math", "Philosophy"];
@@ -293,17 +299,17 @@
             const desc = document.getElementById('lobbyStatusDescription');
 
             if(mode === 'solo') {
-                btnSolo.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all bg-indigo-600 text-white";
-                btnMulti.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all text-slate-400 hover:text-white";
-                joinBox.classList.add('hidden');
-                launchBtn.innerText = "Start Solo Training";
-                desc.innerText = "Solo Mode runs completely locally inside your browser, loading simulated automated smart bot competitors.";
+                if (btnSolo) btnSolo.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all bg-indigo-600 text-white";
+                if (btnMulti) btnMulti.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all text-slate-400 hover:text-white";
+                if (joinBox) joinBox.classList.add('hidden');
+                if (launchBtn) launchBtn.innerText = "Start Solo Training";
+                if (desc) desc.innerText = "Solo Mode runs completely locally inside your browser, loading simulated automated smart bot competitors.";
             } else {
-                btnSolo.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all text-slate-400 hover:text-white";
-                btnMulti.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all bg-indigo-600 text-white";
-                joinBox.classList.remove('hidden');
-                launchBtn.innerText = "Setup Staging Room";
-                desc.innerText = "Launches the Pre-Match Manifest so users can view sync tags and lobby rosters before launching.";
+                if (btnSolo) btnSolo.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all text-slate-400 hover:text-white";
+                if (btnMulti) btnMulti.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all bg-indigo-600 text-white";
+                if (joinBox) joinBox.classList.remove('hidden');
+                if (launchBtn) launchBtn.innerText = "Setup Staging Room";
+                if (desc) desc.innerText = "Launches the Pre-Match Manifest so users can view sync tags and lobby rosters before launching.";
             }
         }
 
@@ -330,8 +336,12 @@
             localStorage.setItem("BOWLPREP_SB_URL", SB_URL);
             localStorage.setItem("BOWLPREP_SB_KEY", SB_KEY);
 
-            if (SB_URL && SB_KEY && !SB_URL.includes("PASTE-YOUR")) {
-                supabaseInstance = window.supabase.createClient(SB_URL, SB_KEY);
+            try {
+                if (SB_URL && SB_KEY && SB_URL.trim() !== "") {
+                    supabaseInstance = window.supabase.createClient(SB_URL, SB_KEY);
+                }
+            } catch(e) {
+                console.error(e);
             }
             toggleSettingsDrawer();
             renderAppState();
@@ -364,9 +374,6 @@
             }
         }
 
-        // ==========================================
-        // LOCAL OFFLINE SOLO RUNTIME ENGINE
-        // ==========================================
         async function createSoloLocalRoom() {
             APP_STATE.isHost = true;
             APP_STATE.activeRoomToken = "LOCAL-SOLO";
@@ -392,8 +399,8 @@
                     generatedCache.push({ tossupText: "Fallback backup frame.", answer: "Offline", category: "Science" });
                 }
                 let p = Math.round((i / count) * 100);
-                bar.style.width = `${p}%`;
-                pct.innerText = `${p}% Compiled`;
+                if (bar) bar.style.width = `${p}%`;
+                if (pct) pct.innerText = `${p}% Compiled`;
             }
 
             let scores = {};
@@ -463,9 +470,6 @@
             }
         }
 
-        // ==========================================
-        // ONLINE MULTIPLAYER BACKEND RUNTIME ENGINE
-        // ==========================================
         async function createMatchRoom() {
             if(!supabaseInstance) return alert("Configure valid Supabase keys via the config gear first.");
             APP_STATE.isHost = true;
@@ -491,8 +495,8 @@
                     generatedCache.push({ tossupText: "Fallback question module logic.", answer: "Fallback", category: "History" });
                 }
                 let p = Math.round((i / count) * 100);
-                bar.style.width = `${p}%`;
-                pct.innerText = `${p}% Synced`;
+                if (bar) bar.style.width = `${p}%`;
+                if (pct) pct.innerText = `${p}% Synced`;
             }
 
             const initialScores = {};
@@ -530,6 +534,7 @@
         }
 
         function connectToRoomChannel(token) {
+            if (!supabaseInstance) return;
             APP_STATE.activeRoomToken = token;
             supabaseInstance.channel(`room_${token}`)
             .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'match_rooms', filter: `room_token=eq.${token}` }, payload => {
@@ -551,10 +556,12 @@
                 document.getElementById('stagingDifficultyDisplay').innerText = room.difficulty;
                 
                 const roster = document.getElementById('stagingRosterContainer');
-                roster.innerHTML = "";
-                Object.keys(room.scores || {}).forEach(uid => {
-                    roster.innerHTML += `<div class="p-2 bg-[#1b263f] border border-slate-700/60 rounded flex justify-between"><span>⚡ ${room.scores[uid].name}</span><span class="text-indigo-400 font-bold">READY</span></div>`;
-                });
+                if (roster) {
+                    roster.innerHTML = "";
+                    Object.keys(room.scores || {}).forEach(uid => {
+                        roster.innerHTML += `<div class="p-2 bg-[#1b263f] border border-slate-700/60 rounded flex justify-between"><span>⚡ ${room.scores[uid].name}</span><span class="text-indigo-400 font-bold">READY</span></div>`;
+                    });
+                }
 
                 if(APP_STATE.isHost) {
                     document.getElementById('stagingHostStartBtn').classList.remove('hidden');
@@ -574,7 +581,7 @@
         }
 
         async function signalStartFromStaging() {
-            if(!APP_STATE.isHost || !APP_STATE.roomDataSnapshot) return;
+            if(!APP_STATE.isHost || !APP_STATE.roomDataSnapshot || !supabaseInstance) return;
             await supabaseInstance.from('match_rooms').update({ item_index: 0, locked_out_players: [] }).eq('room_token', APP_STATE.roomDataSnapshot.room_token);
         }
 
@@ -582,7 +589,7 @@
             clearInterval(APP_STATE.localWordInterval);
             APP_STATE.localWordInterval = setInterval(async () => {
                 let snap = APP_STATE.roomDataSnapshot;
-                if(!snap || snap.is_buzzed_locked || snap.item_index < 0) return;
+                if(!snap || snap.is_buzzed_locked || snap.item_index < 0 || !supabaseInstance) return;
                 if(document.getElementById('postQuestionTimerContainer').classList.contains('hidden') === false) return;
 
                 const currentQuestion = snap.questions_cache[snap.item_index];
@@ -608,9 +615,6 @@
             return JSON.parse(text);
         }
 
-        // ==========================================
-        // STATE RENDER & SYNC ROUTINES
-        // ==========================================
         function executeLocalStateSync(room) {
             if(!room) return;
             APP_STATE.roomDataSnapshot = room;
@@ -628,19 +632,20 @@
 
             document.getElementById('itemCategoryBadge').innerText = currentQuestion.category || "General";
             
-            // Fixed safety line below to prevent crashes if array is missing
             const lockoutList = room.locked_out_players || [];
             const isMeLockedOut = lockoutList.includes(APP_STATE.playerId);
             const buzzButton = document.getElementById('hardwareBuzzerButton');
             
-            if(isMeLockedOut) {
-                document.getElementById('lockoutWarningBadge').classList.remove('hidden');
-                buzzButton.disabled = true;
-                buzzButton.className = "w-full bg-slate-800 text-slate-500 rounded-xl py-6 font-black tracking-widest text-xl cursor-not-allowed border-b-4 border-slate-900";
-            } else {
-                document.getElementById('lockoutWarningBadge').classList.add('hidden');
-                buzzButton.disabled = false;
-                buzzButton.className = "w-full bg-rose-600 hover:bg-rose-500 text-white rounded-xl py-6 font-black tracking-widest text-xl border-b-4 border-rose-800 focus:outline-none";
+            if (buzzButton) {
+                if(isMeLockedOut) {
+                    document.getElementById('lockoutWarningBadge').classList.remove('hidden');
+                    buzzButton.disabled = true;
+                    buzzButton.className = "w-full bg-slate-800 text-slate-500 rounded-xl py-6 font-black tracking-widest text-xl cursor-not-allowed border-b-4 border-slate-900";
+                } else {
+                    document.getElementById('lockoutWarningBadge').classList.add('hidden');
+                    buzzButton.disabled = false;
+                    buzzButton.className = "w-full bg-rose-600 hover:bg-rose-500 text-white rounded-xl py-6 font-black tracking-widest text-xl border-b-4 border-rose-800 focus:outline-none";
+                }
             }
 
             const words = (currentQuestion.tossupText || "").split(" ");
@@ -648,7 +653,6 @@
             for(let i = 0; i < room.current_word_pointer && i < words.length; i++) {
                 displayStr += words[i] + " ";
             }
-            // If we are currently counting down at the end of a question, don't wipe out the countdown text display
             if(document.getElementById('postQuestionTimerContainer').classList.contains('hidden')) {
                 document.getElementById('tossupDisplayStream').innerHTML = displayStr;
             }
@@ -693,6 +697,7 @@
                 snap.buzzed_name = APP_STATE.playerName;
                 executeLocalStateSync(snap);
             } else {
+                if (!supabaseInstance) return;
                 await supabaseInstance.from('match_rooms').update({ is_buzzed_locked: true, who_buzzed: APP_STATE.playerId, buzzed_name: APP_STATE.playerName }).eq('room_token', snap.room_token).eq('is_buzzed_locked', false);
             }
         }
@@ -757,6 +762,7 @@
                 executeLocalStateSync(APP_STATE.soloMatchData);
                 startSoloLocalClock();
             } else {
+                if (!supabaseInstance) return;
                 await supabaseInstance.from('match_rooms').update({
                     scores: updatedScores, 
                     item_index: nextIndex, 
@@ -769,9 +775,6 @@
             }
         }
 
-        // ==========================================
-        // UNIFIED 10-SECOND COUNTDOWN PIPELINE ENGINE
-        // ==========================================
         function triggerPostQuestionCountdownPipeline() {
             if(APP_STATE.postQuestionCountdownTimer) clearInterval(APP_STATE.postQuestionCountdownTimer);
             if(!APP_STATE.isHost) return;
@@ -780,19 +783,19 @@
             const container = document.getElementById('postQuestionTimerContainer');
             const counterLabel = document.getElementById('postQuestionCountdownValue');
             
-            container.classList.remove('hidden');
-            counterLabel.innerText = timeLeft;
+            if (container) container.classList.remove('hidden');
+            if (counterLabel) counterLabel.innerText = timeLeft;
 
             broadcastCountdownStateUpdate(timeLeft);
 
             APP_STATE.postQuestionCountdownTimer = setInterval(async () => {
                 timeLeft--;
                 if(timeLeft >= 0) {
-                    counterLabel.innerText = timeLeft;
+                    if (counterLabel) counterLabel.innerText = timeLeft;
                     broadcastCountdownStateUpdate(timeLeft);
                 } else {
                     clearInterval(APP_STATE.postQuestionCountdownTimer);
-                    container.classList.add('hidden');
+                    if (container) container.classList.add('hidden');
                     
                     let snap = APP_STATE.roomDataSnapshot;
                     let targetIndex = snap.item_index + 1;
@@ -804,6 +807,7 @@
                         executeLocalStateSync(APP_STATE.soloMatchData);
                         startSoloLocalClock();
                     } else {
+                        if (!supabaseInstance) return;
                         await supabaseInstance.from('match_rooms').update({
                             item_index: targetIndex,
                             current_word_pointer: 0,
@@ -819,8 +823,8 @@
             const counterLabel = document.getElementById('postQuestionCountdownValue');
             
             if(sec >= 0) {
-                container.classList.remove('hidden');
-                counterLabel.innerText = sec;
+                if (container) container.classList.remove('hidden');
+                if (counterLabel) counterLabel.innerText = sec;
                 
                 let snap = APP_STATE.roomDataSnapshot;
                 const currentQ = snap.questions_cache[snap.item_index];
@@ -828,7 +832,7 @@
                     document.getElementById('tossupDisplayStream').innerHTML = currentQ.tossupText + ` <br><br><span class="text-amber-400 font-bold font-mono text-sm">[ ANSWER: ${currentQ.answer} ]</span>`;
                 }
             } else {
-                container.classList.add('hidden');
+                if (container) container.classList.add('hidden');
             }
         }
 
@@ -845,24 +849,34 @@
         function renderFinalEndgame(room) {
             switchView('endgame');
             let container = document.getElementById('endgamePlacementsContainer');
-            container.innerHTML = `<h3 class="text-lg font-bold mb-4">Final Scoreboard Metrics</h3>`;
-            Object.keys(room.scores || {}).forEach(uid => {
-                let p = room.scores[uid];
-                container.innerHTML += `<p class="font-mono text-sm">${p.name}: <span class="text-indigo-400">${p.score} pts</span></p>`;
-            });
+            if (container) {
+                container.innerHTML = `<h3 class="text-lg font-bold mb-4">Final Scoreboard Metrics</h3>`;
+                Object.keys(room.scores || {}).forEach(uid => {
+                    let p = room.scores[uid];
+                    container.innerHTML += `<p class="font-mono text-sm">${p.name}: <span class="text-indigo-400">${p.score} pts</span></p>`;
+                });
+            }
         }
 
         function renderAppState() {
             const badge = document.getElementById('apiKeyBadge');
-            if(APP_STATE.apiKey) {
-                badge.classList.add('hidden');
-            } else {
-                badge.classList.remove('hidden');
+            if(badge) {
+                if(APP_STATE.apiKey) {
+                    badge.classList.add('hidden');
+                } else {
+                    badge.classList.remove('hidden');
+                }
             }
-            document.getElementById('configPlayerName').value = APP_STATE.playerName;
-            document.getElementById('apiConfigKey').value = APP_STATE.apiKey;
-            document.getElementById('supabaseUrlInput').value = SB_URL;
-            document.getElementById('supabaseKeyInput').value = SB_KEY;
+            
+            const nameField = document.getElementById('configPlayerName');
+            const keyField = document.getElementById('apiConfigKey');
+            const urlField = document.getElementById('supabaseUrlInput');
+            const sbKeyField = document.getElementById('supabaseKeyInput');
+
+            if (nameField) nameField.value = APP_STATE.playerName;
+            if (keyField) keyField.value = APP_STATE.apiKey;
+            if (urlField) urlField.value = SB_URL;
+            if (sbKeyField) sbKeyField.value = SB_KEY;
             
             if(APP_STATE.view === "lobby") initCategoryGrid();
         }
