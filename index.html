@@ -3,46 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BowlPrep — Competitive Scholastic Bowl Training</title>
-    <!-- Stable Tailwind CSS CDN -->
+    <title>BowlPrep — Competitive Training Arena</title>
+    <!-- Tailwind & Supabase Engines -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js for analytics -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Google Fonts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0b0f19; }
         .mono { font-family: 'JetBrains Mono', monospace; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
     </style>
 </head>
 <body class="text-slate-100 min-h-screen flex flex-col antialiased">
 
-    <!-- AUDIO SYSTEM FOR LIVE BUZZING -->
     <audio id="buzzSound" src="https://assets.mixkit.co/active_storage/sfx/2961/2961-84.wav" preload="auto"></audio>
 
-    <!-- HEADER / NAVIGATION -->
+    <!-- HEADER -->
     <header class="border-b border-slate-800 bg-[#0f1524]/90 backdrop-blur sticky top-0 z-40 px-4 lg:px-8 py-3 flex items-center justify-between">
         <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('landing')">
-            <div class="h-9 w-9 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+            <div class="h-9 w-9 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg">
                 <span class="font-extrabold text-white tracking-tighter text-sm">BP</span>
             </div>
             <div>
                 <span class="font-bold text-lg bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">BowlPrep</span>
-                <span class="text-[10px] uppercase tracking-widest font-bold text-indigo-400 block -mt-1 mono">v1.0.1 Stable</span>
+                <span class="text-[10px] uppercase tracking-widest font-bold text-indigo-400 block -mt-1 mono">v2.5 Hybrid Mode</span>
             </div>
         </div>
-
-        <nav class="hidden md:flex items-center space-x-1">
-            <button onclick="switchView('landing')" class="px-3 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-white transition-colors">Home</button>
-            <button onclick="switchView('lobby')" class="px-3 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-white transition-colors">Multiplayer Hub</button>
-            <button onclick="switchView('dashboard')" class="px-3 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-white transition-colors">Analytics</button>
-            <button onclick="switchView('team')" class="px-3 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-white transition-colors">Team Dashboard</button>
-        </nav>
 
         <div class="flex items-center space-x-3">
             <button onclick="toggleSettingsDrawer()" class="relative p-2 rounded-lg bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 transition-all text-slate-300 hover:text-indigo-400">
@@ -52,10 +39,6 @@
                 </span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
             </button>
-            <div onclick="switchView('profile')" class="flex items-center space-x-2 bg-slate-800/80 border border-slate-700/60 p-1.5 pr-3 rounded-lg cursor-pointer hover:bg-slate-800 transition-colors">
-                <div class="h-6 w-6 rounded bg-indigo-600 text-[10px] font-bold flex items-center justify-center text-white uppercase" id="avatarFallback">U</div>
-                <span class="text-xs font-semibold text-slate-300" id="headerUsername">Alex Mercer</span>
-            </div>
         </div>
     </header>
 
@@ -63,51 +46,46 @@
     <div id="settingsDrawer" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 transition-opacity opacity-0 pointer-events-none duration-300">
         <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-[#0f1626] border-l border-slate-800 p-6 shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300" id="settingsDrawerContainer">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
-                <div class="flex items-center space-x-2">
-                    <h3 class="text-lg font-bold">Secure AI Config</h3>
-                </div>
+                <h3 class="text-lg font-bold">Network & Keys Config</h3>
                 <button onclick="toggleSettingsDrawer()" class="text-2xl text-slate-400 hover:text-white">&times;</button>
             </div>
-            
             <div class="space-y-4 flex-1">
                 <div>
+                    <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-1.5">Your Screen Name</label>
+                    <input type="text" id="configPlayerName" placeholder="PlayerName" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
+                </div>
+                <div>
                     <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-1.5">Google AI Studio API Key</label>
-                    <input type="password" id="apiConfigKey" placeholder="AIzaSy..." class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-indigo-500 font-mono">
-                    <p class="text-slate-400 text-[11px] mt-2">Your key stays locally in your browser. It connects directly to Google.</p>
+                    <input type="password" id="apiConfigKey" placeholder="AIzaSy..." class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono text-slate-100 focus:outline-none focus:border-indigo-500">
+                </div>
+                <div class="pt-2 border-t border-slate-800/60">
+                    <span class="text-[11px] font-bold text-amber-500 uppercase tracking-wider block mb-2">Supabase Settings (Multiplayer Only)</span>
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-1.5">Supabase URL</label>
+                    <input type="text" id="supabaseUrlInput" placeholder="https://your-id.supabase.co" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono text-slate-100 focus:outline-none focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-wider font-bold text-slate-400 mb-1.5">Supabase Anon Key</label>
+                    <input type="password" id="supabaseKeyInput" placeholder="eyJhbG..." class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono text-slate-100 focus:outline-none focus:border-indigo-500">
                 </div>
             </div>
-
             <div class="pt-4 border-t border-slate-800">
-                <button onclick="saveAPIConfig()" class="w-full bg-indigo-600 hover:bg-indigo-500 transition-colors py-2.5 text-sm font-semibold rounded-lg text-white">
-                    Apply API Configuration Key
-                </button>
+                <button onclick="saveAllConfigs()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-2.5 text-sm font-semibold rounded-lg text-white">Save Infrastructure Settings</button>
             </div>
         </div>
     </div>
 
-    <!-- MAIN VIEW PANELS -->
+    <!-- MAIN VIEWS -->
     <main class="flex-1 max-w-[1600px] w-full mx-auto px-4 lg:px-8 py-6 flex flex-col">
-
         <!-- LANDING VIEW -->
         <section id="view-landing" class="view-panel space-y-12 py-6">
-            <div class="text-center max-w-3xl mx-auto space-y-4">
-                <div class="inline-flex items-center space-x-2 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 rounded-full text-xs font-semibold text-indigo-400">
-                    <span>Next-Gen Quiz Bowl Arena</span>
-                </div>
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">
-                    Train Smarter for <br/>
-                    <span class="bg-gradient-to-r from-indigo-400 to-pink-500 bg-clip-text text-transparent">Scholastic Bowl Matchups</span>
-                </h1>
-                <p class="text-slate-400 text-base max-w-xl mx-auto">
-                    Real-time multiplayer practice powered by custom AI pyramidal tossup items and microsecond buzzer synchronization.
-                </p>
+            <div class="text-center max-w-3xl mx-auto space-y-4 pt-12">
+                <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight">Train for <br/><span class="bg-gradient-to-r from-indigo-400 to-pink-500 bg-clip-text text-transparent">Scholastic Bowl Matchups</span></h1>
+                <p class="text-slate-400 text-base max-w-xl mx-auto">Pyramidal question practice engine supporting both offline solo runs and synced live matchmaking.</p>
                 <div class="pt-4 flex justify-center gap-3">
-                    <button onclick="switchView('lobby')" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-semibold text-sm transition-all">
-                        Launch Practice Hub
-                    </button>
-                    <button onclick="toggleSettingsDrawer()" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl font-semibold text-sm text-slate-300">
-                        Setup Engine Key
-                    </button>
+                    <button onclick="switchView('lobby')" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-semibold text-sm transition-all">Launch Arena Hub</button>
+                    <button onclick="toggleSettingsDrawer()" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl font-semibold text-sm text-slate-300">Set Keys & Name</button>
                 </div>
             </div>
         </section>
@@ -115,60 +93,68 @@
         <!-- LOBBY VIEW -->
         <section id="view-lobby" class="view-panel grid grid-cols-1 lg:grid-cols-3 gap-8 hidden flex-1">
             <div class="lg:col-span-2 space-y-6">
-                <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-6 space-y-6">
-                    <h2 class="text-xl font-bold">Configure Practice Arena</h2>
+                <!-- Host Panel -->
+                <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-6 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-bold">Configure Practice Session</h2>
+                        <!-- Mode Switcher -->
+                        <div class="bg-[#161f33] p-1 rounded-lg border border-slate-700 flex">
+                            <button id="modeBtnSolo" onclick="setGameMode('solo')" class="px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all bg-indigo-600 text-white">Solo Play</button>
+                            <button id="modeBtnMulti" onclick="setGameMode('multi')" class="px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all text-slate-400 hover:text-white">Multiplayer</button>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs uppercase font-bold text-slate-400 mb-1.5">Difficulty Matrix</label>
-                            <select id="roomDifficulty" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none">
-                                <option value="Middle School">Middle School Elite</option>
+                            <select id="roomDifficulty" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200">
                                 <option value="High School Regular" selected>High School Regular</option>
-                                <option value="High School National">High School National</option>
+                                <option value="Middle School">Middle School Elite</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-xs uppercase font-bold text-slate-400 mb-1.5">Reveal Pace</label>
-                            <select id="roomSpeed" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none">
-                                <option value="180">Hyper Blitz (Fast)</option>
+                            <select id="roomSpeed" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200">
                                 <option value="260" selected>Standard Match Pace</option>
-                                <option value="380">Instructional (Slow)</option>
+                                <option value="180">Hyper Blitz</option>
                             </select>
                         </div>
                     </div>
-
                     <div>
-                        <label class="block text-xs uppercase font-bold text-slate-400 mb-2">Subject Filtering</label>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5" id="categorySelectionGrid"></div>
+                        <label class="block text-xs uppercase font-bold text-slate-400 mb-2">Subject Categories</label>
+                        <div id="categorySelectionGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5"></div>
                     </div>
-
                     <div class="pt-2 border-t border-slate-800 flex justify-end">
-                        <button onclick="createMatchRoom()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-bold uppercase text-white">
-                            Initialize Arena
-                        </button>
+                        <button onclick="initializePracticeMatch()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-bold uppercase text-white" id="mainLaunchBtn">Start Solo Training</button>
+                    </div>
+                </div>
+
+                <!-- Join Panel (Hidden in Solo Mode) -->
+                <div id="lobbyJoinContainer" class="bg-[#0f1524] border border-slate-800 rounded-xl p-6 space-y-4 hidden">
+                    <h2 class="text-xl font-bold">Join an Active Arena Code</h2>
+                    <div class="flex gap-3">
+                        <input type="text" id="joinTokenInput" placeholder="Enter Room Code (e.g. RM-1234)" class="flex-1 bg-[#161f33] border border-slate-700 rounded-lg px-4 py-2 text-sm text-white uppercase font-mono tracking-wider focus:outline-none focus:border-indigo-500">
+                        <button onclick="joinMatchRoom()" class="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 rounded-lg text-xs font-bold uppercase text-white">Connect Network</button>
                     </div>
                 </div>
             </div>
-
-            <div class="space-y-6">
-                <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-5 flex flex-col h-full space-y-4">
-                    <h3 class="font-bold text-sm uppercase tracking-wider text-slate-300">Live Team Codes</h3>
-                    <div class="space-y-2 flex-1 overflow-y-auto" id="activeRoomsContainer"></div>
-                </div>
+            
+            <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-5 h-fit space-y-2">
+                <h3 class="font-bold text-sm uppercase tracking-wider text-slate-300">Status Readout</h3>
+                <p class="text-xs text-slate-400 leading-relaxed" id="lobbyStatusDescription">Solo Mode runs completely locally inside your browser, loading simulated automated smart bot competitors.</p>
             </div>
         </section>
 
-        <!-- LOADING PACK SCREEN -->
-        <section id="view-loading-screen" class="view-panel max-w-xl mx-auto w-full bg-[#0f1524] border border-slate-800 rounded-2xl p-8 space-y-8 my-auto hidden text-center shadow-2xl">
-            <h2 class="text-xl font-bold" id="loadingStageTitle">Initializing Prompt Directives</h2>
-            <p class="text-slate-400 text-xs" id="loadingStageSubtitle">Assembling architecture packages...</p>
-            <div class="bg-[#141b2e] border border-slate-800 rounded-xl p-4 text-left font-mono text-xs h-[120px] overflow-y-auto space-y-1" id="consoleLogsText"></div>
+        <!-- LOADING SCREEN -->
+        <section id="view-loading-screen" class="view-panel max-w-xl mx-auto w-full bg-[#0f1524] border border-slate-800 rounded-2xl p-8 space-y-8 my-auto hidden text-center">
+            <h2 class="text-xl font-bold" id="loadingStageTitle">Generating Packet Stream Via AI</h2>
+            <div class="bg-[#141b2e] border border-slate-800 rounded-xl p-4 text-left font-mono text-xs h-[120px] overflow-y-auto" id="consoleLogsText"></div>
             <div class="space-y-2">
                 <div class="flex justify-between text-xs text-slate-400">
-                    <span id="loadingProgressPercentage">0% Compiled</span>
-                    <span id="loadingProgressFraction">0 / 15 Items</span>
+                    <span id="loadingProgressPercentage">0% Synced</span>
                 </div>
                 <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                    <div id="loadingProgressBarFill" class="bg-indigo-500 h-full w-0 transition-all duration-300"></div>
+                    <div id="loadingProgressBarFill" class="bg-indigo-500 h-full w-0 transition-all"></div>
                 </div>
             </div>
         </section>
@@ -177,126 +163,90 @@
         <section id="view-gameplay" class="view-panel grid grid-cols-1 lg:grid-cols-4 gap-6 hidden flex-1">
             <div class="lg:col-span-3 flex flex-col space-y-4">
                 <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-4 flex justify-between font-mono text-xs text-slate-400">
-                    <div>ROOM: <span class="text-indigo-400 font-bold" id="gameplayRoomToken">------</span></div>
-                    <div>ROUND STATUS: <span id="gameplayRoundIndicator" class="text-violet-400 font-bold">ROUND 1/2</span></div>
-                    <div>MATRIX: <span id="gameplayItemFraction" class="text-slate-200 font-bold">0 / 15</span></div>
+                    <div>ROOM CODE: <span class="text-indigo-400 font-bold tracking-wider" id="gameplayRoomToken">LOCAL</span></div>
+                    <div>QUESTION: <span id="gameplayItemFraction" class="text-slate-200 font-bold">0 / 5</span></div>
                 </div>
-
                 <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-6 sm:p-8 flex-1 flex flex-col min-h-[280px] relative" id="tossupBoxOutline">
                     <div class="flex justify-between border-b border-slate-800 pb-3 mb-4">
-                        <span class="px-2 py-0.5 bg-indigo-500/10 text-indigo-400 text-[10px] font-mono rounded uppercase" id="itemCategoryBadge">Core Subject</span>
-                        <span class="text-slate-500 font-mono text-[10px]" id="itemSubcategoryText">General Subcategory</span>
+                        <span class="px-2 py-0.5 bg-indigo-500/10 text-indigo-400 text-[10px] font-mono rounded uppercase" id="itemCategoryBadge">Subject</span>
                     </div>
-                    <div class="flex-1 text-slate-100 text-lg sm:text-xl font-medium leading-relaxed" id="tossupDisplayStream"></div>
+                    <div class="flex-1 text-slate-100 text-lg sm:text-xl font-medium leading-relaxed select-none" id="tossupDisplayStream"></div>
                     
-                    <div id="buzzerLockBanner" class="absolute inset-0 bg-rose-950/40 backdrop-blur-sm rounded-xl flex items-center justify-center hidden">
-                        <div class="bg-rose-900 p-6 rounded-xl text-center border border-rose-600 shadow-2xl">
-                            <h4 class="font-bold text-white text-lg uppercase" id="buzzerLockName">PLAYER BUZZED</h4>
-                            <p class="text-rose-200 text-xs mt-1" id="buzzerLockSubtext">Awaiting adjudication...</p>
+                    <!-- DYNAMIC BUZZER MODAL -->
+                    <div id="buzzerLockBanner" class="absolute inset-0 bg-slate-950/95 backdrop-blur-md rounded-xl flex items-center justify-center hidden">
+                        <div class="w-full max-w-md p-6 text-center space-y-4">
+                            <h4 class="font-black text-rose-500 text-2xl tracking-wider uppercase" id="buzzerLockName">ANYONE BUZZED</h4>
+                            
+                            <!-- Synced Answer Text Field -->
+                            <div id="userAnswerContainer" class="hidden space-y-3">
+                                <input type="text" id="userAnswerInput" placeholder="Your Answer..." class="w-full bg-[#161f33] border-2 border-indigo-500 rounded-xl px-4 py-3 text-base text-white font-medium focus:outline-none text-center" autocomplete="off">
+                                <button onclick="submitUserAnswer()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-lg text-sm uppercase tracking-wide transition-all">Transmit Response</button>
+                            </div>
+
+                            <div id="botGradingStatus" class="hidden text-sm text-slate-400 font-mono animate-pulse">
+                                Evaluation tracking in progress...
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <button id="hardwareBuzzerButton" onclick="triggerUserBuzz()" class="w-full bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-white rounded-xl py-6 font-black tracking-widest text-xl border-b-4 border-rose-800 focus:outline-none transition-all">
-                    BUZZ NOW <span class="block text-[11px] font-normal tracking-wide mt-1">[ SPACEBAR BIND ]</span>
-                </button>
-
-                <div id="hostRefereeInterface" class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-3 hidden">
-                    <div class="bg-[#0f1524] p-3 rounded-lg border border-slate-800 font-mono text-xs">
-                        <div>TARGET ANSWER: <span class="text-emerald-400 font-bold" id="hostTargetAnswer">-----</span></div>
-                        <div class="text-slate-400 mt-1">PERMUTATIONS: <span id="hostAlternateAnswers">-----</span></div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <button onclick="adjudicateBuzz(true)" class="bg-emerald-600 hover:bg-emerald-500 py-2.5 rounded-lg font-bold text-xs text-white uppercase">CORRECT (+10)</button>
-                        <button onclick="adjudicateBuzz(false)" class="bg-rose-600 hover:bg-rose-500 py-2.5 rounded-lg font-bold text-xs text-white uppercase">INCORRECT (-5)</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="space-y-4">
-                <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-4 space-y-3 flex flex-col h-full">
-                    <h3 class="text-xs font-bold tracking-wider uppercase text-slate-400 font-mono">Score Tracking Roster</h3>
-                    <div class="space-y-1.5 flex-1 overflow-y-auto" id="gameplayRosterList"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- INTERMISSION VIEW -->
-        <section id="view-intermission" class="view-panel max-w-4xl mx-auto w-full space-y-6 hidden">
-            <div class="bg-[#0f1524] border border-slate-800 p-6 rounded-2xl flex justify-between items-center">
-                <h2 class="text-2xl font-black">ROUND 1 COMPLETE</h2>
-                <button onclick="advanceIntermissionToRoundTwo()" id="intermissionContinueBtn" class="bg-indigo-600 hover:bg-indigo-500 px-5 py-2.5 rounded-lg text-xs font-bold uppercase text-white transition-all">
-                    Preloading Round 2...
+                <button id="hardwareBuzzerButton" onclick="triggerUserBuzz()" class="w-full bg-rose-600 hover:bg-rose-500 text-white rounded-xl py-6 font-black tracking-widest text-xl border-b-4 border-rose-800 focus:outline-none">
+                    BUZZ NOW <span class="block text-[11px] font-normal tracking-wide mt-1">[ SPACEBAR ]</span>
                 </button>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="intermissionStatsCards"></div>
-            <div class="bg-[#0f1524] border border-slate-800 p-5 rounded-xl">
-                <h3 class="text-xs font-bold text-slate-400 uppercase font-mono mb-4">Subject Hit Distribution Matrix</h3>
-                <div class="h-[240px] relative"><canvas id="intermissionChartCanvas"></canvas></div>
+            <div class="bg-[#0f1524] border border-slate-800 rounded-xl p-4 h-full">
+                <h3 class="text-xs font-bold tracking-wider uppercase text-slate-400 font-mono mb-3">Live Scoreboard</h3>
+                <div id="gameplayRosterList" class="space-y-1.5"></div>
             </div>
         </section>
 
         <!-- ENDGAME VIEW -->
-        <section id="view-endgame" class="view-panel max-w-4xl mx-auto w-full space-y-6 hidden">
-            <div class="text-center space-y-2 py-4">
-                <h1 class="text-3xl font-extrabold tracking-tight">MATCH PROTOCOL CONCLUDED</h1>
-            </div>
-            <div class="bg-[#0f1524] border border-slate-800 rounded-2xl p-6 space-y-2" id="endgamePlacementsContainer"></div>
-            <div class="flex justify-center space-x-3">
-                <button onclick="switchView('lobby')" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-bold text-white uppercase">Return to Hub</button>
-            </div>
+        <section id="view-endgame" class="view-panel max-w-4xl mx-auto w-full space-y-6 hidden text-center pt-12">
+            <h1 class="text-3xl font-extrabold tracking-tight">MATCH CONCLUDED</h1>
+            <div class="bg-[#0f1524] border border-slate-800 rounded-2xl p-6" id="endgamePlacementsContainer"></div>
+            <button onclick="switchView('lobby')" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-bold text-white uppercase">Return to Hub</button>
         </section>
-
-        <!-- ANALYTICS DASHBOARD -->
-        <section id="view-dashboard" class="view-panel space-y-6 hidden">
-            <h2 class="text-xl font-bold">Global Performance Evaluation</h2>
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="dashboardOverviewCards"></div>
-            <div class="bg-[#0f1524] border border-slate-800 p-5 rounded-xl h-[300px] relative">
-                <canvas id="dashboardTrendChartCanvas"></canvas>
-            </div>
-        </section>
-
-        <!-- TEAM DASHBOARD -->
-        <section id="view-team" class="view-panel max-w-4xl mx-auto w-full space-y-6 hidden">
-            <div class="bg-[#0f1524] border border-slate-800 p-6 rounded-xl space-y-4">
-                <h2 class="text-xl font-bold border-b border-slate-800 pb-3">Varsity Squad Overview</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-sm text-slate-300">
-                    <div class="p-3 bg-slate-900 rounded">Team Specialty: <span class="text-emerald-400 font-bold">Science Matrix</span></div>
-                    <div class="p-3 bg-slate-900 rounded">Session Count: <span class="text-indigo-400 font-bold">42 Matches</span></div>
-                    <div class="p-3 bg-slate-900 rounded">Roster Count: <span class="text-slate-100 font-bold">3 Registered</span></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- USER PROFILE -->
-        <section id="view-profile" class="view-panel max-w-xl mx-auto w-full bg-[#0f1524] border border-slate-800 rounded-2xl p-6 hidden space-y-4">
-            <h2 class="text-xl font-bold border-b border-slate-800 pb-2">Profile Configuration</h2>
-            <div>
-                <label class="block text-xs uppercase text-slate-400 mb-1">User Handle</label>
-                <input type="text" id="profileUsername" value="Alex Mercer" class="w-full bg-[#161f33] border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none">
-            </div>
-            <button onclick="updateUserProfile()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-bold text-white uppercase">Save Parameters</button>
-        </section>
-
     </main>
 
-    <!-- ENGINE CODE LOGIC LAYER -->
+    <!-- AUTOMATED COMBINED BRAIN ENGINE -->
     <script>
+        let SB_URL = localStorage.getItem("BOWLPREP_SB_URL") || "https://PASTE-YOUR-OWN-PROJECT-ID.supabase.co";
+        let SB_KEY = localStorage.getItem("BOWLPREP_SB_KEY") || "PASTE-YOUR-OWN-ANON-PUBLIC-KEY";
+
+        let supabaseInstance = null;
+        if (SB_URL && SB_KEY && !SB_URL.includes("PASTE-YOUR")) {
+            supabaseInstance = window.supabase.createClient(SB_URL, SB_KEY);
+        }
+
         const SUBJECT_CATEGORIES = ["History", "Science", "Literature", "Fine Arts", "Mythology", "Geography", "Math", "Philosophy"];
-        
+
         let APP_STATE = {
             view: "landing",
+            gameMode: "solo", // 'solo' or 'multi'
             apiKey: localStorage.getItem("BOWLPREP_KEY") || "",
+            playerName: localStorage.getItem("BOWLPREP_NAME") || "Player",
+            playerId: localStorage.getItem("BOWLPREP_UID") || "uid_" + Math.random().toString(36).substring(2, 11),
             selectedCategories: [...SUBJECT_CATEGORIES],
-            currentUser: { username: "Alex Mercer", history: [] },
-            currentMatch: null,
-            charts: {}
+            
+            // Shared Game Engines
+            activeRoomToken: "LOCAL",
+            isHost: true,
+            localWordInterval: null,
+            botTimers: [],
+            
+            // Solo Database Simulation Model
+            soloMatchData: {
+                item_index: 0,
+                questions_cache: [],
+                scores: {},
+                is_buzzed_locked: false,
+                who_buzzed: null,
+                buzzed_name: null,
+                current_word_pointer: 0,
+                speed_ms: 260
+            }
         };
 
-        const SYSTEM_BOTS = [
-            { id: "bot_sarah", name: "Sarah Chen [Bot]", precision: 0.85 },
-            { id: "bot_marcus", name: "Marcus Vance [Bot]", precision: 0.70 }
-        ];
+        localStorage.setItem("BOWLPREP_UID", APP_STATE.playerId);
 
         function switchView(targetId) {
             document.querySelectorAll('.view-panel').forEach(p => p.classList.add('hidden'));
@@ -304,6 +254,29 @@
             if (activePanel) activePanel.classList.remove('hidden');
             APP_STATE.view = targetId;
             renderAppState();
+        }
+
+        function setGameMode(mode) {
+            APP_STATE.gameMode = mode;
+            const btnSolo = document.getElementById('modeBtnSolo');
+            const btnMulti = document.getElementById('modeBtnMulti');
+            const joinBox = document.getElementById('lobbyJoinContainer');
+            const launchBtn = document.getElementById('mainLaunchBtn');
+            const desc = document.getElementById('lobbyStatusDescription');
+
+            if(mode === 'solo') {
+                btnSolo.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all bg-indigo-600 text-white";
+                btnMulti.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all text-slate-400 hover:text-white";
+                joinBox.classList.add('hidden');
+                launchBtn.innerText = "Start Solo Training";
+                desc.innerText = "Solo Mode runs completely locally inside your browser, loading simulated automated smart bot competitors.";
+            } else {
+                btnSolo.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all text-slate-400 hover:text-white";
+                btnMulti.className = "px-3 py-1 text-xs font-bold rounded-md uppercase tracking-wider transition-all bg-indigo-600 text-white";
+                joinBox.classList.remove('hidden');
+                launchBtn.innerText = "Initialize & Broadcast Room";
+                desc.innerText = "The Room Host generates questions via their Gemini Key. Friends can join using just your Room Code and your public Supabase credentials—no extra AI keys required from them!";
+            }
         }
 
         function toggleSettingsDrawer() {
@@ -318,11 +291,20 @@
             }
         }
 
-        function saveAPIConfig() {
-            const val = document.getElementById('apiConfigKey').value.trim();
-            if(!val) return alert("Key input error.");
-            APP_STATE.apiKey = val;
-            localStorage.setItem("BOWLPREP_KEY", val);
+        function saveAllConfigs() {
+            APP_STATE.playerName = document.getElementById('configPlayerName').value.trim() || APP_STATE.playerName;
+            APP_STATE.apiKey = document.getElementById('apiConfigKey').value.trim();
+            SB_URL = document.getElementById('supabaseUrlInput').value.trim();
+            SB_KEY = document.getElementById('supabaseKeyInput').value.trim();
+
+            localStorage.setItem("BOWLPREP_NAME", APP_STATE.playerName);
+            localStorage.setItem("BOWLPREP_KEY", APP_STATE.apiKey);
+            localStorage.setItem("BOWLPREP_SB_URL", SB_URL);
+            localStorage.setItem("BOWLPREP_SB_KEY", SB_KEY);
+
+            if (SB_URL && SB_KEY && !SB_URL.includes("PASTE-YOUR")) {
+                supabaseInstance = window.supabase.createClient(SB_URL, SB_KEY);
+            }
             toggleSettingsDrawer();
             renderAppState();
         }
@@ -345,326 +327,382 @@
             });
         }
 
-        function createMatchRoom() {
-            const token = "RM-" + Math.floor(1000 + Math.random() * 9000);
-            initMatchState(token, document.getElementById('roomDifficulty').value);
-        }
-
-        function initMatchState(token, diff) {
-            if(!APP_STATE.apiKey) {
-                alert("Please enter a valid Google AI Studio Key first via the gear icon.");
-                toggleSettingsDrawer();
-                return;
+        // UNIFIED ROUTER DISPATCHER
+        function initializePracticeMatch() {
+            if(!APP_STATE.apiKey) return alert("An AI Studio API key is required to compile question streams.");
+            if(APP_STATE.gameMode === "multi") {
+                createMatchRoom();
+            } else {
+                createSoloLocalRoom();
             }
-            if(APP_STATE.selectedCategories.length === 0) return alert("Select at least 1 subject filtering metric.");
-
-            APP_STATE.currentMatch = {
-                roomToken: token,
-                difficulty: diff,
-                speedMs: parseInt(document.getElementById('roomSpeed').value),
-                round: 1,
-                itemIndex: 0,
-                questionsCache: [],
-                scores: { user: 0, bot_sarah: 0, bot_marcus: 0 },
-                statsLog: [],
-                liveStreamTimer: null,
-                currentWordsArray: [],
-                currentWordPointer: 0,
-                isBuzzedLocked: false,
-                whoBuzzed: null,
-                buzzTimestamp: 0
-            };
-            switchView('loading-screen');
-            runAICorePipeline();
         }
 
-        async function runAICorePipeline() {
+        // ==========================================
+        // LOCAL OFFLINE SOLO RUNTIME ENGINE
+        // ==========================================
+        async function createSoloLocalRoom() {
+            APP_STATE.isHost = true;
+            APP_STATE.activeRoomToken = "LOCAL-SOLO";
+            switchView('loading-screen');
+
             const logBox = document.getElementById('consoleLogsText');
             const bar = document.getElementById('loadingProgressBarFill');
             const pct = document.getElementById('loadingProgressPercentage');
-            const frac = document.getElementById('loadingProgressFraction');
-            
             logBox.innerHTML = "";
+            
             let generatedCache = [];
-            const count = 15;
-
-            document.getElementById('loadingStageTitle').innerText = `Compiling Round ${APP_STATE.currentMatch.round} Core Matrix`;
+            const count = 5;
 
             for(let i = 1; i <= count; i++) {
-                logBox.innerHTML += `<div>&gt; Pipeline Request block ${i}/15 initiated...</div>`;
-                logBox.scrollTop = logBox.scrollHeight;
-                
-                const category = APP_STATE.selectedCategories[(i - 1) % APP_STATE.selectedCategories.length];
-                
+                logBox.innerHTML += `<div>&gt; Compiling solo AI question ${i}/${count}...</div>`;
+                const cat = APP_STATE.selectedCategories[(i - 1) % APP_STATE.selectedCategories.length];
+                const diff = document.getElementById('roomDifficulty').value;
                 try {
-                    const item = await callGeminiAPI(category, APP_STATE.currentMatch.difficulty);
+                    const item = await callGeminiAPI(cat, diff);
                     generatedCache.push(item);
-                    logBox.innerHTML += `<div class="text-emerald-400">&gt; Item ${i} compiled successfully and verified.</div>`;
+                    logBox.innerHTML += `<div class="text-emerald-400">&gt; Packet ${i} integrated.</div>`;
                 } catch(e) {
-                    console.error(e);
-                    logBox.innerHTML += `<div class="text-amber-500">&gt; Warning: Handshake variance. Running system fallback item layout.</div>`;
-                    generatedCache.push({
-                        tossupText: "This physical constant describes the balance vector across universal structures. It functions as an automated backup system framework generated whenever API nodes timeout. For ten points, identify this placeholder item.",
-                        answer: "System Operational Standby Frame",
-                        category: category, subcategory: "Core Standard Spec", difficulty: APP_STATE.currentMatch.difficulty
-                    });
+                    generatedCache.push({ tossupText: "This backup framework runs if your local connection drops. For ten points, name this condition.", answer: "Offline", category: "Science" });
                 }
-
                 let p = Math.round((i / count) * 100);
                 bar.style.width = `${p}%`;
-                pct.innerText = `${p}% Loaded`;
-                frac.innerText = `${i} / 15 Packages`;
+                pct.innerText = `${p}% Compiled`;
             }
 
-            APP_STATE.currentMatch.questionsCache = generatedCache;
-            setTimeout(() => {
-                switchView('gameplay');
-                launchGameplayItem();
-            }, 500);
+            // Establish Local Score Data Models
+            let scores = {};
+            scores[APP_STATE.playerId] = { name: APP_STATE.playerName + " (You)", score: 0 };
+            scores["bot_sarah"] = { name: "Sarah Chen [Bot]", score: 0 };
+            scores["bot_marcus"] = { name: "Marcus Vance [Bot]", score: 0 };
+
+            APP_STATE.soloMatchData = {
+                item_index: 0,
+                questions_cache: generatedCache,
+                scores: scores,
+                is_buzzed_locked: false,
+                who_buzzed: null,
+                buzzed_name: null,
+                current_word_pointer: 0,
+                speed_ms: parseInt(document.getElementById('roomSpeed').value)
+            };
+
+            switchView('gameplay');
+            executeLocalStateSync(APP_STATE.soloMatchData);
+            startSoloLocalClock();
+        }
+
+        function startSoloLocalClock() {
+            clearInterval(APP_STATE.localWordInterval);
+            APP_STATE.localWordInterval = setInterval(() => {
+                let s = APP_STATE.soloMatchData;
+                if(!s.is_buzzed_locked) {
+                    const currentQ = s.questions_cache[s.item_index];
+                    if(!currentQ) {
+                        clearInterval(APP_STATE.localWordInterval);
+                        return;
+                    }
+                    const words = currentQ.tossupText.split(" ");
+                    if(s.current_word_pointer < words.length) {
+                        s.current_word_pointer++;
+                        executeLocalStateSync(s);
+                        
+                        // Check if a bot decides to buzz on this new word index
+                        evaluateBotBuzzTriggers(s, words.length);
+                    }
+                }
+            }, APP_STATE.soloMatchData.speed_ms);
+        }
+
+        function evaluateBotBuzzTriggers(s, totalWords) {
+            // Bots evaluate trigger capabilities at around 65% of question data streams
+            if(s.current_word_pointer > totalWords * 0.65 && Math.random() < 0.08) {
+                const choices = ["bot_sarah", "bot_marcus"];
+                const targetBot = choices[Math.floor(Math.random() * choices.length)];
+                
+                s.is_buzzed_locked = true;
+                s.who_buzzed = targetBot;
+                s.buzzed_name = s.scores[targetBot].name;
+                
+                clearInterval(APP_STATE.localWordInterval);
+                executeLocalStateSync(s);
+
+                // Bot computes response answer choice evaluation rules
+                setTimeout(() => {
+                    let isBotCorrect = Math.random() > 0.35; // 65% Bot Accuracy Rate
+                    processAdjudicatedChanges(isBotCorrect);
+                }, 2000);
+            }
+        }
+
+        // ==========================================
+        // ONLINE MULTIPLAYER BACKEND RUNTIME ENGINE
+        // ==========================================
+        async function createMatchRoom() {
+            if(!supabaseInstance) return alert("Configure valid Supabase keys via the config gear first.");
+            APP_STATE.isHost = true;
+            const token = "RM-" + Math.floor(1000 + Math.random() * 9000);
+            switchView('loading-screen');
+
+            const logBox = document.getElementById('consoleLogsText');
+            const bar = document.getElementById('loadingProgressBarFill');
+            const pct = document.getElementById('loadingProgressPercentage');
+            logBox.innerHTML = "";
+            
+            let generatedCache = [];
+            const count = 5;
+
+            for(let i = 1; i <= count; i++) {
+                logBox.innerHTML += `<div>&gt; Generating item package ${i}/${count}...</div>`;
+                const cat = APP_STATE.selectedCategories[(i - 1) % APP_STATE.selectedCategories.length];
+                const diff = document.getElementById('roomDifficulty').value;
+                try {
+                    const item = await callGeminiAPI(cat, diff);
+                    generatedCache.push(item);
+                } catch(e) {
+                    generatedCache.push({ tossupText: "Fallback question module logic.", answer: "Fallback", category: "History" });
+                }
+                let p = Math.round((i / count) * 100);
+                bar.style.width = `${p}%`;
+                pct.innerText = `${p}% Synced`;
+            }
+
+            const initialScores = {};
+            initialScores[APP_STATE.playerId] = { name: APP_STATE.playerName, score: 0 };
+
+            await supabaseInstance.from('match_rooms').insert({
+                room_token: token,
+                difficulty: document.getElementById('roomDifficulty').value,
+                speed_ms: parseInt(document.getElementById('roomSpeed').value),
+                categories: APP_STATE.selectedCategories,
+                questions_cache: generatedCache,
+                scores: initialScores
+            });
+
+            connectToRoomChannel(token);
+        }
+
+        async function joinMatchRoom() {
+            if(!supabaseInstance) return alert("Configure valid Supabase keys via the config gear first.");
+            const token = document.getElementById('joinTokenInput').value.trim().toUpperCase();
+            if(!token) return;
+
+            APP_STATE.isHost = false;
+            const { data } = await supabaseInstance.from('match_rooms').select('*').eq('room_token', token).maybeSingle();
+            if(!data) return alert("Active room layout code not located.");
+
+            let updatedScores = { ...data.scores };
+            if(!updatedScores[APP_STATE.playerId]) {
+                updatedScores[APP_STATE.playerId] = { name: APP_STATE.playerName, score: 0 };
+                await supabaseInstance.from('match_rooms').update({ scores: updatedScores }).eq('room_token', token);
+            }
+            connectToRoomChannel(token);
+        }
+
+        function connectToRoomChannel(token) {
+            APP_STATE.activeRoomToken = token;
+            supabaseInstance.channel(`room_${token}`)
+            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'match_rooms', filter: `room_token=eq.${token}` }, payload => {
+                executeLocalStateSync(payload.new);
+            })
+            .subscribe(async (status) => {
+                if(status === "SUBSCRIBED") {
+                    const { data } = await supabaseInstance.from('match_rooms').select('*').eq('room_token', token).single();
+                    executeLocalStateSync(data);
+                    switchView('gameplay');
+                    if(APP_STATE.isHost) startMultiplayerHostClock();
+                }
+            });
+        }
+
+        function startMultiplayerHostClock() {
+            clearInterval(APP_STATE.localWordInterval);
+            APP_STATE.localWordInterval = setInterval(async () => {
+                let snap = APP_STATE.roomDataSnapshot;
+                if(!snap || snap.is_buzzed_locked) return;
+
+                const currentQuestion = snap.questions_cache[snap.item_index];
+                if(!currentQuestion) return clearInterval(APP_STATE.localWordInterval);
+                
+                const maxWords = currentQuestion.tossupText.split(" ").length;
+                if(snap.current_word_pointer < maxWords) {
+                    await supabaseInstance.from('match_rooms').update({ current_word_pointer: snap.current_word_pointer + 1 }).eq('room_token', snap.room_token);
+                }
+            }, APP_STATE.roomDataSnapshot.speed_ms);
         }
 
         async function callGeminiAPI(cat, diff) {
-            const prompt = `Generate a single Quiz Bowl tossup question.
-            Category: ${cat}
-            Difficulty: ${diff}
-            Must be pyramidal (start hard, get progressively easier clues). Explicitly outline the single answer string text.
-            Output standard clean JSON format ONLY. Do not use any markdown formatting codes or blocks like \`\`\`json. Exact Schema:
-            {"tossupText": "Question wording paragraphs written here", "answer": "Core direct solution target answer name", "category": "${cat}", "subcategory": "Specific classification theme", "difficulty": "${diff}"}`;
-
+            const prompt = `Generate a single Quiz Bowl tossup question. Category: ${cat}. Difficulty: ${diff}. Must be pyramidal. Output standard clean raw JSON format ONLY. Schema: {"tossupText": "Wording here", "answer": "Answer here", "category": "${cat}"}`;
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${APP_STATE.apiKey}`;
-            const res = await fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-            });
+            const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
             const data = await res.json();
             let text = data.candidates[0].content.parts[0].text.trim();
-            if(text.startsWith("```")) {
-                text = text.replace(/^```(?:json)?/, "").replace(/```$/, "").trim();
-            }
+            if(text.startsWith("```")) text = text.replace(/^```(?:json)?/, "").replace(/```$/, "").trim();
             return JSON.parse(text);
         }
 
-        function launchGameplayItem() {
-            const m = APP_STATE.currentMatch;
-            if(m.itemIndex >= m.questionsCache.length) {
-                if(m.round === 1) runIntermissionPhase();
-                else finishMatchPipeline();
+        // ==========================================
+        // STATE RENDER & SYNC ROUTINES
+        // ==========================================
+        function executeLocalStateSync(room) {
+            APP_STATE.roomDataSnapshot = room;
+            
+            document.getElementById('gameplayRoomToken').innerText = APP_STATE.gameMode === 'solo' ? "LOCAL SOLO PRACTICE" : room.room_token;
+            document.getElementById('gameplayItemFraction').innerText = `${room.item_index + 1} / ${room.questions_cache.length}`;
+            
+            const currentQuestion = room.questions_cache[room.item_index];
+            if(!currentQuestion) {
+                clearInterval(APP_STATE.localWordInterval);
+                renderFinalEndgame(room);
                 return;
             }
 
-            document.getElementById('buzzerLockBanner').classList.add('hidden');
-            document.getElementById('hostRefereeInterface').classList.add('hidden');
-            document.getElementById('tossupBoxOutline').className = "bg-[#0f1524] border border-slate-800 rounded-xl p-6 flex flex-col min-h-[280px] relative";
-
-            const current = m.questionsCache[m.itemIndex];
-            document.getElementById('gameplayRoomToken').innerText = m.roomToken;
-            document.getElementById('gameplayRoundIndicator').innerText = `ROUND ${m.round}/2`;
-            document.getElementById('gameplayItemFraction').innerText = `${m.itemIndex + 1} / 15`;
-            document.getElementById('itemCategoryBadge').innerText = current.category;
-            document.getElementById('itemSubcategoryText').innerText = current.subcategory || "General Spec";
+            document.getElementById('itemCategoryBadge').innerText = currentQuestion.category;
             
-            document.getElementById('tossupDisplayStream').innerHTML = "";
-            m.currentWordsArray = current.tossupText.split(" ");
-            m.currentWordPointer = 0;
-            m.isBuzzedLocked = false;
-            m.whoBuzzed = null;
-            m.buzzTimestamp = Date.now();
-
-            renderScoreboardRoster();
-
-            clearInterval(m.liveStreamTimer);
-            m.liveStreamTimer = setInterval(() => {
-                if(!m.isBuzzedLocked && m.currentWordPointer < m.currentWordsArray.length) {
-                    document.getElementById('tossupDisplayStream').innerHTML += m.currentWordsArray[m.currentWordPointer] + " ";
-                    m.currentWordPointer++;
-                } else if (m.currentWordPointer >= m.currentWordsArray.length) {
-                    clearInterval(m.liveStreamTimer);
-                }
-            }, m.speedMs);
-
-            primeBotActions();
-        }
-
-        let botTimers = [];
-        function primeBotActions() {
-            botTimers.forEach(clearTimeout);
-            botTimers = [];
-            const m = APP_STATE.currentMatch;
-            
-            SYSTEM_BOTS.forEach(bot => {
-                const threshold = Math.random() * 0.4 + 0.4;
-                const delay = (m.currentWordsArray.length * threshold) * m.speedMs;
-                const tid = setTimeout(() => { lockBuzzerState(bot.id, bot.name); }, delay);
-                botTimers.push(tid);
-            });
-        }
-
-        function triggerUserBuzz() {
-            lockBuzzerState("user", APP_STATE.currentUser.username);
-        }
-
-        function lockBuzzerState(id, name) {
-            const m = APP_STATE.currentMatch;
-            if(!m || m.isBuzzedLocked) return;
-
-            m.isBuzzedLocked = true;
-            m.whoBuzzed = id;
-            clearInterval(m.liveStreamTimer);
-            botTimers.forEach(clearTimeout);
-
-            try { document.getElementById('buzzSound').play(); } catch(e){}
-
-            const elapsed = ((Date.now() - m.buzzTimestamp) / 1000).toFixed(2);
-            document.getElementById('tossupBoxOutline').className = "bg-[#0f1524] border-2 border-rose-600 rounded-xl p-6 flex flex-col min-h-[280px] relative shadow-lg shadow-rose-950/20";
-            document.getElementById('buzzerLockName').innerText = `${name.toUpperCase()} BUZZED`;
-            document.getElementById('buzzerLockSubtext').innerText = `Locked index at ${elapsed}s runtime threshold mark.`;
-            document.getElementById('buzzerLockBanner').classList.remove('hidden');
-
-            m.statsLog.push({ itemIndex: m.itemIndex, round: m.round, category: m.questionsCache[m.itemIndex].category, who: id, speed: parseFloat(elapsed) });
-
-            document.getElementById('hostTargetAnswer').innerText = m.questionsCache[m.itemIndex].answer;
-            document.getElementById('hostAlternateAnswers').innerText = m.questionsCache[m.itemIndex].alternateAnswers || "None Defined";
-            document.getElementById('hostRefereeInterface').classList.remove('hidden');
-
-            if(id !== "user") {
-                setTimeout(() => { adjudicateBuzz(Math.random() > 0.3); }, 2000);
+            const words = currentQuestion.tossupText.split(" ");
+            let displayStr = "";
+            for(let i = 0; i < room.current_word_pointer && i < words.length; i++) {
+                displayStr += words[i] + " ";
             }
-        }
+            document.getElementById('tossupDisplayStream').innerHTML = displayStr;
 
-        function adjudicateBuzz(correct) {
-            const m = APP_STATE.currentMatch;
-            if(!m) return;
-
-            m.statsLog[m.statsLog.length - 1].correct = correct;
-
-            if(correct) {
-                m.scores[m.whoBuzzed] += 10;
-                m.itemIndex++;
-                setTimeout(launchGameplayItem, 500);
-            } else {
-                m.scores[m.whoBuzzed] -= 5;
-                m.isBuzzedLocked = false;
-                document.getElementById('buzzerLockBanner').classList.add('hidden');
-                document.getElementById('hostRefereeInterface').classList.add('hidden');
-                document.getElementById('tossupBoxOutline').className = "bg-[#0f1524] border border-slate-800 rounded-xl p-6 flex flex-col min-h-[280px] relative";
+            if(room.is_buzzed_locked) {
+                clearInterval(APP_STATE.localWordInterval);
+                try { document.getElementById('buzzSound').play(); } catch(e){}
                 
-                m.liveStreamTimer = setInterval(() => {
-                    if(!m.isBuzzedLocked && m.currentWordPointer < m.currentWordsArray.length) {
-                        document.getElementById('tossupDisplayStream').innerHTML += m.currentWordsArray[m.currentWordPointer] + " ";
-                        m.currentWordPointer++;
-                    }
-                }, m.speedMs);
+                document.getElementById('buzzerLockName').innerText = `${room.buzzed_name.toUpperCase()} BUZZED`;
+                document.getElementById('buzzerLockBanner').classList.remove('hidden');
+
+                if(room.who_buzzed === APP_STATE.playerId) {
+                    document.getElementById('userAnswerContainer').classList.remove('hidden');
+                    document.getElementById('botGradingStatus').classList.add('hidden');
+                    setTimeout(() => { document.getElementById('userAnswerInput').focus(); }, 50);
+                } else {
+                    document.getElementById('userAnswerContainer').classList.add('hidden');
+                    document.getElementById('botGradingStatus').classList.remove('hidden');
+                    document.getElementById('botGradingStatus').innerText = `${room.buzzed_name} is formulating text evaluation choices...`;
+                }
+            } else {
+                document.getElementById('buzzerLockBanner').classList.add('hidden');
+                document.getElementById('userAnswerContainer').classList.add('hidden');
+                document.getElementById('userAnswerInput').value = "";
             }
-            renderScoreboardRoster();
+
+            renderRosterScoreboard(room.scores);
         }
 
-        function renderScoreboardRoster() {
-            const t = document.getElementById('gameplayRosterList');
-            if(!t || !APP_STATE.currentMatch) return;
-            t.innerHTML = "";
-            
-            const m = APP_STATE.currentMatch;
-            const r = [
-                { name: APP_STATE.currentUser.username, score: m.scores.user },
-                { name: "Sarah Chen [Bot]", score: m.scores.bot_sarah },
-                { name: "Marcus Vance [Bot]", score: m.scores.bot_marcus }
-            ].sort((a,b)=>b.score - a.score);
+        async function triggerUserBuzz() {
+            let snap = APP_STATE.roomDataSnapshot;
+            if(!snap || snap.is_buzzed_locked) return;
 
-            r.forEach(p => {
-                t.innerHTML += `
-                    <div class="flex justify-between p-2 bg-slate-900 border border-slate-800 rounded text-xs font-mono">
-                        <span class="text-slate-200">${p.name}</span>
-                        <span class="font-bold text-indigo-400">${p.score} pts</span>
-                    </div>
-                `;
+            if(APP_STATE.gameMode === 'solo') {
+                clearInterval(APP_STATE.localWordInterval);
+                snap.is_buzzed_locked = true;
+                snap.who_buzzed = APP_STATE.playerId;
+                snap.buzzed_name = APP_STATE.playerName;
+                executeLocalStateSync(snap);
+            } else {
+                await supabaseInstance.from('match_rooms').update({ is_buzzed_locked: true, who_buzzed: APP_STATE.playerId, buzzed_name: APP_STATE.playerName }).eq('room_token', snap.room_token).eq('is_buzzed_locked', false);
+            }
+        }
+
+        async function submitUserAnswer() {
+            let snap = APP_STATE.roomDataSnapshot;
+            if(!snap || snap.who_buzzed !== APP_STATE.playerId) return;
+
+            const val = document.getElementById('userAnswerInput').value.trim();
+            if(!val) return;
+
+            document.getElementById('userAnswerContainer').classList.add('hidden');
+            document.getElementById('botGradingStatus').innerText = "AI Referee checking your answer...";
+            document.getElementById('botGradingStatus').classList.remove('hidden');
+
+            const targetAnswer = snap.questions_cache[snap.item_index].answer;
+            const prompt = `You are a strict Quiz Bowl referee. Core target answer: "${targetAnswer}". User typed answer: "${val}". Respond ONLY with the word TRUE if valid, or FALSE if wrong.`;
+            let isCorrect = false;
+            try {
+                const url = `[https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$](https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$){APP_STATE.apiKey}`;
+                const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+                const d = await res.json();
+                isCorrect = d.candidates[0].content.parts[0].text.trim().toUpperCase().includes("TRUE");
+            } catch(e) {
+                isCorrect = (val.toLowerCase() === targetAnswer.toLowerCase());
+            }
+
+            processAdjudicatedChanges(isCorrect);
+        }
+
+        async function processAdjudicatedChanges(isCorrect) {
+            let snap = APP_STATE.roomDataSnapshot;
+            let updatedScores = { ...snap.scores };
+            let nextIndex = snap.item_index;
+            let nextWordPointer = snap.current_word_pointer;
+
+            if(isCorrect) {
+                updatedScores[snap.who_buzzed].score += 10;
+                nextIndex += 1;
+                nextWordPointer = 0;
+            } else {
+                updatedScores[snap.who_buzzed].score -= 5;
+            }
+
+            if(APP_STATE.gameMode === "solo") {
+                APP_STATE.soloMatchData.scores = updatedScores;
+                APP_STATE.soloMatchData.item_index = nextIndex;
+                APP_STATE.soloMatchData.current_word_pointer = nextWordPointer;
+                APP_STATE.soloMatchData.is_buzzed_locked = false;
+                APP_STATE.soloMatchData.who_buzzed = null;
+                APP_STATE.soloMatchData.buzzed_name = null;
+                
+                executeLocalStateSync(APP_STATE.soloMatchData);
+                startSoloLocalClock();
+            } else {
+                await supabaseInstance.from('match_rooms').update({
+                    scores: updatedScores, item_index: nextIndex, current_word_pointer: nextWordPointer,
+                    is_buzzed_locked: false, who_buzzed: null, buzzed_name: null
+                }).eq('room_token', snap.room_token);
+            }
+        }
+
+        function renderRosterScoreboard(scores) {
+            const t = document.getElementById('gameplayRosterList');
+            if(!t) return;
+            t.innerHTML = "";
+            Object.keys(scores).forEach(uid => {
+                const entry = scores[uid];
+                t.innerHTML += `<div class="flex justify-between p-2 bg-slate-900 border border-slate-800 text-xs font-mono"><span>${entry.name}</span><span class="text-indigo-400 font-bold">${entry.score} pts</span></div>`;
             });
         }
 
-        function runIntermissionPhase() {
-            switchView('intermission');
-            const m = APP_STATE.currentMatch;
-            const uEvents = m.statsLog.filter(e => e.who === "user");
-            
-            document.getElementById('intermissionStatsCards').innerHTML = `
-                <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-                    <div class="text-[10px] text-slate-400 uppercase">Score Performance</div>
-                    <div class="text-xl font-bold text-indigo-400 mt-1">${m.scores.user} pts</div>
-                </div>
-                <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-                    <div class="text-[10px] text-slate-400 uppercase">Captured Objects</div>
-                    <div class="text-xl font-bold text-emerald-400 mt-1">${uEvents.filter(e => e.correct).length} Correct</div>
-                </div>
-            `;
-
-            setTimeout(async () => {
-                let nextPack = [];
-                for(let i=1; i<=15; i++) {
-                    const c = APP_STATE.selectedCategories[(i-1) % APP_STATE.selectedCategories.length];
-                    try { const item = await callGeminiAPI(c, m.difficulty); nextPack.push(item); }
-                    catch(e){ nextPack.push(m.questionsCache[0]); }
-                }
-                m.questionsCache = nextPack;
-                const btn = document.getElementById('intermissionContinueBtn');
-                btn.innerText = "Launch Round 2 Stratagem";
-                btn.className = "bg-emerald-600 hover:bg-emerald-500 px-5 py-2.5 rounded-lg text-xs font-bold uppercase text-white transition-all";
-            }, 200);
-        }
-
-        function advanceIntermissionToRoundTwo() {
-            const m = APP_STATE.currentMatch;
-            m.round = 2;
-            m.itemIndex = 0;
-            switchView('gameplay');
-            launchGameplayItem();
-        }
-
-        function finishMatchPipeline() {
+        function renderFinalEndgame(room) {
             switchView('endgame');
-            const container = document.getElementById('endgamePlacementsContainer');
-            container.innerHTML = `<h3 class="font-bold text-center py-4 text-emerald-400">Match Concluded. Check metrics or return to lobby.</h3>`;
-            
-            APP_STATE.currentUser.history.push({ score: APP_STATE.currentMatch.scores.user, logs: APP_STATE.currentMatch.statsLog });
-            localStorage.setItem("BOWLPREP_USER_DATA", JSON.stringify(APP_STATE.currentUser));
-        }
-
-        function initGlobalDashboardView() {
-            const container = document.getElementById('dashboardOverviewCards');
-            if(!container) return;
-            const h = APP_STATE.currentUser.history;
-            container.innerHTML = `
-                <div class="p-4 bg-[#0f1524] border border-slate-800 rounded-xl font-mono text-center">
-                    <div class="text-xs text-slate-400">Matches Hosted</div>
-                    <div class="text-2xl font-bold text-indigo-400 mt-1">${h.length}</div>
-                </div>
-            `;
+            let container = document.getElementById('endgamePlacementsContainer');
+            container.innerHTML = `<h3 class="text-lg font-bold mb-4">Final Scoreboard Metrics</h3>`;
+            Object.keys(room.scores).forEach(uid => {
+                let p = room.scores[uid];
+                container.innerHTML += `<p class="font-mono text-sm">${p.name}: <span class="text-indigo-400">${p.score} pts</span></p>`;
+            });
         }
 
         function renderAppState() {
             const badge = document.getElementById('apiKeyBadge');
             if(APP_STATE.apiKey) {
                 badge.classList.add('hidden');
-                document.getElementById('apiConfigKey').value = APP_STATE.apiKey;
             } else {
                 badge.classList.remove('hidden');
             }
-
-            document.getElementById('headerUsername').innerText = APP_STATE.currentUser.username;
-            document.getElementById('avatarFallback').innerText = APP_STATE.currentUser.username.substring(0,1);
-
+            document.getElementById('configPlayerName').value = APP_STATE.playerName;
+            document.getElementById('apiConfigKey').value = APP_STATE.apiKey;
+            document.getElementById('supabaseUrlInput').value = SB_URL;
+            document.getElementById('supabaseKeyInput').value = SB_KEY;
+            
             if(APP_STATE.view === "lobby") initCategoryGrid();
-            if(APP_STATE.view === "dashboard") initGlobalDashboardView();
-        }
-
-        function updateUserProfile() {
-            const val = document.getElementById('profileUsername').value.trim();
-            if(!val) return;
-            APP_STATE.currentUser.username = val;
-            localStorage.setItem("BOWLPREP_USER_DATA", JSON.stringify(APP_STATE.currentUser));
-            switchView('landing');
         }
 
         window.addEventListener('keydown', (e) => {
+            if(document.activeElement.id === "userAnswerInput") {
+                if(e.code === "Enter") submitUserAnswer();
+                return;
+            }
             if(e.code === "Space" && APP_STATE.view === "gameplay") {
                 e.preventDefault();
                 triggerUserBuzz();
@@ -672,8 +710,6 @@
         });
 
         window.addEventListener('DOMContentLoaded', () => {
-            const data = localStorage.getItem("BOWLPREP_USER_DATA");
-            if(data) { try { APP_STATE.currentUser = JSON.parse(data); } catch(e){} }
             switchView('landing');
         });
     </script>
